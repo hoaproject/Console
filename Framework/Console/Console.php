@@ -92,28 +92,28 @@ class Hoa_Console {
      *
      * @var Hoa_Console object
      */
-    private static $_instance = null;
+    private static $_instance       = null;
 
     /**
      * Whether exception should be thrown out from console.
      *
      * @var Hoa_Console bool
      */
-    protected $throwException = false;
+    protected $throwException       = false;
 
     /**
      * The request object.
      *
      * @var Hoa_Console_Request object
      */
-    protected $_request       = null;
+    protected $_request             = null;
 
     /**
      * The Hoa_Console parameters.
      *
      * @var Hoa_Console array
      */
-    protected $parameters     = array(
+    protected $parameters           = array(
         'system.group.value'        => null,
         'system.group.default'      => 'Main',
         'system.command.value'      => null,

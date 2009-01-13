@@ -81,7 +81,7 @@ class Hoa_Console_Core_Cli {
      *
      * @var Hoa_Console_Core_Cli_Parser object
      */
-    protected $command = null;
+    protected $command  = null;
 
     /**
      * Request.

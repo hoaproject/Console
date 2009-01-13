@@ -83,14 +83,14 @@ class Hoa_Console_Dispatcher {
      *
      * @var Hoa_Console_Core_Cli object
      */
-    protected $_cli = null;
+    protected $_cli     = null;
 
     /**
      * Router.
      *
      * @var Hoa_Console_Router object
      */
-    protected $_router = null;
+    protected $_router  = null;
 
     /**
      * Request.
