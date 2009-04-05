@@ -111,8 +111,18 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
             preg_match('#.*?\s*:\s*([0-9]+)#', $width, $matches);
             $out     = (int) $matches[1];
         }
-        else
+        else {
+
             $out     = (int) trim(Hoa_Console_System::execute('echo $COLUMNS'));
+
+            if(empty($out)) {
+
+                $out = trim(Hoa_Console_System::execute('stty -a'));
+
+                if(0 != preg_match('#;\s+([0-9]+)\s+columns;#', $out, $match))
+                    $out = $match[1];
+            }
+        }
 
         if(empty($out))
             $out = 80;
@@ -137,8 +147,18 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
             preg_match('#.*?\s*:\s*([0-9]+)#', $width, $matches);
             $out     = (int) $matches[1];
         }
-        else
+        else {
+
             $out     = (int) trim(Hoa_Console_System::execute('echo $LINES'));
+
+            if(empty($out)) {
+
+                $out = trim(Hoa_Console_System::execute('stty -a'));
+
+                if(0 != preg_match('#;\s+([0-9]+)\s+rows;#', $out, $match))
+                    $out = $match[1];
+            }
+        }
 
         if(empty($out))
             $out = 120;
