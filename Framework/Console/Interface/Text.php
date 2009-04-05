@@ -85,10 +85,10 @@ class Hoa_Console_Interface_Text {
      * Built column from an array.
      * The array has this structure :
      *   array(
-     *       array('Firstname', 'Lastname', 'Love', 'Made'   ),
-     *       array('Ivan',      'Enderlin', 'Hoa'            ),
-     *       array('Rasmus',    'Lerdorf'                    ),
-     *       array(null,        'Lee',       null,  'The Web')
+     *       array('Firstname', 'Lastname',   'Love', 'Made'   ),
+     *       array('Ivan',      'Enderlin',   'Hoa'            ),
+     *       array('Rasmus',    'Lerdorf'                      ),
+     *       array(null,        'Berners-Lee', null,  'The Web')
      *   )
      * The cell can have a new-line character (\n).
      * The column can have a global alignement, a horizontal and a vertical
@@ -122,6 +122,7 @@ class Hoa_Console_Interface_Text {
         $separator = explode('|', $separator);
         $nbColumn  = 0;
         $nbLine    = count($line);
+        $xtraWidth = 2 * ($verticalPadding + 2); // + separator
 
         // Get the number of column.
         foreach($line as $key => &$column) {
@@ -132,6 +133,8 @@ class Hoa_Console_Interface_Text {
             $handle = count($column);
             $handle > $nbColumn and $nbColumn = $handle;
         }
+
+        $xtraWidth  += $horizontalPadding * $nbColumn;
 
         // Get the column width.
         $columnWidth = array_fill(0, $nbColumn, 0);
@@ -151,16 +154,18 @@ class Hoa_Console_Interface_Text {
         // If the sum of each column is greater than the window width, we reduce
         // all greaters columns.
         $envWindow = Hoa_Console_Environment_Window::getColumns();
-        while($envWindow < ($cWidthSum = array_sum($columnWidth))) {
+
+        while($envWindow <= ($cWidthSum = $xtraWidth + array_sum($columnWidth))) {
 
             $diff            = $cWidthSum - $envWindow;
-            $max             = max($columnWidth) - (2 * $horizontalPadding * $nbColumn) - 2;
+            $max             = max($columnWidth) - $xtraWidth;
             $newWidth        = $max - $diff;
             $i               = array_search(max($columnWidth), $columnWidth);
             $columnWidth[$i] = $newWidth;
 
             foreach($line as $key => &$c)
-                $c[$i] = self::wordwrap($c[$i], $newWidth);
+                if(isset($c[$i]))
+                    $c[$i] = self::wordwrap($c[$i], $newWidth);
         }
 
         // Manage the horizontal right padding.
@@ -213,7 +218,7 @@ class Hoa_Console_Interface_Text {
                                                 $value
                                             );
 
-        $line = $newLine;
+        $line   = $newLine;
         unset($newLine);
         $nbLine = count($line);
 
@@ -226,17 +231,27 @@ class Hoa_Console_Interface_Text {
                 $column += array_fill($handle, $nbColumn - $handle, null);
         }
 
-        // Prepare the format for sprintf.
-        if($alignement === self::ALIGN_LEFT)
-            $format = '%-' . implode('s%-', $columnWidth) . 's';
-        else
-            $format = '%'  . implode('s%',  $columnWidth) . 's';
-
-        $format .= str_repeat("\n", $verticalPadding + 1);
-
         // Built !
-        $out = null;
+        $out  = null;
+        $dash = $alignement === self::ALIGN_LEFT ? '-' : '';
         foreach($line as $key => $handle) {
+
+            $format = null;
+
+            foreach($handle as $i => $hand)
+                if(preg_match_all('#(\\e\[[0-9]+m)#', $hand, $match)) {
+
+                    $a = $columnWidth[$i];
+
+                    foreach($match as $m)
+                        $a += strlen($m[1]);
+
+                    $format .= '%' . $dash . ($a + floor(count($match) / 2)) . 's';
+                }
+                else
+                    $format .= '%' . $dash . $columnWidth[$i] . 's';
+
+            $format .= str_repeat("\n", $verticalPadding + 1);
 
             array_unshift($handle, $format);
             $out .= call_user_func_array('sprintf', $handle);
@@ -300,8 +315,11 @@ class Hoa_Console_Interface_Text {
         $width = 0;
 
         foreach($lines as $foo => $line)
-            foreach(explode("\n", $line) as $fooo => $lin)
+            foreach(explode("\n", $line) as $fooo => $lin) {
+
+                $lin = preg_replace('#\\e\[[0-9]+m#', '', $lin);
                 strlen($lin) > $width and $width = strlen($lin);
+            }
 
         return $width;
     }
