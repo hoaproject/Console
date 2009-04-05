@@ -141,6 +141,8 @@ abstract class Hoa_Console_Interface_Style {
         if(!is_array($options))
             if(true === self::styleExists($options))
                 $options = self::getStyle($options);
+            elseif(empty($options))
+                return $text;
             else
                 $options = array(0 => $options);
 
