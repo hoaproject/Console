@@ -50,11 +50,7 @@ import('Console.Core.GetOption');
 /**
  * Hoa_Console_Core_Io
  */
-import('Console.Core.Io');
-
-// Need the alias functions in Hoa_Console_Core_Io.
-// So, force the loading of this class.
-Hoa_Framework::autoload('Hoa_Console_Core_Io');
+import('Console.Core.Io', true);
 
 /**
  * Hoa_Console_Interface_Style
