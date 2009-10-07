@@ -74,48 +74,75 @@ import('Console.Core.Io');
  * @subpackage  Hoa_Console_Core_Cli
  */
 
-class Hoa_Console_Core_Cli {
+class Hoa_Console_Core_Cli implements Hoa_Framework_Parameterizable_Readable {
 
     /**
      * Command parsed.
      *
      * @var Hoa_Console_Core_Cli_Parser object
      */
-    protected $command  = null;
+    protected $_commandline  = null;
 
     /**
-     * Request.
+     * Parameters of Hoa_Console.
      *
-     * @var Hoa_Console_Request object
+     * @var Hoa_Framework_Parameter object
      */
-    protected $_request = null;
+    private $_parameters     = null;
 
 
 
     /**
-     * Set the request.
+     * Construct a dispatcher.
      *
      * @access  public
-     * @param   Hoa_Console_Request  $request    The request instance.
-     * @return  Hoa_Console_Request
+     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @return  void
      */
-    public function setRequest ( Hoa_Console_Request $request ) {
+    public function __construct ( Hoa_Framework_Parameter $parameters ) {
 
-        $old            = $this->_request;
-        $this->_request = $request;
+        $this->_parameters = $parameters;
 
-        return $old;
+        return;
     }
 
     /**
-     * Get the request.
+     * Get many parameters from a class.
      *
      * @access  public
-     * @return  Hoa_Console_Request
+     * @return  array
+     * @throw   Hoa_Exception
      */
-    public function getRequest ( ) {
+    public function getParameters ( ) {
 
-        return $this->_request;
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -131,8 +158,8 @@ class Hoa_Console_Core_Cli {
             do {
 
                 Hoa_Console_Core_Io::cout(
-                    $this->getPromptPrefix() .
-                    $this->getPromptSymbol(),
+                    $this->getParameter('prompt.prefix'),
+                    $this->getParameter('prompt.symbol'),
                     false
                 );
 
@@ -151,22 +178,34 @@ class Hoa_Console_Core_Cli {
      * Hoa_Console_Core_Cli_Parser object.
      *
      * @access  protected
-     * @param   string     $command     The command.
+     * @param   string     $commandline     The command line.
      * @return  Hoa_Console_Core_Cli_Parser
      */
-    protected function setParsed ( $command ) {
+    protected function setParsed ( $commandline ) {
 
-        $old           = $this->command;
-        $this->command = new Hoa_Console_Core_Cli_Parser();
+        $old                = $this->_commandline;
+        $this->_commandline = new Hoa_Console_Core_Cli_Parser();
+        $this->_commandline->setLongOnly($this->getParameter('cli.longonly'));
+        $separator          = $this->getParameter('cli.separator');
 
-        $this->command->setLongOnly(
-            $this->getRequest()->getParameter('cli.longonly')
-        );
+        if(empty($commandline))
+            $commandline = $this->_parameters->getKeyword($this, 'group') .
+                           $separator .
+                           $this->_parameters->getKeyword($this, 'command');
 
-        if(empty($command))
-            $command = $this->getRequest()->getParameter('system.command.default');
+        $this->_commandline->parse($commandline);
+        $command = $this->_commandline->getCommand();
 
-        $this->command->parse($command);
+        if(false === strpos($command, $separator))
+            $command = $separator . $command;
+
+        list($group, $command) = explode($separator, $command);
+
+        if(!empty($group))
+            $this->_parameters->setKeyword($this, 'group', $group);
+
+        if(!empty($command))
+            $this->_parameters->setKeyword($this, 'command', $command);
 
         return $old;
     }
@@ -179,29 +218,7 @@ class Hoa_Console_Core_Cli {
      */
     public function getParsed ( ) {
 
-        return $this->command;
-    }
-
-    /**
-     * Get the prompt prefix.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getPromptPrefix ( ) {
-
-        return $this->getRequest()->getParameter('prompt.prefix');
-    }
-
-    /**
-     * Get the prompt symbol.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getPromptSymbol ( ) {
-
-        return $this->getRequest()->getParameter('prompt.symbol');
+        return $this->_commandline;
     }
 
     /**

@@ -92,7 +92,8 @@ import('Console.Environment.~');
  * @subpackage  Hoa_Console_Command_Abstract
  */
 
-abstract class Hoa_Console_Command_Abstract {
+abstract class Hoa_Console_Command_Abstract
+    implements Hoa_Framework_Parameterizable_Readable {
 
     /**
      * Values of the has_arg field of options array.
@@ -187,13 +188,6 @@ abstract class Hoa_Console_Command_Abstract {
     protected $programName = null;
 
     /**
-     * Request.
-     *
-     * @var Hoa_Console_Request object
-     */
-    private $_request      = null;
-
-    /**
      * Parser.
      *
      * @var Hoa_Console_Core_Cli_Parser object
@@ -207,62 +201,70 @@ abstract class Hoa_Console_Command_Abstract {
      */
     private $gopt          = null;
 
+    /**
+     * Parameters of Hoa_Console.
+     *
+     * @var Hoa_Framework_Parameter object
+     */
+    private $_parameters   = null;
+
     
 
     /**
      * Set the request and the parser.
      *
      * @access  public
-     * @param   Hoa_Console_Request          $request    The request instance.
-     * @param   Hoa_Console_Core_Cli_Parser  $parser     The parser instance.
+     * @param   Hoa_Framework_Parameter      $parameters    Parameters.
+     * @param   Hoa_Console_Core_Cli_Parser  $parser        The parser instance.
      * @return  void
      */
-    final public function __construct ( Hoa_Console_Request         $request,
+    final public function __construct ( Hoa_Framework_Parameter     $parameters,
                                         Hoa_Console_Core_Cli_Parser $parser ) {
 
-        $this->setRequest($request);
-        $this->setParser ($parser);
-        $this->setGopt   ();
+        $this->_parameters = $parameters;
+        $this->setParser($parser);
+        $this->setGopt();
 
         return;
     }
 
     /**
-     * Set the request.
-     *
-     * @access  private
-     * @param   Hoa_Console_Request  $request    The request instance.
-     * @return  Hoa_Console_Request
-     */
-    private function setRequest ( Hoa_Console_Request $request ) {
-
-        $old            = $this->_request;
-        $this->_request = $request;
-
-        return $old;
-    }
-
-    /**
-     * Get the request.
-     *
-     * @access  private
-     * @return  Hoa_Console_Request
-     */
-    private function getRequest ( ) {
-
-        return $this->_request;
-    }
-
-    /**
-     * Get a specific parameter from the request object.
+     * Get many parameters from a class.
      *
      * @access  public
-     * @param   string  $parameter    Parameter.
-     * @return  mixed
+     * @return  array
+     * @throw   Hoa_Exception
      */
-    public function getParameter ( $parameter ) {
+    public function getParameters ( ) {
 
-        return $this->getRequest()->getParameter($parameter);
+        return $this->_parameters->getParameters($this);
+    }
+
+    /**
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -439,7 +441,7 @@ abstract class Hoa_Console_Command_Abstract {
                             $width      = null ) {
 
         if(null === $width)
-            $width = self::getEnvironment('window.columns');
+            $width = $this->getEnvironment('window.columns');
 
         return Hoa_Console_Interface_Text::align($text, $alignement, $width);
     }
@@ -553,7 +555,7 @@ abstract class Hoa_Console_Command_Abstract {
                  )
             );
 
-        return self::columnize(
+        return $this->columnize(
                    $out,
                    Hoa_Console_Interface_Text::ALIGN_LEFT,
                    .5,

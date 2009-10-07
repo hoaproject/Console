@@ -42,11 +42,6 @@ require_once 'Framework.php';
 import('Console.Exception');
 
 /**
- * Hoa_Console_Request
- */
-import('Console.Request');
-
-/**
  * Hoa_Console_Dispatcher
  */
 import('Console.Dispatcher');
@@ -63,7 +58,7 @@ import('Console.Interface.Style');
 
 /**
  * Special characters.
- * Please, see : http://www.opengroup.org/onlinepubs/007908799/xbd/termios.html#tag_008_001_009
+ * Please, see: http://www.opengroup.org/onlinepubs/007908799/xbd/termios.html#tag_008_001_009
  * HC means Hoa Console.
  */
 _define('HC_SUCCESS',  1);
@@ -85,60 +80,35 @@ _define('HC_STOP',    16);
  * @package     Hoa_Console
  */
 
-class Hoa_Console {
+class Hoa_Console implements Hoa_Framework_Parameterizable {
 
     /**
      * Singleton.
      *
      * @var Hoa_Console object
      */
-    private static $_instance       = null;
+    private static $_instance = null;
 
     /**
      * Whether exception should be thrown out from console.
      *
      * @var Hoa_Console bool
      */
-    protected $throwException       = false;
+    protected $throwException = false;
 
     /**
      * The request object.
      *
      * @var Hoa_Console_Request object
      */
-    protected $_request             = null;
+    protected $_request       = null;
 
     /**
      * The Hoa_Console parameters.
      *
-     * @var Hoa_Console array
+     * @var Hoa_Framework_Parameter object
      */
-    protected $parameters           = array(
-        'system.group.value'        => null,
-        'system.group.default'      => 'Main',
-        'system.command.value'      => null,
-        'system.command.default'    => 'Welcome',
-        'system.command.file'       => null,
-        'system.command.class'      => null,
-
-        'route.directory'           => 'Command/',
-        'route.grpcmd.separator'    => ':',
-
-        'pattern.group'             => '(:Group)',
-        'pattern.command.name'      => '(:Command)',
-        'pattern.command.file'      => '(:Command)',
-        'pattern.command.class'     => '(:Command)Command',
-
-        'prompt.prefix'             => '',
-        'prompt.symbol'             => '> ',
-
-        'cli.longonly'              => false,
-
-        'interface.style.directory' => 'Style/',
-
-        'command.php'               => 'php',
-        'command.browser'           => 'open'
-    );
+    private $_parameters      = null;
 
 
 
@@ -151,11 +121,32 @@ class Hoa_Console {
      */
     private function __construct ( Array $parameters = array() ) {
 
-        #IF_DEFINED HOA_STANDALONE
-        if(empty($parameters))
-            Hoa_Framework::configurePackage(
-                'Console', $parameters, Hoa_Framework::CONFIGURATION_DOT);
-        #END_IF
+        $this->_parameters = new Hoa_Framework_Parameter(
+            $this,
+            array(
+                'group'   => 'main',
+                'command' => 'welcome',
+                'style'   => 'default'
+            ),
+            array(
+                'command.class'     => '(:command:U:)Command',
+                'command.file'      => '(:command:U:).php',
+                'command.directory' => 'hoa://Data/Bin/Command/(:group:U:)',
+
+                'cli.separator'     => ':',
+                'cli.longonly'      => false,
+
+                'prompt.prefix'     => '',
+                'prompt.symbol'     => '> ',
+
+                'style.class'       => '(:style:U:)Style',
+                'style.file'        => '(:style:U:).php',
+                'style.directory'   => 'hoa://Data/Bin/Style',
+
+                'command.php'       => 'php',
+                'command.browser'   => 'open'
+            )
+        );
 
         $this->setParameters($parameters);
     }
@@ -176,96 +167,69 @@ class Hoa_Console {
     }
 
     /**
-     * Set parameters.
+     * Set many parameters to a class.
      *
-     * @access  protected
-     * @param   array      $parameters    Parameters.
-     * @param   array      $recursive     Used for recursive parameters.
-     * @return  array
+     * @access  public
+     * @param   array   $in      Parameters to set.
+     * @return  void
+     * @throw   Hoa_Exception
      */
-    protected function setParameters ( Array $parameters = array(),
-                                             $recursive  = array() ) {
+    public function setParameters ( Array $in ) {
 
-        if($recursive === array()) {
-            $array       =& $this->parameters;
-            $recursivity = false;
-        }
-        else {
-            $array       =& $recursive;
-            $recursivity = true;
-        }
-
-        if(empty($parameters))
-            return $array;
-
-        foreach($parameters as $option => $value) {
-
-            if(empty($option) || (empty($value) && !is_bool($value)))
-                continue;
-
-            if(is_array($value))
-                $array[$option] = $this->setParameters($value, $array[$option]);
-
-            else
-                $array[$option] = $value;
-        }
-
-        return $array;
+        return $this->_parameters->setParameters($this, $in);
     }
 
     /**
-     * Get all parameters.
+     * Get many parameters from a class.
      *
-     * @access  protected
+     * @access  public
      * @return  array
+     * @throw   Hoa_Exception
      */
-    protected function getParameters ( ) {
+    public function getParameters ( ) {
 
-        return $this->parameters;
+        return $this->_parameters->getParameters($this);
     }
 
     /**
-     * Get a specific parameter.
+     * Set a parameter to a class.
      *
-     * @access  protected
-     * @param   string     $parameter    The parameter name.
+     * @access  public
+     * @param   string  $key      Key.
+     * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Console_Exception
+     * @throw   Hoa_Exception
      */
-    protected function getParameter ( $parameter ) {
+    public function setParameter ( $key, $value ) {
 
-        if(!isset($this->parameters[$parameter]))
-            throw new Hoa_Console(
-                'The parameter %s does not exists.', 0, $parameter);
-
-        return $this->parameters[$parameter];
+        return $this->_parameters->setParameter($this, $key, $value);
     }
 
     /**
-     * Set the request object, with parameters.
+     * Get a parameter from a class.
      *
-     * @access  protected
-     * @return  Hoa_Console_Request
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
      */
-    protected function setRequest ( ) {
+    public function getParameter ( $key ) {
 
-        $old            = $this->_request;
-        $this->_request = new Hoa_Console_Request(
-                              $this->getParameters()
-                          );
-
-        return $old;
+        return $this->_parameters->getParameter($this, $key);
     }
 
     /**
-     * Get the request object.
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
      *
-     * @access  protected
-     * @return  Hoa_Console_Request
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
      */
-    protected function getRequest ( ) {
+    public function getFormattedParameter ( $key ) {
 
-        return $this->_request;
+        return $this->_parameters->getFormattedParameter($this, $key);
     }
 
     /**
@@ -279,10 +243,13 @@ class Hoa_Console {
 
         try {
 
-            $this->setRequest();
-
-            $dispatcher = new Hoa_Console_Dispatcher();
-            $dispatcher->setRequest($this->getRequest());
+            $dispatcher = new Hoa_Console_Dispatcher($this->_parameters);
+            $this->_parameters->shareWith(
+                $this,
+                $dispatcher,
+                Hoa_Framework_Parameter::PERMISSION_READ |
+                Hoa_Framework_Parameter::PERMISSION_SHARE
+            );
             $dispatcher->dispatch();
         }
         catch ( Hoa_Console_Exception $e ) {
@@ -328,8 +295,11 @@ class Hoa_Console {
      */
     public function importStyle ( $style ) {
 
-        $directory = $this->getParameter('interface.style.directory');
-        $path      = HOA_DATA_BIN . DS . $directory . DS . $style . '.php';
+        $this->_parameters->setKeyword($this, 'style', $style);
+        $class     = $this->getFormattedParameter('style.class');
+        $file      = $this->getFormattedParameter('style.file');
+        $directory = $this->getFormattedParameter('style.directory');
+        $path      = $directory . '/' . $file;
 
         if(!file_exists($path))
             throw new Hoa_Console_Exception(
@@ -337,12 +307,12 @@ class Hoa_Console {
 
         require_once $path;
 
-        $sheet     = new $style();
+        $sheet     = new $class();
 
         if(!($sheet instanceof Hoa_Console_Interface_Style))
             throw new Hoa_Console_Exception(
                 'The style %s must extend the Hoa_Console_Interface_Style class.',
-                1, $style);
+                1, $class);
 
         $sheet->import();
 

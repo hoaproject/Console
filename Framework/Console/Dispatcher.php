@@ -53,11 +53,6 @@ import('Console.Exception');
 import('Console.Core.Cli');
 
 /**
- * Hoa_Console_Router
- */
-import('Console.Router');
-
-/**
  * Hoa_Console_Command_Abstract
  */
 import('Console.Command.Abstract');
@@ -76,59 +71,72 @@ import('Console.Command.Abstract');
  * @subpackage  Hoa_Console_Dispatcher
  */
 
-class Hoa_Console_Dispatcher {
+class Hoa_Console_Dispatcher implements Hoa_Framework_Parameterizable_Readable {
 
     /**
-     * Command Line Interface.
+     * Parameters of Hoa_Console.
      *
-     * @var Hoa_Console_Core_Cli object
+     * @var Hoa_Framework_Parameter object
      */
-    protected $_cli     = null;
-
-    /**
-     * Router.
-     *
-     * @var Hoa_Console_Router object
-     */
-    protected $_router  = null;
-
-    /**
-     * Request.
-     *
-     * @var Hoa_Console_Request object
-     */
-    protected $_request = null;
+    private $_parameters = null;
 
 
 
     /**
-     * Set the request.
+     * Construct a dispatcher.
      *
      * @access  public
-     * @param   Hoa_Console_Request  $request    The request instance.
-     * @return  Hoa_Console_Request
+     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @return  void
      */
-    public function setRequest ( Hoa_Console_Request $request ) {
+    public function __construct ( Hoa_Framework_Parameter $parameters ) {
 
-        $old            = $this->_request;
-        $this->_request = $request;
+        $this->_parameters = $parameters;
 
-        return $old;
+        return;
     }
 
     /**
-     * Get the request.
+     * Get many parameters from a class.
      *
      * @access  public
-     * @return  Hoa_Console_Request
+     * @return  array
+     * @throw   Hoa_Exception
      */
-    public function getRequest ( ) {
+    public function getParameters ( ) {
 
-        return $this->_request;
+        return $this->_parameters->getParameters($this);
     }
 
     /**
-     * Dispatch : get a prompt, the command-line parsing, the command name,
+     * Get a parameter from a class.
+     *
+     * @access  public
+     * @param   string  $key      Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getParameter ( $key ) {
+
+        return $this->_parameters->getParameter($this, $key);
+    }
+
+    /**
+     * Get a formatted parameter from a class (i.e. zFormat with keywords and
+     * other parameters).
+     *
+     * @access  public
+     * @param   string  $key    Key.
+     * @return  mixed
+     * @throw   Hoa_Exception
+     */
+    public function getFormattedParameter ( $key ) {
+
+        return $this->_parameters->getFormattedParameter($this, $key);
+    }
+
+    /**
+     * Dispatch: get a prompt, the command-line parsing, the command name,
      * instance class, call method, manage errors, exceptions and returns etc.
      * Take a look to
      * http://www.opengroup.org/onlinepubs/007908799/xbd/termios.html#tag_008_001_009
@@ -139,34 +147,44 @@ class Hoa_Console_Dispatcher {
      */
     public function dispatch ( ) {
 
-        $this->setCli();
-        $this->setRouter();
+        $cli = new Hoa_Console_Core_Cli($this->_parameters);
+        $this->_parameters->shareWith(
+            $this,
+            $cli,
+            Hoa_Framework_Parameter::PERMISSION_READ |
+            Hoa_Framework_Parameter::PERMISSION_WRITE
+        );
 
         do {
 
-            $this->getCli()->setRequest($this->getRequest());
-            $this->getCli()->newPrompt();
+            $cli->newPrompt();
 
-            $this->getRouter()->setRequest($this->getRequest());
-            $this->getRouter()->route($this->getCli()->getParsed()->getCommand());
-
-            $path    = $this->getRequest()->getParameter('route.directory');
-            $group   = $this->getRequest()->getParameter('system.group.value');
-            $command = $this->getRequest()->getParameter('system.command.value');
-            $file    = $this->getRequest()->getParameter('system.command.file');
-            $class   = $this->getRequest()->getParameter('system.command.class');
+            $class     = $this->getFormattedParameter('command.class');
+            $file      = $this->getFormattedParameter('command.file');
+            $directory = $this->getFormattedParameter('command.directory');
+            $path      = $directory . '/' . $file;
 
             try {
 
-                $this->load($path . $group . DS . $file . '.php');
+                if(!file_exists($path))
+                    throw new Hoa_Console_Exception(
+                        'File %s is not found.', -1, $path);
+
+                require_once $path;
 
                 $reflection = new ReflectionClass($class);
                 $argument   = array(
-                                  $this->getRequest(),
-                                  $this->getCli()->getParsed()
+                                  $this->_parameters,
+                                  $cli->getParsed()
                               );
                 $object     = $reflection->newInstanceArgs($argument);
                 $return     = HC_EXIT;
+
+                $this->_parameters->shareWith(
+                    $this,
+                    $object,
+                    Hoa_Framework_Parameter::PERMISSION_READ
+                );
 
                 if($object instanceof Hoa_Console_Command_Abstract) {
 
@@ -198,72 +216,5 @@ class Hoa_Console_Dispatcher {
                 $continue = false;
 
         } while($continue);
-    }
-
-    /**
-     * Set the CLI object.
-     *
-     * @access  protected
-     * @return  Hoa_Console_Core_Cli
-     */
-    protected function setCli ( ) {
-
-        $old        = $this->_cli;
-        $this->_cli = new Hoa_Console_Core_Cli();
-
-        return $old;
-    }
-
-    /**
-     * Get the CLI object.
-     *
-     * @access  public
-     * @return  Hoa_Console_Core_Cli
-     */
-    public function getCli ( ) {
-
-        return $this->_cli;
-    }
-
-    /**
-     * Set the router.
-     *
-     * @access  protected
-     * @return  Hoa_Console_Router
-     */
-    protected function setRouter ( ) {
-
-        $old           = $this->_router;
-        $this->_router = new Hoa_Console_Router();
-
-        return $old;
-    }
-
-    /**
-     * Get the router.
-     *
-     * @access  public
-     * @return  Hoa_Console_Router
-     */
-    public function getRouter ( ) {
-
-        return $this->_router;
-    }
-
-    /**
-     * Load file.
-     *
-     * @access  private
-     * @param   string   $file    File to load.
-     * @return  void
-     * @throw   Hoa_Console_Exception
-     */
-    private function load ( $file = '' ) {
-
-        if(!file_exists($file))
-            throw new Hoa_Console_Exception(
-                'File %s is not found.', 7, $file);
-
-        require_once $file;
     }
 }
