@@ -148,14 +148,16 @@ class Hoa_Console_Core_Io {
 
         // Hack for password, bad hack.
         if($comportement === self::TYPE_PASSWORD)
-            self::cout("\033[8m", self::NO_NEW_LINE);
+            if(!OS_WIN && function_exists('posix_isatty'))
+                self::cout("\033[8m", self::NO_NEW_LINE);
 
         if(false === $in = fgets(STDIN))
             throw new Hoa_Console_Core_Exception(
                 'Cannot read the standard input.', 0);
 
         if($comportement === self::TYPE_PASSWORD)
-            self::cout("\033[0m", self::NO_NEW_LINE);
+            if(!OS_WIN && function_exists('posix_isatty'))
+                self::cout("\033[0m", self::NO_NEW_LINE);
 
         $in = trim($in);
 
