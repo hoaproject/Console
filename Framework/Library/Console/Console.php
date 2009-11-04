@@ -170,7 +170,7 @@ class Hoa_Console implements Hoa_Framework_Parameterizable {
      * Set many parameters to a class.
      *
      * @access  public
-     * @param   array   $in      Parameters to set.
+     * @param   array   $in    Parameters to set.
      * @return  void
      * @throw   Hoa_Exception
      */
@@ -209,7 +209,7 @@ class Hoa_Console implements Hoa_Framework_Parameterizable {
      * Get a parameter from a class.
      *
      * @access  public
-     * @param   string  $key      Key.
+     * @param   string  $key    Key.
      * @return  mixed
      * @throw   Hoa_Exception
      */
