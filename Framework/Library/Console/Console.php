@@ -267,7 +267,7 @@ class Hoa_Console implements Hoa_Framework_Parameterizable {
             );
 
             $expand = Hoa_Console_Core_Io::cin(
-                          'Expand the exception ?',
+                          'Expand the exception?',
                           Hoa_Console_Core_Io::TYPE_YES_NO
                       );
 
