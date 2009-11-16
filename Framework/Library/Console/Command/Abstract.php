@@ -545,7 +545,12 @@ abstract class Hoa_Console_Command_Abstract
         foreach($this->options as $i => $options)
             $out[] = array(
                 '    -' . $options[self::OPTION_VAL] . ', --' .
-                $options[self::OPTION_NAME],
+                $options[self::OPTION_NAME] .
+                ($options[self::OPTION_HAS_ARG] === self::REQUIRED_ARGUMENT
+                    ? '='
+                    : ($options[self::OPTION_HAS_ARG] === self::OPTIONAL_ARGUMENT
+                          ? '[=]'
+                          : '')),
                 (isset($definition[$options[self::OPTION_VAL]])
                     ? $definition[$options[self::OPTION_VAL]]
                     : (isset($definition[$options[0]])
