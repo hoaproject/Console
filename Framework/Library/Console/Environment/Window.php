@@ -119,7 +119,7 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
 
                 $out = trim(Hoa_Console_System::execute('stty -a'));
 
-                if(0 != preg_match('#;\s+([0-9]+)\s+columns;#', $out, $match))
+                if(false !== preg_match('#;\s+([0-9]+)\s+columns;#', $out, $match))
                     $out = $match[1];
             }
         }
@@ -155,7 +155,7 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
 
                 $out = trim(Hoa_Console_System::execute('stty -a'));
 
-                if(0 != preg_match('#;\s+([0-9]+)\s+rows;#', $out, $match))
+                if(false !== preg_match('#;\s+([0-9]+)\s+rows;#', $out, $match))
                     $out = $match[1];
             }
         }
