@@ -73,7 +73,7 @@ class Hoa_Console_Core_Cli_Parser {
      *
      * @var Hoa_Console_Core_Cli_Parser array
      */
-    protected $parsed   = array(
+    protected $parsed   =  array(
         'command'       => array(),
         'input'         => array(),
         'switch'        => array()
