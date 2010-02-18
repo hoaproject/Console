@@ -118,10 +118,10 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
             if(empty($out)) {
 
                 $out   = trim(Hoa_Console_System::execute('stty -a'));
-                $regex = '#(?:;\s+(?P<c>[0-9]+)\s+columns;)|(?:;\s+columns\s+(?P<c>[0-9]+);)#';
+                $regex = '#(?:;\s+(?P<c>[0-9]+)\s+columns;)|(?:;\s+columns\s+(?P<d>[0-9]+);)#';
 
                 if(false !== preg_match($regex, $out, $match))
-                    $out = $match['c'];
+                    $out = isset($match['c']) ? $match['c'] : $match['d'];
             }
         }
 
@@ -155,10 +155,10 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
             if(empty($out)) {
 
                 $out   = trim(Hoa_Console_System::execute('stty -a'));
-                $regex = '#(?:;\s+(?P<r>[0-9]+)\s+rows;)|(?:;\s+rows\s+(?P<r>[0-9]+);)#';
+                $regex = '#(?:;\s+(?P<r>[0-9]+)\s+rows;)|(?:;\s+rows\s+(?P<s>[0-9]+);)#';
 
                 if(false !== preg_match($regex, $out, $match))
-                    $out = $match['r'];
+                    $out = isset($match['r']) ? $match['r'] : $match['s'];
             }
         }
 
