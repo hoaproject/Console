@@ -584,8 +584,8 @@ abstract class Hoa_Console_Command_Abstract
                str_pad(
                    ' ',
                    $this->getEnvironment('window.columns')
-                   - strlen(preg_replace('#' . "\033". '\[[0-9]+m#', '', $text)) -
-                   + 8
+                   - strlen(preg_replace('#' . "\033". '\[[0-9]+m#', '', $text))
+                   - 9
                ) .
                (
                 $status === true
