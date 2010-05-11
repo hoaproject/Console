@@ -134,17 +134,20 @@ class Hoa_Console_Core_Io {
      * @param   bool    $comportement    If the cin should receive an answer to
      *                                   a question, a password, or a normal
      *                                   string.
+     * @param   bool    $ln              Whether add a \n at the end of data.
+     * @param   bool
      * @return  mixed
      * @throw   Hoa_Console_Core_Exception
      * @todo    Remake the password system (maybe with the fflush() function,
      *          see the unix:///coreutils-6.11/lib/getpass.c)
      */
-    public static function cin ( $prefix = null, $comportement = self::TYPE_NORMAL ) {
+    public static function cin ( $prefix = null, $comportement = self::TYPE_NORMAL,
+                                 $ln     = self::NEW_LINE ) {
 
         if($comportement === self::TYPE_YES_NO)
             $prefix .= ' (y/n)';
 
-        self::cout($prefix);
+        self::cout($prefix, $ln);
 
         // Hack for password, bad hack.
         if($comportement === self::TYPE_PASSWORD)
@@ -223,13 +226,15 @@ class Hoa_Console_Core_Io {
  * @param   bool    $comportement    If the cin should receive an answer to
  *                                   a question, a password, or a normal
  *                                   string.
+ * @param   bool    $ln              Whether add a \n at the end of data.
  * @return  string
  * @throw   Hoa_Console_Core_Exception
  */
 function cin ( $prefix       = null,
-               $comportement = Hoa_Console_Core_Io::TYPE_NORMAL ) {
+               $comportement = Hoa_Console_Core_Io::TYPE_NORMAL,
+               $ln           = Hoa_Console_Core_Io::NEW_LINE ) {
 
-    return Hoa_Console_Core_Io::cin($prefix, $comportement);
+    return Hoa_Console_Core_Io::cin($prefix, $comportement, $ln);
 }
 
 /**
