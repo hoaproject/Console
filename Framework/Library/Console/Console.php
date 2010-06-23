@@ -49,7 +49,7 @@ import('Console.Dispatcher');
 /**
  * Hoa_Console_Core_Io
  */
-import('Console.Core.Io', true);
+import('Console.Core.Io') and load();
 
 /**
  * Hoa_Console_Interface_Style
