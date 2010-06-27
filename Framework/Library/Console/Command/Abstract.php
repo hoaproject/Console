@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Console_Command_Exception
@@ -93,7 +93,7 @@ import('Console.Environment.~');
  */
 
 abstract class Hoa_Console_Command_Abstract
-    implements Hoa_Framework_Parameterizable_Readable {
+    implements Hoa_Core_Parameterizable_Readable {
 
     /**
      * Values of the has_arg field of options array.
@@ -204,7 +204,7 @@ abstract class Hoa_Console_Command_Abstract
     /**
      * Parameters of Hoa_Console.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters   = null;
 
@@ -214,11 +214,11 @@ abstract class Hoa_Console_Command_Abstract
      * Set the request and the parser.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter      $parameters    Parameters.
+     * @param   Hoa_Core_Parameter      $parameters    Parameters.
      * @param   Hoa_Console_Core_Cli_Parser  $parser        The parser instance.
      * @return  void
      */
-    final public function __construct ( Hoa_Framework_Parameter     $parameters,
+    final public function __construct ( Hoa_Core_Parameter     $parameters,
                                         Hoa_Console_Core_Cli_Parser $parser ) {
 
         $this->_parameters = $parameters;

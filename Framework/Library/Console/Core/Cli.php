@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Console
@@ -74,7 +74,7 @@ import('Console.Core.Io');
  * @subpackage  Hoa_Console_Core_Cli
  */
 
-class Hoa_Console_Core_Cli implements Hoa_Framework_Parameterizable_Readable {
+class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
 
     /**
      * Command parsed.
@@ -86,7 +86,7 @@ class Hoa_Console_Core_Cli implements Hoa_Framework_Parameterizable_Readable {
     /**
      * Parameters of Hoa_Console.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters     = null;
 
@@ -96,10 +96,10 @@ class Hoa_Console_Core_Cli implements Hoa_Framework_Parameterizable_Readable {
      * Construct a dispatcher.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @param   Hoa_Core_Parameter  $parameters    Parameters.
      * @return  void
      */
-    public function __construct ( Hoa_Framework_Parameter $parameters ) {
+    public function __construct ( Hoa_Core_Parameter $parameters ) {
 
         $this->_parameters = $parameters;
 

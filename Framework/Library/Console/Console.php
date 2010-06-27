@@ -32,9 +32,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Console_Exception
@@ -80,7 +80,7 @@ _define('HC_STOP',    16);
  * @package     Hoa_Console
  */
 
-class Hoa_Console implements Hoa_Framework_Parameterizable {
+class Hoa_Console implements Hoa_Core_Parameterizable {
 
     /**
      * Singleton.
@@ -106,7 +106,7 @@ class Hoa_Console implements Hoa_Framework_Parameterizable {
     /**
      * The Hoa_Console parameters.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters      = null;
 
@@ -121,7 +121,7 @@ class Hoa_Console implements Hoa_Framework_Parameterizable {
      */
     private function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Framework_Parameter(
+        $this->_parameters = new Hoa_Core_Parameter(
             $this,
             array(
                 'group'   => 'main',
@@ -247,8 +247,8 @@ class Hoa_Console implements Hoa_Framework_Parameterizable {
             $this->_parameters->shareWith(
                 $this,
                 $dispatcher,
-                Hoa_Framework_Parameter::PERMISSION_READ |
-                Hoa_Framework_Parameter::PERMISSION_SHARE
+                Hoa_Core_Parameter::PERMISSION_READ |
+                Hoa_Core_Parameter::PERMISSION_SHARE
             );
             $dispatcher->dispatch();
         }

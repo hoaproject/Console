@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_Console
@@ -71,12 +71,12 @@ import('Console.Command.Abstract');
  * @subpackage  Hoa_Console_Dispatcher
  */
 
-class Hoa_Console_Dispatcher implements Hoa_Framework_Parameterizable_Readable {
+class Hoa_Console_Dispatcher implements Hoa_Core_Parameterizable_Readable {
 
     /**
      * Parameters of Hoa_Console.
      *
-     * @var Hoa_Framework_Parameter object
+     * @var Hoa_Core_Parameter object
      */
     private $_parameters = null;
 
@@ -86,10 +86,10 @@ class Hoa_Console_Dispatcher implements Hoa_Framework_Parameterizable_Readable {
      * Construct a dispatcher.
      *
      * @access  public
-     * @param   Hoa_Framework_Parameter  $parameters    Parameters.
+     * @param   Hoa_Core_Parameter  $parameters    Parameters.
      * @return  void
      */
-    public function __construct ( Hoa_Framework_Parameter $parameters ) {
+    public function __construct ( Hoa_Core_Parameter $parameters ) {
 
         $this->_parameters = $parameters;
 
@@ -151,8 +151,8 @@ class Hoa_Console_Dispatcher implements Hoa_Framework_Parameterizable_Readable {
         $this->_parameters->shareWith(
             $this,
             $cli,
-            Hoa_Framework_Parameter::PERMISSION_READ |
-            Hoa_Framework_Parameter::PERMISSION_WRITE
+            Hoa_Core_Parameter::PERMISSION_READ |
+            Hoa_Core_Parameter::PERMISSION_WRITE
         );
 
         do {
@@ -183,7 +183,7 @@ class Hoa_Console_Dispatcher implements Hoa_Framework_Parameterizable_Readable {
                 $this->_parameters->shareWith(
                     $this,
                     $object,
-                    Hoa_Framework_Parameter::PERMISSION_READ
+                    Hoa_Core_Parameter::PERMISSION_READ
                 );
 
                 if($object instanceof Hoa_Console_Command_Abstract) {
