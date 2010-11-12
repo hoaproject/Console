@@ -228,7 +228,7 @@ class Hoa_Console_Core_Cli_Parser {
          *
          * Nice isn't it :D ?
          *
-         * Note : this regular expression like to capture empty array (near
+         * Note : this regular expression likes to capture empty array (near
          * <input>), why ?
          */
 
@@ -236,8 +236,7 @@ class Hoa_Console_Core_Cli_Parser {
 
         preg_match_all($regex, $command, $matches, PREG_SET_ORDER);
 
-        foreach($matches as $i => $match) {
-
+        foreach($matches as $i => $match)
             if($this->isInput($match))
                 $this->addInput($match);
 
@@ -246,7 +245,6 @@ class Hoa_Console_Core_Cli_Parser {
 
             elseif($this->isValuedSwitch($match))
                 $this->addValuedSwitch($match);
-        }
 
         $this->setCommand(array_shift($this->parsed['input']));
 
