@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Hoa_Console_Environment_Exception
  */
 import('Console.Environment.Exception');

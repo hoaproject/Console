@@ -33,11 +33,6 @@
  */
 
 /**
- * Hoa_Core
- */
-require_once 'Core.php';
-
-/**
  * Class Hoa_Console_Interface_Sound.
  *
  * This class tries to produce terminal sounds.
