@@ -225,12 +225,13 @@ class Hoa_Console_Core_Io {
  * @return  string
  * @throw   Hoa_Console_Core_Exception
  */
+if(!ƒ('cin')) {
 function cin ( $prefix       = null,
                $comportement = Hoa_Console_Core_Io::TYPE_NORMAL,
                $ln           = Hoa_Console_Core_Io::NEW_LINE ) {
 
     return Hoa_Console_Core_Io::cin($prefix, $comportement, $ln);
-}
+}}
 
 /**
  * Alias of Hoa_Console_Core_Io::cout.
@@ -242,8 +243,9 @@ function cin ( $prefix       = null,
  * @return  void
  * @throw   Hoa_Console_Core_Exception
  */
+if(!ƒ('cout')) {
 function cout ( $out = null, $ln = Hoa_Console_Core_Io::NEW_LINE,
                 $ww  = Hoa_Console_Core_Io::WORDWRAP ) {
 
     return Hoa_Console_Core_Io::cout($out, $ln, $ww);
-}
+}}
