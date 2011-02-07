@@ -106,7 +106,7 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getParameters ( ) {
 
@@ -119,7 +119,7 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key      Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getParameter ( $key ) {
 
@@ -133,7 +133,7 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getFormattedParameter ( $key ) {
 

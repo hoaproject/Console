@@ -228,7 +228,7 @@ abstract class Hoa_Console_Command_Abstract
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getParameters ( ) {
 
@@ -241,7 +241,7 @@ abstract class Hoa_Console_Command_Abstract
      * @access  public
      * @param   string  $key      Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getParameter ( $key ) {
 
@@ -255,7 +255,7 @@ abstract class Hoa_Console_Command_Abstract
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Exception
+     * @throw   Hoa_Core_Exception
      */
     public function getFormattedParameter ( $key ) {
 
