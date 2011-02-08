@@ -24,71 +24,68 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console\Command\Exception
+ */
+-> import('Console.Command.Exception')
+
+/**
+ * \Hoa\Console\Core\GetOption
+ */
+-> import('Console.Core.GetOption')
+
+/**
+ * \Hoa\Console\Core\Io
+ */
+-> import('Console.Core.Io', true)
+
+/**
+ * \Hoa\Console\Chrome\Style
+ */
+-> import('Console.Chrome.Style')
+
+/**
+ * \Hoa\Console\Chrome\Sound
+ */
+-> import('Console.Chrome.Sound')
+
+/**
+ * \Hoa\Console\Chrome\Text
+ */
+-> import('Console.Chrome.Text')
+
+/**
+ * \Hoa\Console\System
+ */
+-> import('Console.System.~')
+
+/**
+ * \Hoa\Console\Environment
+ */
+-> import('Console.Environment.~');
+
+}
+
+namespace Hoa\Console\Command {
+
+/**
+ * Class \Hoa\Console\Command\Generic.
  *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Command_Dispatcher
- *
- */
-
-/**
- * Hoa_Console_Command_Exception
- */
-import('Console.Command.Exception');
-
-/**
- * Hoa_Console_Core_GetOption
- */
-import('Console.Core.GetOption');
-
-/**
- * Hoa_Console_Core_Io
- */
-import('Console.Core.Io') and load();
-
-/**
- * Hoa_Console_Interface_Style
- */
-import('Console.Interface.Style');
-
-/**
- * Hoa_Console_Interface_Sound
- */
-import('Console.Interface.Sound');
-
-/**
- * Hoa_Console_Interface_Text
- */
-import('Console.Interface.Text');
-
-/**
- * Hoa_Console_System
- */
-import('Console.System.~');
-
-/**
- * Hoa_Console_Environment
- */
-import('Console.Environment.~');
-
-/**
- * Class Hoa_Console_Command_Command_Dispatcher.
- *
- * This class is a bridge between the command and the Hoa_Console package, i.e.
+ * This class is a bridge between the command and the \Hoa\Console package, i.e.
  * it is a wrapper for many classes.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Command_Abstract
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Console_Command_Abstract
-    implements Hoa_Core_Parameterizable_Readable {
+abstract class Generic implements \Hoa\Core\Parameterizable\Readable {
 
     /**
      * Values of the has_arg field of options array.
@@ -118,7 +115,7 @@ abstract class Hoa_Console_Command_Abstract
     const OPTION_VAL         = 2;
 
     /**
-     * Alias constants of Hoa_Console_Interface_Text::ALIGN_*.
+     * Alias constants of \Hoa\Console\Chrome\Text::ALIGN_*.
      *
      * @const int
      */
@@ -127,7 +124,7 @@ abstract class Hoa_Console_Command_Abstract
     const ALIGN_CENTER       = 2;
 
     /**
-     * Alias constants of Hoa_Console_Interface_Style::COLOR_*, and TEXT_*.
+     * Alias constants of \Hoa\Console\Chrome\Style::COLOR_*, and TEXT_*.
      *
      * @const int
      */
@@ -164,42 +161,42 @@ abstract class Hoa_Console_Command_Abstract
      * OPTIONAL_ARGUMENT.
      * The val is the short option value.
      *
-     * @var Hoa_Console_Command_Abstract array
+     * @var \Hoa\Console\Command\Generic array
      */
     protected $options     = array();
 
     /**
      * The author name.
      *
-     * @var Hoa_Console_Command_Abstract string
+     * @var \Hoa\Console\Command\Generic string
      */
     protected $author      = null;
 
     /**
      * The program name.
      *
-     * @var Hoa_Console_Command_Abstract string
+     * @var \Hoa\Console\Command\Generic string
      */
     protected $programName = null;
 
     /**
      * Parser.
      *
-     * @var Hoa_Console_Core_Cli_Parser object
+     * @var \Hoa\Console\Core\Cli\Parser object
      */
     private $_parser       = null;
 
     /**
      * GetOption.
      *
-     * @var Hoa_Console_Core_GetOption object
+     * @var \Hoa\Console\Core\GetOption object
      */
     private $gopt          = null;
 
     /**
-     * Parameters of Hoa_Console.
+     * Parameters of \Hoa\Console.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     private $_parameters   = null;
 
@@ -209,12 +206,12 @@ abstract class Hoa_Console_Command_Abstract
      * Set the request and the parser.
      *
      * @access  public
-     * @param   Hoa_Core_Parameter      $parameters    Parameters.
-     * @param   Hoa_Console_Core_Cli_Parser  $parser        The parser instance.
+     * @param   \Hoa\Core\Parameter      $parameters    Parameters.
+     * @param   \Hoa\Console\Core\Cli\Parser  $parser        The parser instance.
      * @return  void
      */
-    final public function __construct ( Hoa_Core_Parameter     $parameters,
-                                        Hoa_Console_Core_Cli_Parser $parser ) {
+    final public function __construct ( \Hoa\Core\Parameter     $parameters,
+                                        \Hoa\Console\Core\Cli\Parser $parser ) {
 
         $this->_parameters = $parameters;
         $this->setParser($parser);
@@ -228,7 +225,7 @@ abstract class Hoa_Console_Command_Abstract
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -241,7 +238,7 @@ abstract class Hoa_Console_Command_Abstract
      * @access  public
      * @param   string  $key      Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -255,7 +252,7 @@ abstract class Hoa_Console_Command_Abstract
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -266,10 +263,10 @@ abstract class Hoa_Console_Command_Abstract
      * Set the router.
      *
      * @access  private
-     * @param   Hoa_Console_Core_Cli_Parser  $parser    The parser instance.
-     * @return  Hoa_Console_Core_Cli_Parser
+     * @param   \Hoa\Console\Core\Cli\Parser  $parser    The parser instance.
+     * @return  \Hoa\Console\Core\Cli\Parser
      */
-    private function setParser ( Hoa_Console_Core_Cli_Parser $parser ) {
+    private function setParser ( \Hoa\Console\Core\Cli\Parser $parser ) {
 
         $old           = $this->_parser;
         $this->_parser = $parser;
@@ -281,7 +278,7 @@ abstract class Hoa_Console_Command_Abstract
      * Get the parser.
      *
      * @access  private
-     * @return  Hoa_Console_Core_Cli_Parser
+     * @return  \Hoa\Console\Core\Cli\Parser
      */
     private function getParser ( ) {
 
@@ -292,12 +289,12 @@ abstract class Hoa_Console_Command_Abstract
      * Set the getOption object.
      *
      * @access  private
-     * @return  Hoa_Console_Core_GetOption
+     * @return  \Hoa\Console\Core\GetOption
      */
     private function setGopt ( ) {
 
         $old        = $this->gopt;
-        $this->gopt = new Hoa_Console_Core_GetOption(
+        $this->gopt = new \Hoa\Console\Core\GetOption(
                           $this->_getOption(),
                           $this->getParser()
                       );
@@ -309,7 +306,7 @@ abstract class Hoa_Console_Command_Abstract
      * Get the getOption object.
      *
      * @access  private
-     * @return  Hoa_Console_Core_GetOption
+     * @return  \Hoa\Console\Core\GetOption
      */
     private function getOpt ( ) {
 
@@ -328,7 +325,7 @@ abstract class Hoa_Console_Command_Abstract
     }
 
     /**
-     * Get option from a pipette. Please, see the Hoa_Console_Core_GetOption
+     * Get option from a pipette. Please, see the \Hoa\Console\Core\GetOption
      * class.
      *
      * @access  protected
@@ -356,7 +353,7 @@ abstract class Hoa_Console_Command_Abstract
     }
 
     /**
-     * Wrap the Hoa_Console_Core_Cli_Parser::listInputs() method.
+     * Wrap the \Hoa\Console\Core\Cli\Parser::listInputs() method.
      *
      * @access  public
      * @param   string  $a     First input.
@@ -381,13 +378,13 @@ abstract class Hoa_Console_Command_Abstract
     }
 
     /**
-     * Wrap the Hoa_Console_Core_Cli_Parser::parseSpecialValue() method.
+     * Wrap the \Hoa\Console\Core\Cli\Parser::parseSpecialValue() method.
      *
      * @access  public
      * @param   string  $value       The value to parse.
      * @param   array   $keywords    Value of keywords.
      * @return  array
-     * @throw   Hoa_Console_Core_Cli_Exception
+     * @throw   \Hoa\Console\Core\Cli\Exception
      */
     public function parseSpecialValue ( $value, Array $keywords = array() ) {
 
@@ -395,35 +392,35 @@ abstract class Hoa_Console_Command_Abstract
     }
 
     /**
-     * Wrap the Hoa_Console_Interface_Style::stylize() method.
+     * Wrap the \Hoa\Console\Chrome\Style::stylize() method.
      *
      * @access  public
      * @param   string  $text    
      * @param   string  $options    Should be an integer or an array of integer
      *                              (given by
-     *                              Hoa_Console_Interface_Style::COLOR_* or 
-     *                              Hoa_Console_Interface_Style::TEXT_*
+     *                              \Hoa\Console\Chrome\Style::COLOR_* or 
+     *                              \Hoa\Console\Chrome\Style::TEXT_*
      *                              constants combinaisons), or a style name.
      * @return  string
      */
     public function stylize ( $text, $options = array() ) {
 
-        return Hoa_Console_Interface_Style::stylize($text, $options);
+        return \Hoa\Console\Chrome\Style::stylize($text, $options);
     }
 
     /**
-     * Wrap the Hoa_Console_Interface_Sound::bip() method.
+     * Wrap the \Hoa\Console\Chrome\Sound::bip() method.
      *
      * @access  public
      * @return  string
      */
     public function bip ( ) {
 
-        return Hoa_Console_Interface_Sound::bip();
+        return \Hoa\Console\Chrome\Sound::bip();
     }
 
     /**
-     * Wrap the Hoa_Console_Interface_Text::align() method.
+     * Wrap the \Hoa\Console\Chrome\Text::align() method.
      *
      * @access  public
      * @param   string  $text          The text.
@@ -432,17 +429,17 @@ abstract class Hoa_Console_Command_Abstract
      * @return  string
      */
     public function align ( $text,
-                            $alignement = Hoa_Console_Interface_Text::ALIGN_LEFT,
+                            $alignement = \Hoa\Console\Chrome\Text::ALIGN_LEFT,
                             $width      = null ) {
 
         if(null === $width)
             $width = $this->getEnvironment('window.columns');
 
-        return Hoa_Console_Interface_Text::align($text, $alignement, $width);
+        return \Hoa\Console\Chrome\Text::align($text, $alignement, $width);
     }
 
     /**
-     * Wrap the Hoa_Console_Interface_Text::columnize() method.
+     * Wrap the \Hoa\Console\Chrome\Text::columnize() method.
      *
      * @access  public
      * @param   Array   $line                 The table represented by an array
@@ -457,12 +454,12 @@ abstract class Hoa_Console_Command_Abstract
      * @return  string
      */
     public function columnize ( Array $line,
-                                $alignement        = Hoa_Console_Interface_Text::ALIGN_LEFT,
+                                $alignement        = \Hoa\Console\Chrome\Text::ALIGN_LEFT,
                                 $horizontalPadding = 2,
                                 $verticalPadding   = 0,
                                 $separator         = null ) {
 
-        return Hoa_Console_Interface_Text::columnize(
+        return \Hoa\Console\Chrome\Text::columnize(
                    $line,
                    $alignement,
                    $horizontalPadding,
@@ -472,7 +469,7 @@ abstract class Hoa_Console_Command_Abstract
     }
 
     /**
-     * Wrap the Hoa_Console_Interface_Text::wordwrap() method.
+     * Wrap the \Hoa\Console\Chrome\Text::wordwrap() method.
      *
      * @access  public
      * @param   string  $text     Text to wrap.
@@ -482,11 +479,11 @@ abstract class Hoa_Console_Command_Abstract
      */
     public function wordwrap ( $text, $width = null, $break = "\n" ) {
 
-        return Hoa_Console_Interface_Text::wordwrap($text, $width, $break);
+        return \Hoa\Console\Chrome\Text::wordwrap($text, $width, $break);
     }
 
     /**
-     * Wrap the Hoa_Console_Interface_Text::underline() method.
+     * Wrap the \Hoa\Console\Chrome\Text::underline() method.
      *
      * @access  public
      * @param   string  $text       The text to underline.
@@ -495,38 +492,38 @@ abstract class Hoa_Console_Command_Abstract
      */
     public function underline ( $text, $pattern = '*' ) {
 
-        return Hoa_Console_Interface_Text::underline($text, $pattern);
+        return \Hoa\Console\Chrome\Text::underline($text, $pattern);
     }
 
     /**
-     * Wrap the Hoa_Console_System::execute() method.
+     * Wrap the \Hoa\Console\System::execute() method.
      *
      * @access  public
      * @param   string  $command    The command to execute.
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      */
     public function execute ( $command ) {
 
-        return Hoa_Console_System::execute($command);
+        return \Hoa\Console\System::execute($command);
     }
 
     /**
-     * Wrap the Hoa_Console_Environment::get() method.
+     * Wrap the \Hoa\Console\Environment::get() method.
      *
      * @access  public
      * @param   string  $data    Data to get.
      * @return  mixed
-     * @throw   Hoa_Console_Environment_Exception
+     * @throw   \Hoa\Console\Environment\Exception
      */
     public function getEnvironment ( $data ) {
 
-        return Hoa_Console_Environment::get($data);
+        return \Hoa\Console\Environment::get($data);
     }
 
     /**
      * It is a helper to make the usage options list (through the
-     * Hoa_Console_Interface_Text::columnize() method).
+     * \Hoa\Console\Chrome\Text::columnize() method).
      *
      * @access  public
      * @param   Array   $definition    An associative array : short or long
@@ -557,7 +554,7 @@ abstract class Hoa_Console_Command_Abstract
 
         return $this->columnize(
                    $out,
-                   Hoa_Console_Interface_Text::ALIGN_LEFT,
+                   \Hoa\Console\Chrome\Text::ALIGN_LEFT,
                    .5,
                    0,
                    '|: '
@@ -588,7 +585,7 @@ abstract class Hoa_Console_Command_Abstract
                     : '[' . $this->stylize('!!', 'nosuccess') . ']'
                );
 
-        cout($out, Hoa_Console_Core_Io::NEW_LINE, Hoa_Console_Core_Io::NO_WORDWRAP);
+        cout($out, \Hoa\Console\Core\Io::NEW_LINE, \Hoa\Console\Core\Io::NO_WORDWRAP);
 
         return;
     }
@@ -608,4 +605,6 @@ abstract class Hoa_Console_Command_Abstract
      * @return  int
      */
     abstract public function usage ( );
+}
+
 }

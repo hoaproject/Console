@@ -24,39 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_Interface
- *
  */
+
+namespace Hoa\Console\Chrome {
 
 /**
- * Interface Hoa_Console_Environment_Interface.
+ * Class \Hoa\Console\Chrome\Sound.
  *
- * Force to implement the get() method.
+ * This class tries to produce terminal sounds.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_Interface
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-interface Hoa_Console_Environment_Interface {
+class Sound {
 
     /**
-     * Obtain data from the environment.
-     * Data has the form : group.key, where the group is the class, and key
-     * depends of the class (should be a method for example).
+     * Make a stupid “bip”.
      *
      * @access  public
-     * @param   string  $data    Data to get.
-     * @return  mixed
-     * @throw   Hoa_Console_Environment_Exception
+     * @return  string
      */
-    public static function get ( $data );
+    public static function bip ( ) {
+
+        return "\007";
+    }
+}
+
 }

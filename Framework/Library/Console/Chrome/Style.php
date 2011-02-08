@@ -24,36 +24,34 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Interface_Style
- *
  */
 
-/**
- * Hoa_Console_Interface_Exception
- */
-import('Console.Interface.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Console_Interface_Style.
+ * \Hoa\Console\Chrome\Exception
+ */
+-> import('Console.Chrome.Exception');
+
+}
+
+namespace Hoa\Console\Chrome {
+
+/**
+ * Class \Hoa\Console\Chrome\Style.
  *
- * Manage the text style : color of foreground, background, or text style (bold,
+ * Manage the text style: color of foreground, background, or text style (bold,
  * underscore etc.).
  * This class also allows to register and recover styles.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Interface_Style
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Console_Interface_Style {
+abstract class Style {
 
     /**
      * The eigth foreground console color.
@@ -111,7 +109,7 @@ abstract class Hoa_Console_Interface_Style {
     /**
      * Register of style.
      *
-     * @var Hoa_Console_Interface_Style array
+     * @var \Hoa\Console\Chrome\Style array
      */
     protected static $style = array();
 
@@ -150,12 +148,14 @@ abstract class Hoa_Console_Interface_Style {
      * @access  public
      * @param   array   $styles    Styles.
      * @return  array
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     public static function addStyles ( Array $styles ) {
 
         foreach($styles as $name => $options)
             self::addStyle($name, $options);
+
+        return;
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class Hoa_Console_Interface_Style {
      * @param   mixed   $options      Should be an integer or an array of integer.
      * @param   bool    $overwrite    Overwrite style or not.
      * @return  array
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     public static function addStyle ( $name, $options,
                                       $overwrite = self::STYLE_IMPORTANT ) {
@@ -180,12 +180,15 @@ abstract class Hoa_Console_Interface_Style {
             unset($options['!important']);
         }
 
-        if(true === self::styleExists($name) && self::STYLE_IMPORTANT === $overwrite)
-            throw new Hoa_Console_Interface_Exception(
+        if(   true === self::styleExists($name)
+           && self::STYLE_IMPORTANT === $overwrite)
+            throw new Exception(
                 'The %s style already exists, ask to do not overwrite if exists.',
                 0, $name);
 
         self::$style[$name] = $options;
+
+        return;
     }
 
     /**
@@ -206,12 +209,12 @@ abstract class Hoa_Console_Interface_Style {
      * @access  protected
      * @param   string     $name    The style name.
      * @return  array
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     protected static function getStyle ( $name ) {
 
         if(false === self::styleExists($name))
-            throw new Hoa_Console_Interface_Exception(
+            throw new Exception(
                 'The %s style does not exists.', 1, $name);
 
         return self::$style[$name];
@@ -225,4 +228,6 @@ abstract class Hoa_Console_Interface_Style {
      * @return  void
      */
     abstract public function import ( );
+}
+
 }

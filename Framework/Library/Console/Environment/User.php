@@ -24,44 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_User
- *
  */
 
-/**
- * Hoa_Console_Environment_Exception
- */
-import('Console.Environment.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Environment_Interface
+ * \Hoa\Console\Environment\Exception
  */
-import('Console.Environment.Interface');
+-> import('Console.Environment.Exception')
 
 /**
- * Hoa_Console_System
+ * \Hoa\Console\System
  */
-import('Console.System.~');
+-> import('Console.System.~');
+
+}
+
+namespace Hoa\Console\Environment {
 
 /**
- * Class Hoa_Console_Environment_User.
+ * Class \Hoa\Console\Environment\User.
  *
  * Get some informations about the user.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_User
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface {
+class User {
 
     /**
      * Obtain data from the user environment.
@@ -69,7 +62,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
      * @access  public
      * @param   string  $data    Data to get.
      * @return  mixed
-     * @throw   Hoa_Console_Environment_Exception
+     * @throw   \Hoa\Console\Environment\Exception
      */
     public static function get ( $data ) {
 
@@ -100,7 +93,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
               break;
 
             default:
-                throw new Hoa_Console_Environment_Exception(
+                throw new Exception(
                     'Given an unidentified data : %s.', 0, $data);
         }
     }
@@ -110,7 +103,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
      *
      * @access  public
      * @return  int
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getUid ( ) {
@@ -120,7 +113,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
             $out = null;
         }
         else
-            $out = (int) trim(Hoa_Console_System::execute('id -u'));
+            $out = (int) trim(\Hoa\Console\System::execute('id -u'));
 
         if(empty($out))
             $out = null;
@@ -133,7 +126,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getUser ( ) {
@@ -143,7 +136,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
             $out = null;
         }
         else
-            $out = trim(Hoa_Console_System::execute('id -un'));
+            $out = trim(\Hoa\Console\System::execute('id -un'));
 
         if(empty($out))
             $out = null;
@@ -158,7 +151,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
      * @param   mixed   $user    Specify a username or user ID. If set to null,
      *                           the current user ID will be selected.
      * @return  array
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getGid ( $user = null ) {
@@ -171,7 +164,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
             $out = null;
         }
         else
-            $out = explode(' ', trim(Hoa_Console_System::execute('id -G ' . $user)));
+            $out = explode(' ', trim(\Hoa\Console\System::execute('id -G ' . $user)));
 
         if(empty($out))
             $out = array();
@@ -186,7 +179,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
      * @param   mixed   $user    Specify a username or user ID. If set to null,
      *                           the current user ID will be selected.
      * @return  array
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getGroup ( $user = null ) {
@@ -199,7 +192,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
             $out = null;
         }
         else
-            $out = explode(' ', Hoa_Console_System::execute('id -Gn ' . $user));
+            $out = explode(' ', \Hoa\Console\System::execute('id -Gn ' . $user));
 
         if(empty($out))
             $out = array();
@@ -214,7 +207,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
      * @param   mixed   $user    Specify a username or user ID. If set to null,
      *                           the current user ID will be selected.
      * @return  int
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getEffectiveGid ( $user = null ) {
@@ -227,7 +220,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
             $out = null;
         }
         else
-            $out = (int) Hoa_Console_System::execute('id -g ' . $user);
+            $out = (int) \Hoa\Console\System::execute('id -g ' . $user);
 
         if(empty($out))
             $out = null;
@@ -242,7 +235,7 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
      * @param   mixed   $user    Specify a username or user ID. If set to null,
      *                           the current user ID will be selected.
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getEffectiveGroup ( $user = null ) {
@@ -255,11 +248,13 @@ class Hoa_Console_Environment_User implements Hoa_Console_Environment_Interface 
             $out = null;
         }
         else
-            $out = trim(Hoa_Console_System::execute('id -gn ' . $user));
+            $out = trim(\Hoa\Console\System::execute('id -gn ' . $user));
 
         if(empty($out))
             $out = null;
 
         return $out;
     }
+}
+
 }

@@ -24,64 +24,62 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_Cli
- *
  */
 
-/**
- * Hoa_Console
- */
-import('Console.~');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Core_Exception
+ * \Hoa\Console
  */
-import('Console.Core.Exception');
+-> import('Console.~')
 
 /**
- * Hoa_Console_Core_Cli_Parser
+ * \Hoa\Console\Core\Exception
  */
-import('Console.Core.Cli.Parser');
+-> import('Console.Core.Exception')
 
 /**
- * Hoa_Console_Core_Io
+ * \Hoa\Console\Core\Cli\Parser
  */
-import('Console.Core.Io');
+-> import('Console.Core.Cli.Parser')
 
 /**
- * Class Hoa_Console_Core_Cli.
+ * \Hoa\Console\Core\Io
+ */
+-> import('Console.Core.Io');
+
+}
+
+namespace Hoa\Console\Core\Cli {
+
+/**
+ * Class \Hoa\Console\Core\Cli.
  *
  * This class get a command-line (from the global variale, e.g. $_SERVER, or
  * from a printed prompt), and run the CLI parser, through the
- * Hoa_Console_Core_Cli_Parser class. When the parsing is over, this class
+ * \Hoa\Console\Core\Cli\Parser class. When the parsing is over, this class
  * proposes the result to other classes.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_Cli
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
+class Cli implements \Hoa\Core\Parameterizable\Readable {
 
     /**
      * Command parsed.
      *
-     * @var Hoa_Console_Core_Cli_Parser object
+     * @var \Hoa\Console\Core\Cli\Parser object
      */
     protected $_commandline  = null;
 
     /**
-     * Parameters of Hoa_Console.
+     * Parameters of \Hoa\Console.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     private $_parameters     = null;
 
@@ -91,10 +89,10 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      * Construct a dispatcher.
      *
      * @access  public
-     * @param   Hoa_Core_Parameter  $parameters    Parameters.
+     * @param   \Hoa\Core\Parameter  $parameters    Parameters.
      * @return  void
      */
-    public function __construct ( Hoa_Core_Parameter $parameters ) {
+    public function __construct ( \Hoa\Core\Parameter $parameters ) {
 
         $this->_parameters = $parameters;
 
@@ -106,7 +104,7 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -119,7 +117,7 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key      Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -133,7 +131,7 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -149,16 +147,16 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      */
     public function newPrompt ( ) {
 
-        if(false === Hoa_Console::isStandalone())
+        if(false === \Hoa\Console::isStandalone())
             do {
 
-                Hoa_Console_Core_Io::cout(
+                \Hoa\Console\Core\Io::cout(
                     $this->getParameter('prompt.prefix'),
                     $this->getParameter('prompt.symbol'),
                     false
                 );
 
-                $command = Hoa_Console_Core_Io::cin();
+                $command = \Hoa\Console\Core\Io::cin();
             } while ( $command == '' );
         else
             $command = $this->rebuildCommand();
@@ -170,16 +168,16 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
 
     /**
      * Set the command given in the last prompt, and parse it with the
-     * Hoa_Console_Core_Cli_Parser object.
+     * \Hoa\Console\Core\Cli\Parser object.
      *
      * @access  protected
      * @param   string     $commandline     The command line.
-     * @return  Hoa_Console_Core_Cli_Parser
+     * @return  \Hoa\Console\Core\Cli\Parser
      */
     protected function setParsed ( $commandline ) {
 
         $old                = $this->_commandline;
-        $this->_commandline = new Hoa_Console_Core_Cli_Parser();
+        $this->_commandline = new Parser();
         $this->_commandline->setLongOnly($this->getParameter('cli.longonly'));
         $separator          = $this->getParameter('cli.separator');
 
@@ -209,7 +207,7 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
      * Get the command parsed given in the last prompt.
      *
      * @acccess  public
-     * @return   Hoa_Console_Core_Cli_Parser
+     * @return   \Hoa\Console\Core\Cli\Parser
      */
     public function getParsed ( ) {
 
@@ -258,4 +256,6 @@ class Hoa_Console_Core_Cli implements Hoa_Core_Parameterizable_Readable {
 
         return trim($out);
     }
+}
+
 }

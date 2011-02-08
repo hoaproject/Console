@@ -24,46 +24,44 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Interface_Animation
- *
  */
 
-/**
- * Hoa_Console_Interface_Exception
- */
-import('Console.Interface.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Core_Io
+ * \Hoa\Console\Chrome\Exception
  */
-import('Console.Core.Io');
+-> import('Console.Chrome.Exception')
 
 /**
- * Class Hoa_Console_Interface_Animation.
+ * \Hoa\Console\Core\Io
+ */
+-> import('Console.Core.Io');
+
+}
+
+namespace Hoa\Console\Chrome {
+
+/**
+ * Class \Hoa\Console\Chrome\Animation.
  *
  * This class allows to make an animation on a single line (by using the \r
  * special char, not with cleaning screen for each animation frame).
  * See the self::render() method to know tips.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Interface_Animation
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_Console_Interface_Animation {
+abstract class Animation {
 
     /**
      * The animation parameters. Should be overload by childs.
      *
-     * @var Hoa_Console_Interface_Animation
+     * @var \Hoa\Console\Chrome\Animation
      */
     protected $parameters = array();
 
@@ -75,7 +73,7 @@ abstract class Hoa_Console_Interface_Animation {
      * @access  public
      * @param   array   $parameters    Animation parameters.
      * @return  void
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     public function __construct ( Array $parameters = array() ) {
 
@@ -88,7 +86,7 @@ abstract class Hoa_Console_Interface_Animation {
      * @access  public
      * @param   array   $parameters    Animation parameters.
      * @return  void
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     public function setParameters ( Array $parameters ) {
 
@@ -103,12 +101,12 @@ abstract class Hoa_Console_Interface_Animation {
      * @param   string  $parameter    The parameter name.
      * @param   mixed   $value        The parameter value.
      * @return  mixed
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     public function setParameter ( $parameter, $value ) {
 
         if(false === $this->parameterExists($parameter))
-            throw new Hoa_Console_Interface_Exception(
+            throw new \Hoa\Console\Chrome\Exception(
                 'The %s parameter does not exist.', 0, $parameter);
 
         $old                          = $this->parameters[$parameter];
@@ -123,12 +121,12 @@ abstract class Hoa_Console_Interface_Animation {
      * @access  public
      * @param   string  $parameter    The parameter name.
      * @return  mixed
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     public function getParameter ( $parameter ) {
 
         if(false === $this->parameterExists($parameter))
-            throw new Hoa_Console_Interface_Exception(
+            throw new \Hoa\Console\Chrome\Exception(
                 'The %s parameter does not exist.', 1, $parameter);
 
         return $this->parameters[$parameter];
@@ -169,9 +167,9 @@ abstract class Hoa_Console_Interface_Animation {
             $i      = $this->animationFrame($i);
             $render = $this->animationRender($i, $max);
 
-            Hoa_Console_Core_Io::cout(
+            \Hoa\Console\Core\Io::cout(
                 "\r" . $render,
-                Hoa_Console_Core_Io::NO_NEW_LINE
+                \Hoa\Console\Core\Io::NO_NEW_LINE
             );
         }
 
@@ -205,7 +203,9 @@ abstract class Hoa_Console_Interface_Animation {
      * @param   int        $i      The current frame number.
      * @param   int        $max    Max number of frame.
      * @return  string
-     * @throw   Hoa_Console_Interface_Exception
+     * @throw   \Hoa\Console\Chrome\Exception
      */
     abstract protected function animationRender ( $i, $max );
+}
+
 }

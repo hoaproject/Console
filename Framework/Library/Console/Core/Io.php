@@ -24,23 +24,21 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_Io
- *
  */
 
-/**
- * Hoa_Console_Core_Exception
- */
-import('Console.Core.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Environment_Window
+ * \Hoa\Console\Core\Exception
  */
-import('Console.Environment.Window');
+-> import('Console.Core.Exception')
+
+/**
+ * \Hoa\Console\Environment\Window
+ */
+-> import('Console.Environment.Window');
 
 /**
  * Whether they are not defined.
@@ -49,23 +47,23 @@ _define('STDIN',  fopen('php://stdin' , 'rb'));
 _define('STDOUT', fopen('php://stdout', 'wb'));
 _define('STDERR', fopen('php://stderr', 'wb'));
 
+}
+
+namespace Hoa\Console\Core {
+
 /**
- * Class Hoa_Console_Core_Io.
+ * Class \Hoa\Console\Core\Io.
  *
  * This class allows to treat the STDIN, STDOUT, and STDERR stream.
  * Methods have options to make a bit more than just writte in a i/o stream,
  * like wordwrap the text, or prepare a question (y/n) etc.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_Io
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Core_Io {
+class Io {
 
     /**
      * Write a \n after the cout message.
@@ -132,7 +130,7 @@ class Hoa_Console_Core_Io {
      * @param   bool    $ln              Whether add a \n at the end of data.
      * @param   bool
      * @return  mixed
-     * @throw   Hoa_Console_Core_Exception
+     * @throw   \Hoa\Console\Core\Exception
      * @todo    Remake the password system (maybe with the fflush() function,
      *          see the unix:///coreutils-6.11/lib/getpass.c)
      */
@@ -150,7 +148,7 @@ class Hoa_Console_Core_Io {
                 self::cout("\033[8m", self::NO_NEW_LINE);
 
         if(false === $in = fgets(STDIN))
-            throw new Hoa_Console_Core_Exception(
+            throw new \Hoa\Console\Core\Exception(
                 'Cannot read the standard input.', 0);
 
         if($comportement === self::TYPE_PASSWORD)
@@ -188,7 +186,7 @@ class Hoa_Console_Core_Io {
      * @param   bool    $ln     Whether add a \n at the end of data.
      * @param   bool    $ww     Wordwrap the text or not.
      * @return  void
-     * @throw   Hoa_Console_Core_Exception
+     * @throw   \Hoa\Console\Core\Exception
      */
     public static function cout ( $out = null, $ln = self::NEW_LINE,
                                   $ww  = self::WORDWRAP ) {
@@ -196,7 +194,7 @@ class Hoa_Console_Core_Io {
         if(self::WORDWRAP === $ww)
             $out = wordwrap(
                        $out,
-                       Hoa_Console_Environment_Window::getColumns(),
+                       \Hoa\Console\Environment\Window::getColumns(),
                        "\n",
                        true
                    );
@@ -205,15 +203,19 @@ class Hoa_Console_Core_Io {
             $out .= "\n";
 
         if(false === @fwrite(STDOUT, $out))
-            throw new Hoa_Console_Core_Exception(
+            throw new Exception(
                 'Cannot write in the standard output. Data was %s.', 1, $out);
 
         return;
     }
 }
 
+}
+
+namespace {
+
 /**
- * Alias of Hoa_Console_Core_Io::cin.
+ * Alias of \Hoa\Console\Core\Io::cin.
  *
  * @access  public
  * @param   string  $prefix          The prefix text before getting data
@@ -223,29 +225,31 @@ class Hoa_Console_Core_Io {
  *                                   string.
  * @param   bool    $ln              Whether add a \n at the end of data.
  * @return  string
- * @throw   Hoa_Console_Core_Exception
+ * @throw   \Hoa\Console\Core\Exception
  */
 if(!ƒ('cin')) {
 function cin ( $prefix       = null,
-               $comportement = Hoa_Console_Core_Io::TYPE_NORMAL,
-               $ln           = Hoa_Console_Core_Io::NEW_LINE ) {
+               $comportement = \Hoa\Console\Core\Io::TYPE_NORMAL,
+               $ln           = \Hoa\Console\Core\Io::NEW_LINE ) {
 
-    return Hoa_Console_Core_Io::cin($prefix, $comportement, $ln);
+    return \Hoa\Console\Core\Io::cin($prefix, $comportement, $ln);
 }}
 
 /**
- * Alias of Hoa_Console_Core_Io::cout.
+ * Alias of \Hoa\Console\Core\Io::cout.
  *
  * @access  public
  * @param   mixed   $out    Data to write.
  * @param   bool    $ln     Whether add a \n at the end of data.
  * @param   bool    $ww     Wordwrap the text or not.
  * @return  void
- * @throw   Hoa_Console_Core_Exception
+ * @throw   \Hoa\Console\Core\Exception
  */
 if(!ƒ('cout')) {
-function cout ( $out = null, $ln = Hoa_Console_Core_Io::NEW_LINE,
-                $ww  = Hoa_Console_Core_Io::WORDWRAP ) {
+function cout ( $out = null, $ln = \Hoa\Console\Core\Io::NEW_LINE,
+                $ww  = \Hoa\Console\Core\Io::WORDWRAP ) {
 
-    return Hoa_Console_Core_Io::cout($out, $ln, $ww);
+    return \Hoa\Console\Core\Io::cout($out, $ln, $ww);
 }}
+
+}

@@ -24,31 +24,31 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_Exception
- *
  */
+
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Exception
+ * \Hoa\Console\Exception
  */
-import('Console.Exception');
+-> import('Console.Exception');
+
+}
+
+namespace Hoa\Console\Environment {
 
 /**
- * Class Hoa_Console_Environment_Exception.
+ * Class \Hoa\Console\Environment\Exception.
  *
- * Extending the Hoa_Console_Exception class.
+ * Extending the \Hoa\Console\Exception class.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_Exception
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Environment_Exception extends Hoa_Console_Exception { }
+class Exception extends \Hoa\Console\Exception { }
+
+}

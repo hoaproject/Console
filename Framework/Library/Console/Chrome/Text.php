@@ -24,34 +24,32 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Interface_Text
- *
  */
 
-/**
- * Hoa_Console_Environment_Window
- */
-import('Console.Environment.Window');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Console_Interface_Text.
+ * \Hoa\Console\Environment\Window
+ */
+-> import('Console.Environment.Window');
+
+}
+
+namespace Hoa\Console\Chrome {
+
+/**
+ * Class \Hoa\Console\Chrome\Text.
  *
  * This class builts the text layout.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Interface_Text
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Interface_Text {
+class Text {
 
     /**
      * Align the text to left.
@@ -148,7 +146,7 @@ class Hoa_Console_Interface_Text {
 
         // If the sum of each column is greater than the window width, we reduce
         // all greaters columns.
-        $envWindow = Hoa_Console_Environment_Window::getColumns();
+        $envWindow = \Hoa\Console\Environment\Window::getColumns();
 
         while($envWindow <= ($cWidthSum = $xtraWidth + array_sum($columnWidth))) {
 
@@ -269,7 +267,7 @@ class Hoa_Console_Interface_Text {
                                    $width      = null ) {
 
         if(null === $width)
-            $width = Hoa_Console_Environment_Window::getColumns();
+            $width = \Hoa\Console\Environment\Window::getColumns();
 
         $out = null;
 
@@ -352,7 +350,7 @@ class Hoa_Console_Interface_Text {
     public static function wordwrap ( $text, $width = null, $break = "\n" ) {
 
         if(null === $width)
-            $width = Hoa_Console_Environment_Window::getColumns();
+            $width = \Hoa\Console\Environment\Window::getColumns();
 
         return wordwrap($text, $width, $break, true);
     }
@@ -385,4 +383,6 @@ class Hoa_Console_Interface_Text {
 
         return implode("\n", $text);
     }
+}
+
 }

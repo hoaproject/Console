@@ -24,44 +24,37 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_Window
- *
  */
 
-/**
- * Hoa_Console_Environment_Exception
- */
-import('Console.Environment.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Environment_Interface
+ * \Hoa\Console\Environment\Exception
  */
-import('Console.Environment.Interface');
+-> import('Console.Environment.Exception')
 
 /**
- * Hoa_Console_System
+ * \Hoa\Console\System
  */
-import('Console.System.~');
+-> import('Console.System.~');
+
+}
+
+namespace Hoa\Console\Environment {
 
 /**
- * Class Hoa_Console_Environment_Window.
+ * Class \Hoa\Console\Environment\Window.
  *
  * Get some informations about the window (i.e. the terminal).
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_Window
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interface {
+class Window {
 
     /**
      * Obtain data from the window environment.
@@ -69,7 +62,7 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
      * @access  public
      * @param   string  $data    Data to get.
      * @return  mixed
-     * @throw   Hoa_Console_Environment_Exception
+     * @throw   \Hoa\Console\Environment\Exception
      */
     public static function get ( $data ) {
 
@@ -84,7 +77,7 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
               break;
 
             default:
-                throw new Hoa_Console_Environment_Exception(
+                throw new Exception(
                     'Given an unidentified data : %s.', 0, $data);
         }
     }
@@ -94,13 +87,13 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
      *
      * @access  public
      * @return  int
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      */
     public static function getColumns ( ) {
 
         if(OS_WIN) {
 
-            $modecon = Hoa_Console_System::execute('mode con');
+            $modecon = \Hoa\Console\System::execute('mode con');
             $modecon = explode("\n", trim($modecon));
             $width   = trim($modecon[3]);
             preg_match('#.*?\s*:\s*([0-9]+)#', $width, $matches);
@@ -108,11 +101,11 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
         }
         else {
 
-            $out     = (int) trim(Hoa_Console_System::execute('echo $COLUMNS'));
+            $out     = (int) trim(\Hoa\Console\System::execute('echo $COLUMNS'));
 
             if(empty($out)) {
 
-                $out   = trim(Hoa_Console_System::execute('stty -a'));
+                $out   = trim(\Hoa\Console\System::execute('stty -a'));
                 $regex = '#(?:;\s+(?P<c>[0-9]+)\s+columns;)|(?:;\s+columns\s+(?P<d>[0-9]+);)#';
 
                 if(false !== preg_match($regex, $out, $match))
@@ -131,13 +124,13 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
      *
      * @access  public
      * @return  int
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      */
     public static function getLines ( ) {
 
         if(OS_WIN) {
 
-            $modecon = Hoa_Console_System::execute('mode con');
+            $modecon = \Hoa\Console\System::execute('mode con');
             $modecon = explode("\n", trim($modecon));
             $width   = trim($modecon[2]);
             preg_match('#.*?\s*:\s*([0-9]+)#', $width, $matches);
@@ -145,11 +138,11 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
         }
         else {
 
-            $out     = (int) trim(Hoa_Console_System::execute('echo $LINES'));
+            $out     = (int) trim(\Hoa\Console\System::execute('echo $LINES'));
 
             if(empty($out)) {
 
-                $out   = trim(Hoa_Console_System::execute('stty -a'));
+                $out   = trim(\Hoa\Console\System::execute('stty -a'));
                 $regex = '#(?:;\s+(?P<r>[0-9]+)\s+rows;)|(?:;\s+rows\s+(?P<s>[0-9]+);)#';
 
                 if(false !== preg_match($regex, $out, $match))
@@ -162,4 +155,6 @@ class Hoa_Console_Environment_Window implements Hoa_Console_Environment_Interfac
 
         return $out;
     }
+}
+
 }

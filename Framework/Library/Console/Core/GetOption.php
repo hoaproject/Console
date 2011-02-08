@@ -24,38 +24,36 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_GetOption
- *
  */
 
-/**
- * Hoa_Console_Core_Exception
- */
-import('Console.Core.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Console_Core_GetOption.
+ * \Hoa\Console\Core\Exception
+ */
+-> import('Console.Core.Exception');
+
+}
+
+namespace Hoa\Console\Core {
+
+/**
+ * Class \Hoa\Console\Core\GetOption.
  *
- * This class is complementary to the Hoa_Console_Core_Cli_Parser class.
+ * This class is complementary to the \Hoa\Console\Core\Cli\Parser class.
  * This class manages the options profile for a command, i.e. argument,
  * interactivity, option name etc.
  * And, of course, it proposes the getOption method, that allow user to loop
  * easily the command options/arguments.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_GetOption
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Core_GetOption {
+class GetOption {
 
     /**
      * Values of the has_arg field of options array.
@@ -95,14 +93,14 @@ class Hoa_Console_Core_GetOption {
      * OPTIONAL_ARGUMENT.
      * The val is the short option value.
      *
-     * @var Hoa_Console_Command_Abstract array
+     * @var \Hoa\Console\Command\Generic array
      */
     protected $options         = array();
 
     /**
      * The differents values for interactive arguments.
      *
-     * @var Hoa_Console_Command_Abstract array
+     * @var \Hoa\Console\Command\Generic array
      */
     protected $interactiveArgs = array(
         0 => array('false', '0', 'never',  'no',  'none'),
@@ -113,7 +111,7 @@ class Hoa_Console_Core_GetOption {
     /**
      * The pipette contains all the short value of options.
      *
-     * @var Hoa_Console_Core_GetOption char
+     * @var \Hoa\Console\Core\GetOption char
      */
     protected $pipette         = array();
 
@@ -123,13 +121,13 @@ class Hoa_Console_Core_GetOption {
      * Prepare the pipette.
      *
      * @access  public
-     * @param   array                        $options    The option definition.
-     * @param   Hoa_Console_Core_Cli_Parser  $parser     The parser.
+     * @param   array                         $options    The option definition.
+     * @param   \Hoa\Console\Core\Cli\Parser  $parser     The parser.
      * @return  void
      * @todo    Implement the INTERACTIVE_* constants.
      */
-    public function __construct ( Array                       $options,
-                                  Hoa_Console_Core_Cli_Parser $parser   ) {
+    public function __construct ( Array                        $options,
+                                  \Hoa\Console\Core\Cli\Parser $parser   ) {
 
         if(empty($options))
             $this->pipette[null] = null;
@@ -167,8 +165,9 @@ class Hoa_Console_Core_GetOption {
                     $parser->transferSwitchToInput($name, $value);
             }
 
-            elseif($argument === self::REQUIRED_ARGUMENT && !is_string($value))
-                throw new Hoa_Console_Core_Exception(
+            elseif(   $argument === self::REQUIRED_ARGUMENT
+                   && !is_string($value))
+                throw new Exception(
                     'The argument %s requires a value (it is not a switch).',
                     0, $name);
 
@@ -177,6 +176,8 @@ class Hoa_Console_Core_GetOption {
 
         $this->pipette[null] = null;
         reset($this->pipette);
+
+        return;
     }
 
     /**
@@ -238,4 +239,6 @@ class Hoa_Console_Core_GetOption {
 
         return count($this->pipette) == 1;
     }
+}
+
 }

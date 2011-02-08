@@ -24,32 +24,31 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- *
  */
 
-/**
- * Hoa_Console_Exception
- */
-import('Console.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Dispatcher
+ * \Hoa\Console\Exception
  */
-import('Console.Dispatcher');
+-> import('Console.Exception')
 
 /**
- * Hoa_Console_Core_Io
+ * \Hoa\Console\Dispatcher
  */
-import('Console.Core.Io') and load();
+-> import('Console.Dispatcher')
 
 /**
- * Hoa_Console_Interface_Style
+ * \Hoa\Console\Core\Io
  */
-import('Console.Interface.Style');
+-> import('Console.Core.Io')
+
+/**
+ * \Hoa\Console\Chrome\Style
+ */
+-> import('Console.Chrome.Style');
 
 /**
  * Special characters.
@@ -62,46 +61,47 @@ _define('HC_ERROR',    4);
 _define('HC_START',    8);
 _define('HC_STOP',    16);
 
+}
+
+namespace Hoa\Console {
+
 /**
- * Class Hoa_Console.
+ * Class \Hoa\Console.
  *
- * This class get and set the Hoa_Console parameters, and start the dispatch.
+ * This class get and set the \Hoa\Console parameters, and start the dispatch.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console implements Hoa_Core_Parameterizable {
+class Console implements \Hoa\Core\Parameterizable {
 
     /**
      * Singleton.
      *
-     * @var Hoa_Console object
+     * @var \Hoa\Console object
      */
     private static $_instance = null;
 
     /**
      * Whether exception should be thrown out from console.
      *
-     * @var Hoa_Console bool
+     * @var \Hoa\Console bool
      */
     protected $throwException = false;
 
     /**
      * The request object.
      *
-     * @var Hoa_Console_Request object
+     * @var \Hoa\Console\Request object
      */
     protected $_request       = null;
 
     /**
-     * The Hoa_Console parameters.
+     * The \Hoa\Console parameters.
      *
-     * @var Hoa_Core_Parameter object
+     * @var \Hoa\Core\Parameter object
      */
     private $_parameters      = null;
 
@@ -116,7 +116,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      */
     private function __construct ( Array $parameters = array() ) {
 
-        $this->_parameters = new Hoa_Core_Parameter(
+        $this->_parameters = new \Hoa\Core\Parameter(
             $this,
             array(
                 'group'   => 'main',
@@ -147,7 +147,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
     }
 
     /**
-     * Singleton : get instance of Hoa_Console.
+     * Singleton : get instance of \Hoa\Console.
      *
      * @access  public
      * @param   array   $parameters    Parameters.
@@ -167,7 +167,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   array   $in    Parameters to set.
      * @return  void
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameters ( Array $in ) {
 
@@ -179,7 +179,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @return  array
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameters ( ) {
 
@@ -193,7 +193,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      * @param   string  $key      Key.
      * @param   mixed   $value    Value.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function setParameter ( $key, $value ) {
 
@@ -206,7 +206,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getParameter ( $key ) {
 
@@ -220,7 +220,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      * @access  public
      * @param   string  $key    Key.
      * @return  mixed
-     * @throw   Hoa_Core_Exception
+     * @throw   \Hoa\Core\Exception
      */
     public function getFormattedParameter ( $key ) {
 
@@ -231,49 +231,49 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      * Run the dispatcher.
      *
      * @access  public
-     * @return  Hoa_Console
-     * @throw   Hoa_Console_Exception
+     * @return  \Hoa\Console
+     * @throw   \Hoa\Console\Exception
      */
     public function dispatch ( ) {
 
         try {
 
-            $dispatcher = new Hoa_Console_Dispatcher($this->_parameters);
+            $dispatcher = new Dispatcher($this->_parameters);
             $this->_parameters->shareWith(
                 $this,
                 $dispatcher,
-                Hoa_Core_Parameter::PERMISSION_READ |
-                Hoa_Core_Parameter::PERMISSION_SHARE
+                \Hoa\Core\Parameter::PERMISSION_READ |
+                \Hoa\Core\Parameter::PERMISSION_SHARE
             );
             $dispatcher->dispatch();
         }
-        catch ( Hoa_Console_Exception $e ) {
+        catch ( Exception $e ) {
 
             if(false !== $this->getThrowException())
                 throw $e;
 
-            Hoa_Console_Core_Io::cout(
-                Hoa_Console_Interface_Style::styleExists('_exception')
-                    ? Hoa_Console_Interface_Style::stylize(
+            Core\Io::cout(
+                Chrome\Style::styleExists('_exception')
+                    ? Chrome\Style::stylize(
                           $e->getFormattedMessage(),
                           '_exception'
                       )
                     : $e->getFormattedMessage()
             );
 
-            $expand = Hoa_Console_Core_Io::cin(
+            $expand = Core\Io::cin(
                           'Expand the exception?',
-                          Hoa_Console_Core_Io::TYPE_YES_NO
+                          Core\Io::TYPE_YES_NO
                       );
 
             if(true === $expand)
-                Hoa_Console_Core_Io::cout(
-                    Hoa_Console_Interface_Style::styleExists('_exception')
-                        ? Hoa_Console_Interface_Style::stylize(
-                              $e->raiseError(Hoa_Core_Exception::ERROR_RETURN),
+                Core\Io::cout(
+                    Chrome\Style::styleExists('_exception')
+                        ? Chrome\Style::stylize(
+                              $e->raiseError(\Hoa\Core\Exception::ERROR_RETURN),
                               '_exception'
                           )
-                        : $e->raiseError(Hoa_Core_Exception::ERROR_RETURN)
+                        : $e->raiseError(\Hoa\Core\Exception::ERROR_RETURN)
                 );
         }
 
@@ -285,8 +285,8 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
      *
      * @access  public
      * @param   string  $style    The style filename.
-     * @return  Hoa_Console
-     * @throw   Hoa_Console_Exception
+     * @return  \Hoa\Console
+     * @throw   \Hoa\Console\Exception
      */
     public function importStyle ( $style ) {
 
@@ -297,16 +297,16 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
         $path      = $directory . '/' . $file;
 
         if(!file_exists($path))
-            throw new Hoa_Console_Exception(
+            throw new Exception(
                 'The style %s is not found at %s.', 0, array($style, $path));
 
         require_once $path;
 
         $sheet     = new $class();
 
-        if(!($sheet instanceof Hoa_Console_Interface_Style))
-            throw new Hoa_Console_Exception(
-                'The style %s must extend the Hoa_Console_Interface_Style class.',
+        if(!($sheet instanceof Chrome\Style))
+            throw new Exception(
+                'The style %s must extend the \Hoa\Console\Chrome\Style class.',
                 1, $class);
 
         $sheet->import();
@@ -341,7 +341,7 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
     }
 
     /**
-     * If the Hoa_Console package is used in standalone mode or not, i.e. if the
+     * If the \Hoa\Console package is used in standalone mode or not, i.e. if the
      * script is running from :
      *     $ php <script>.php
      * or
@@ -354,4 +354,6 @@ class Hoa_Console implements Hoa_Core_Parameterizable {
 
         return true;
     }
+}
+
 }

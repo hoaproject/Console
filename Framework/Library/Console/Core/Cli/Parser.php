@@ -24,21 +24,23 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_Cli_Parser
- *
  */
 
-/**
- * Hoa_Console_Core_Cli_Exception
- */
-import('Console.Core.Cli.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Class Hoa_Console_Core_Cli_Parser.
+ * \Hoa\Console\Core\Cli\Exception
+ */
+-> import('Console.Core.Cli.Exception');
+
+}
+
+namespace Hoa\Console\Core\Cli {
+
+/**
+ * Class \Hoa\Console\Core\Cli\Parser.
  *
  * This class parses a command line.
  * See the parse() method to get more informations about command-line
@@ -47,26 +49,22 @@ import('Console.Core.Cli.Exception');
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.2
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Core_Cli_Parser
  */
 
-class Hoa_Console_Core_Cli_Parser {
+class Parser {
 
     /**
      * If long value is not enabled, -abc is equivalent to -a -b -c, else -abc
      * is equivalent to --abc.
      *
-     * @var Hoa_Console_Core_Cli_Parser
+     * @var \Hoa\Console\Core\Cli\Parser
      */
     protected $longonly = false;
 
     /**
      * The parsed result in three categories : command, input, and switch.
      *
-     * @var Hoa_Console_Core_Cli_Parser array
+     * @var \Hoa\Console\Core\Cli\Parser array
      */
     protected $parsed   =  array(
         'command'       => array(),
@@ -156,9 +154,9 @@ class Hoa_Console_Core_Cli_Parser {
      * 7. Input :
      *   The regular expression sets a value as much as possible to each
      *   switch (option). If a switch does not take a value (see the
-     *   Hoa_Console_Core_GetOption::NO_ARGUMENT constant), the value will be
+     *   \Hoa\Console\Core\GetOption::NO_ARGUMENT constant), the value will be
      *   transfered to the input stack. But this action is not made in this
-     *   class, only in the Hoa_Console_Core_GetOption class, because this class
+     *   class, only in the \Hoa\Console\Core\GetOption class, because this class
      *   does not have the options profile. We got the transferSwitchToInput()
      *   method, that is called in the GetOption class.
      *   So :
@@ -180,12 +178,12 @@ class Hoa_Console_Core_Cli_Parser {
      * @access  public
      * @param   string  $command    The command to parse.
      * @return  void
-     * @return  Hoa_Console_Core_Cli_Exception
+     * @return  \Hoa\Console\Core\Cli\Exception
      */
     public function parse ( $command = '' ) {
 
         if(empty($command))
-            throw new Hoa_Console_Core_Cli_Exception(
+            throw new Exception(
                 'The command could not be empty.', 0);
 
         /**
@@ -486,7 +484,7 @@ class Hoa_Console_Core_Cli_Parser {
      * @param   string  $value       The value to parse.
      * @param   array   $keywords    Value of keywords.
      * @return  array
-     * @throw   Hoa_Console_Core_Cli_Exception
+     * @throw   \Hoa\Console\Core\Cli\Exception
      * @todo    Could be ameliorate with a ":" explode, and some eval.
      *          Check if operands are integer.
      */
@@ -505,7 +503,7 @@ class Hoa_Console_Core_Cli_Parser {
             if(0 !== preg_match('#^(-?[0-9]+):(-?[0-9]+)$#', $subvalue, $matches)) {
 
                 if($matches[1] < 0 && $matches[2] < 0)
-                    throw new Hoa_Console_Core_Cli_Exception(
+                    throw new Exception(
                         'Cannot give two negative numbers, given %s.',
                         1, $subvalue);
 
@@ -516,7 +514,7 @@ class Hoa_Console_Core_Cli_Parser {
                 if($max < 0 || $min < 0) {
 
                     if($max - $min < 0)
-                        throw new Hoa_Console_Core_Cli_Exception(
+                        throw new Exception(
                             'The difference between operands must be ' .
                             'positive.', 2);
 
@@ -557,4 +555,6 @@ class Hoa_Console_Core_Cli_Parser {
 
         return $this->longonly;
     }
+}
+
 }

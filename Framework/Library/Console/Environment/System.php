@@ -24,44 +24,35 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_System
- *
  */
 
-/**
- * Hoa_Console_Environment_Exception
- */
-import('Console.Environment.Exception');
+namespace {
 
 /**
- * Hoa_Console_Environment_Interface
+ * \Hoa\Console\Environment\Exception
  */
-import('Console.Environment.Interface');
+import('Console.Environment.Exception')
 
 /**
- * Hoa_Console_System
+ * \Hoa\Console\System
  */
-import('Console.System.~');
+-> import('Console.System.~');
+
+}
+
+namespace Hoa\Console\Environment {
 
 /**
- * Class Hoa_Console_Environment_System.
+ * Class \Hoa\Console\Environment\System.
  *
  * Get some informations about the system.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment_System
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interface {
+class System {
 
     /**
      * Obtain data from the system environment.
@@ -69,7 +60,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
      * @access  public
      * @param   string  $data    Data to get.
      * @return  mixed
-     * @throw   Hoa_Console_Environment_Exception
+     * @throw   \Hoa\Console\Environment\Exception
      */
     public static function get ( $data ) {
 
@@ -96,7 +87,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
               break;
 
             default:
-                throw new Hoa_Console_Environment_Exception(
+                throw new Exception(
                     'Given an unidentified data : %s.', 0, $data);
         }
     }
@@ -106,7 +97,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getUptime ( ) {
@@ -117,7 +108,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
         }
         else {
 
-            $handle  = trim(Hoa_Console_System::execute('uptime'));
+            $handle  = trim(\Hoa\Console\System::execute('uptime'));
             if(0   === preg_match('#up ([^,]+),#', $handle, $matches))
                 $out = null;
             else
@@ -135,7 +126,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getUname ( ) {
@@ -145,7 +136,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
             $out = null;
         }
         else
-            $out = trim(Hoa_Console_System::execute('uname -s'));
+            $out = trim(\Hoa\Console\System::execute('uname -s'));
 
         if(empty($out))
             $out = null;
@@ -159,7 +150,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getNodename ( ) {
@@ -169,7 +160,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
             $out = null;
         }
         else
-            $out = trim(Hoa_Console_System::execute('uname -n'));
+            $out = trim(\Hoa\Console\System::execute('uname -n'));
 
         if(empty($out))
             $out = null;
@@ -182,7 +173,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getVersion ( ) {
@@ -192,7 +183,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
             $out = null;
         }
         else
-            $out = trim(Hoa_Console_System::execute('uname -v'));
+            $out = trim(\Hoa\Console\System::execute('uname -v'));
 
         if(empty($out))
             $out = null;
@@ -204,7 +195,7 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
      *
      * @access  public
      * @return  string
-     * @throw   Hoa_Console_System_Exception
+     * @throw   \Hoa\Console\System\Exception
      * @todo    Make this for our favorite OS, I called Windows !
      */
     public static function getRelease ( ) {
@@ -214,11 +205,13 @@ class Hoa_Console_Environment_System implements Hoa_Console_Environment_Interfac
             $out = null;
         }
         else
-            $out = trim(Hoa_Console_System::execute('uname -r'));
+            $out = trim(\Hoa\Console\System::execute('uname -r'));
 
         if(empty($out))
             $out = null;
 
         return $out;
     }
+}
+
 }

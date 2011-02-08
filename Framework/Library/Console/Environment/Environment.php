@@ -24,54 +24,47 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment
- *
  */
 
-/**
- * Hoa_Console_Environment_Exception
- */
-import('Console.Environment.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Console_Environment_Interface
+ * \Hoa\Console\Environment\Exception
  */
-import('Console.Environment.Interface');
+-> import('Console.Environment.Exception')
 
 /**
- * Hoa_Console_Environment_Window
+ * \Hoa\Console\Environment\Window
  */
-import('Console.Environment.Window');
+-> import('Console.Environment.Window')
 
 /**
- * Hoa_Console_Environment_User
+ * \Hoa\Console\Environment\User
  */
-import('Console.Environment.User');
+-> import('Console.Environment.User')
 
 /**
- * Hoa_Console_Environment_System
+ * \Hoa\Console\Environment\System
  */
-import('Console.Environment.System');
+-> import('Console.Environment.System');
+
+}
+
+namespace Hoa\Console\Environment {
 
 /**
- * Class Hoa_Console_Environment.
+ * Class \Hoa\Console\Environment.
  *
  * Dispatch the asked data through the get() method.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_Console
- * @subpackage  Hoa_Console_Environment
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_Console_Environment implements Hoa_Console_Environment_Interface {
+class Environment {
 
     /**
      * Obtain data from the environment.
@@ -87,39 +80,41 @@ class Hoa_Console_Environment implements Hoa_Console_Environment_Interface {
         @list($group, $key) = explode('.', $data);
 
         if(null === $key)
-            throw new Hoa_Console_Environment_Exception(
+            throw new Exception(
                 'No key was found in the data %s. Must precise : group.key, not ' .
                 'only group.', 0, $data);
 
         if(empty($group))
-            throw new Hoa_Console_Environment_Exception(
+            throw new Exception(
                 'The group in data %s must not be empty. Must precise : ' . 
                 'group.key, not only key.', 1, $data);
 
         if(empty($key))
-            throw new Hoa_Console_Environment_Exception(
+            throw new Exception(
                 'The key in data %s must not be empty. Must precise : ' . 
                 'group.key, not only group.', 2, $data);
 
         switch($group) {
 
             case 'window':
-                return Hoa_Console_Environment_Window::get($key);
+                return \Hoa\Console\Environment\Window::get($key);
               break;
 
             case 'user':
-                return Hoa_Console_Environment_User::get($key);
+                return \Hoa\Console\Environment\User::get($key);
               break;
 
             case 'system':
-                return Hoa_Console_Environment_System::get($key);
+                return \Hoa\Console\Environment\System::get($key);
               break;
 
             default:
-                throw new Hoa_Console_Environment_Exception(
+                throw new Exception(
                     'Unknown group %s.', 3, $group);
         }
 
         return null;
     }
+}
+
 }
