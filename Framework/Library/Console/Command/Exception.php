@@ -37,7 +37,7 @@ from('Hoa')
 
 }
 
-namespace Hoa\Console\Command {
+namespace Hoa\Console\Command {
 
 /**
  * Class \Hoa\Console\Command\Exception.
