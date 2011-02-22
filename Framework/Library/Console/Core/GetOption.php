@@ -134,44 +134,50 @@ class GetOption {
 
         $this->options = $options;
 
-        foreach($parser->getSwitches() as $name => $value) {
+        foreach($parser->getSwitches() as $name => $values) {
 
-            $found    = null;
-            $argument = null;
+            if(!is_array($values))
+                $values = array($values);
 
-            foreach($options as $foo => $option) {
+            foreach($values as $value) {
 
-                if($option[self::OPTION_NAME] === "$name") {
+                $found    = null;
+                $argument = null;
 
-                    $found    = $option[self::OPTION_VAL];
-                    $argument = $option[self::OPTION_HAS_ARG];
-                    break;
+                foreach($options as $option) {
+
+                    if($option[self::OPTION_NAME] === "$name") {
+
+                        $found    = $option[self::OPTION_VAL];
+                        $argument = $option[self::OPTION_HAS_ARG];
+                        break;
+                    }
+
+                    if($option[self::OPTION_VAL] === "$name") {
+
+                        $found    = $option[self::OPTION_VAL];
+                        $argument = $option[self::OPTION_HAS_ARG];
+                        break;
+                    }
                 }
 
-                if($option[self::OPTION_VAL] === "$name") {
+                if(null === $found)
+                    continue;
 
-                    $found    = $option[self::OPTION_VAL];
-                    $argument = $option[self::OPTION_HAS_ARG];
-                    break;
+                if($argument === self::NO_ARGUMENT) {
+
+                    if(!is_bool($value))
+                        $parser->transferSwitchToInput($name, $value);
                 }
+
+                elseif(   $argument === self::REQUIRED_ARGUMENT
+                       && !is_string($value))
+                    throw new Exception(
+                        'The argument %s requires a value (it is not a switch).',
+                        0, $name);
+
+                $this->pipette[] = array($found, $value);
             }
-
-            if(null === $found)
-                continue;
-
-            if($argument === self::NO_ARGUMENT) {
-
-                if(!is_bool($value))
-                    $parser->transferSwitchToInput($name, $value);
-            }
-
-            elseif(   $argument === self::REQUIRED_ARGUMENT
-                   && !is_string($value))
-                throw new Exception(
-                    'The argument %s requires a value (it is not a switch).',
-                    0, $name);
-
-            $this->pipette[$found] = $value;
         }
 
         $this->pipette[null] = null;
@@ -203,27 +209,32 @@ class GetOption {
             return null;
         }
 
-        if(   ''   === key($this->pipette)
-           && null === current($this->pipette)) {
+        $k     = key($this->pipette);
+        $c     = current($this->pipette);
+        $key   = $c[0];
+        $value = $c[1];
+
+        if('' === $k && null === $c) {
 
             reset($this->pipette);
             $first = true;
+
             return false;
         }
 
         $allow = array();
 
         if(null === $short)
-            foreach($this->options as $foo => $option)
+            foreach($this->options as $option)
                 $allow[] = $option[self::OPTION_VAL];
         else
             $allow = str_split($short);
 
-        if(!in_array(key($this->pipette), $allow))
+        if(!in_array($key, $allow))
             return false;
 
-        $optionValue = current($this->pipette);
-        $return      = key($this->pipette);
+        $optionValue = $value;
+        $return      = $key;
         next($this->pipette);
 
         return $return;

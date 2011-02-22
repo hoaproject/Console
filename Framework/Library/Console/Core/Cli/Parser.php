@@ -341,43 +341,46 @@ class Parser {
      * @access  protected
      * @param   string     $name      Switch name.
      * @param   string     $value     Switch value.
-     * @param   string     $escape    Character to espace.
+     * @param   string     $escape    Character to escape.
      * @return  void
      */
     protected function addSwitch ( $name, $value, $escape = null ) {
 
         if(substr($name, 0, 2) == '--')
-            $this->addSwitch(substr($name, 2), $value, $escape);
+            return $this->addSwitch(substr($name, 2), $value, $escape);
 
-        elseif(substr($name, 0, 1) == '-')
+        if(substr($name, 0, 1) == '-') {
 
             if(true === $this->getLongOnly())
-                $this->addSwitch('-' . $name, $value, $escape);
+                return $this->addSwitch('-' . $name, $value, $escape);
 
-            else
-                foreach(str_split(substr($name, 1)) as $foo => $switch)
-                    $this->addSwitch($switch, $value, $escape);
-        else {
+            foreach(str_split(substr($name, 1)) as $foo => $switch)
+                $this->addSwitch($switch, $value, $escape);
 
-            if(null !== $escape) {
-
-                $escape = $escape == '' ? ' ' : $escape;
-                if(is_string($value))
-                    $value  = str_replace('\\' . $escape, $escape, $value);
-            }
-            else
-                if(is_string($value))
-                    $value  = str_replace('\\ ', ' ', $value);
-
-            if(   isset($this->parsed['switch'][$name])
-               && is_bool($this->parsed['switch'][$name]))
-                $value = (bool) (1 - $this->parsed['switch'][$name]);
-
-            if(empty($name))
-                return $this->addInput(array(6 => null, 'i' => $value));
-
-            $this->parsed['switch'][$name] = $value;
+            return;
         }
+
+        if(null !== $escape) {
+
+            $escape = $escape == '' ? ' ' : $escape;
+
+            if(is_string($value))
+                $value = str_replace('\\' . $escape, $escape, $value);
+        }
+        else
+            if(is_string($value))
+                $value = str_replace('\\ ', ' ', $value);
+
+        if(isset($this->parsed['switch'][$name]))
+            if(is_bool($this->parsed['switch'][$name]))
+                $value = !$this->parsed['switch'][$name];
+            else
+                $value = array($this->parsed['switch'][$name], $value);
+
+        if(empty($name))
+            return $this->addInput(array(6 => null, 'i' => $value));
+
+        $this->parsed['switch'][$name] = $value;
 
         return;
     }
