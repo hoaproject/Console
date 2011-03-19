@@ -270,10 +270,10 @@ class Console implements \Hoa\Core\Parameterizable {
                 Core\Io::cout(
                     Chrome\Style::styleExists('_exception')
                         ? Chrome\Style::stylize(
-                              $e->raiseError(\Hoa\Core\Exception::ERROR_RETURN),
+                              $e->raise()
                               '_exception'
                           )
-                        : $e->raiseError(\Hoa\Core\Exception::ERROR_RETURN)
+                        : $e->raise()
                 );
         }
 
@@ -317,7 +317,7 @@ class Console implements \Hoa\Core\Parameterizable {
     /**
      * Set the parameter throwException. If it is set, all exception will be
      * thrown out of the console, else a simplement message (from the method
-     * raiseError()) will be print.
+     * raise()) will be print.
      *
      * @access  public
      * @param   bool    $throw    Throw exception or not ?
