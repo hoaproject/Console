@@ -270,7 +270,7 @@ class Console implements \Hoa\Core\Parameterizable {
                 Core\Io::cout(
                     Chrome\Style::styleExists('_exception')
                         ? Chrome\Style::stylize(
-                              $e->raise()
+                              $e->raise(),
                               '_exception'
                           )
                         : $e->raise()
