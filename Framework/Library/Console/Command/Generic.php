@@ -88,8 +88,8 @@ namespace Hoa\Console\Command {
  * This class is a bridge between the command and the \Hoa\Console package, i.e.
  * it is a wrapper for many classes.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

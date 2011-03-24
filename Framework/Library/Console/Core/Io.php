@@ -66,8 +66,8 @@ namespace Hoa\Console\Core {
  * Methods have options to make a bit more than just writte in a i/o stream,
  * like wordwrap the text, or prepare a question (y/n) etc.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

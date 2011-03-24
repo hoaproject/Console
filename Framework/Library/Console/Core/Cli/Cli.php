@@ -70,8 +70,8 @@ namespace Hoa\Console\Core\Cli {
  * \Hoa\Console\Core\Cli\Parser class. When the parsing is over, this class
  * proposes the result to other classes.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 
