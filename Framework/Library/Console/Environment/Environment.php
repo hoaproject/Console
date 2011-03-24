@@ -68,7 +68,7 @@ namespace Hoa\Console\Environment {
  * Dispatch the asked data through the get() method.
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
+ * @copyright  Copyright (c) 2007-2011 Ivan ENDERLIN.
  * @license    New BSD License
  */
 
