@@ -83,7 +83,7 @@ namespace Hoa\Console {
  * @license    New BSD License
  */
 
-class Console implements \Hoa\Core\Parameterizable {
+class Console implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Singleton.
@@ -107,7 +107,7 @@ class Console implements \Hoa\Core\Parameterizable {
     protected $_request       = null;
 
     /**
-     * The \Hoa\Console parameters.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -150,8 +150,9 @@ class Console implements \Hoa\Core\Parameterizable {
                 'command.browser'   => 'open'
             )
         );
+        $this->_parameters->setParameters($parameters);
 
-        $this->setParameters($parameters);
+        return;
     }
 
     /**
@@ -170,69 +171,14 @@ class Console implements \Hoa\Core\Parameterizable {
     }
 
     /**
-     * Set many parameters to a class.
+     * Get parameters.
      *
      * @access  public
-     * @param   array   $in    Parameters to set.
-     * @return  void
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameters ( Array $in ) {
-
-        return $this->_parameters->setParameters($this, $in);
-    }
-
-    /**
-     * Get many parameters from a class.
-     *
-     * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Set a parameter to a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @param   mixed   $value    Value.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function setParameter ( $key, $value ) {
-
-        return $this->_parameters->setParameter($this, $key, $value);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**
@@ -247,12 +193,6 @@ class Console implements \Hoa\Core\Parameterizable {
         try {
 
             $dispatcher = new Dispatcher($this->_parameters);
-            $this->_parameters->shareWith(
-                $this,
-                $dispatcher,
-                \Hoa\Core\Parameter::PERMISSION_READ |
-                \Hoa\Core\Parameter::PERMISSION_SHARE
-            );
             $dispatcher->dispatch();
         }
         catch ( Exception $e ) {
@@ -298,10 +238,10 @@ class Console implements \Hoa\Core\Parameterizable {
      */
     public function importStyle ( $style ) {
 
-        $this->_parameters->setKeyword($this, 'style', $style);
-        $class     = $this->getFormattedParameter('style.class');
-        $file      = $this->getFormattedParameter('style.file');
-        $directory = $this->getFormattedParameter('style.directory');
+        $this->_parameters->setKeyword('style', $style);
+        $class     = $this->_parameters->getFormattedParameter('style.class');
+        $file      = $this->_parameters->getFormattedParameter('style.file');
+        $directory = $this->_parameters->getFormattedParameter('style.directory');
         $path      = $directory . '/' . $file;
 
         if(!file_exists($path))

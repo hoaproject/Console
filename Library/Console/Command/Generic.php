@@ -93,7 +93,7 @@ namespace Hoa\Console\Command {
  * @license    New BSD License
  */
 
-abstract class Generic implements \Hoa\Core\Parameterizable\Readable {
+abstract class Generic implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Values of the has_arg field of options array.
@@ -218,7 +218,7 @@ abstract class Generic implements \Hoa\Core\Parameterizable\Readable {
      * @param   \Hoa\Console\Core\Cli\Parser  $parser        The parser instance.
      * @return  void
      */
-    final public function __construct ( \Hoa\Core\Parameter     $parameters,
+    final public function __construct ( \Hoa\Core\Parameter          $parameters,
                                         \Hoa\Console\Core\Cli\Parser $parser ) {
 
         $this->_parameters = $parameters;
@@ -229,42 +229,14 @@ abstract class Generic implements \Hoa\Core\Parameterizable\Readable {
     }
 
     /**
-     * Get many parameters from a class.
+     * Get parameters.
      *
      * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**

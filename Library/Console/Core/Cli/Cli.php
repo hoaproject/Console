@@ -75,7 +75,7 @@ namespace Hoa\Console\Core\Cli {
  * @license    New BSD License
  */
 
-class Cli implements \Hoa\Core\Parameterizable\Readable {
+class Cli implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
      * Command parsed.
@@ -85,7 +85,7 @@ class Cli implements \Hoa\Core\Parameterizable\Readable {
     protected $_commandline  = null;
 
     /**
-     * Parameters of \Hoa\Console.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -108,42 +108,14 @@ class Cli implements \Hoa\Core\Parameterizable\Readable {
     }
 
     /**
-     * Get many parameters from a class.
+     * Get parameters.
      *
      * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**
@@ -159,8 +131,8 @@ class Cli implements \Hoa\Core\Parameterizable\Readable {
             do {
 
                 \Hoa\Console\Core\Io::cout(
-                    $this->getParameter('prompt.prefix'),
-                    $this->getParameter('prompt.symbol'),
+                    $this->_parameters->getParameter('prompt.prefix'),
+                    $this->_parameters->getParameter('prompt.symbol'),
                     false
                 );
 
@@ -186,13 +158,15 @@ class Cli implements \Hoa\Core\Parameterizable\Readable {
 
         $old                = $this->_commandline;
         $this->_commandline = new Parser();
-        $this->_commandline->setLongOnly($this->getParameter('cli.longonly'));
-        $separator          = $this->getParameter('cli.separator');
+        $this->_commandline->setLongOnly(
+            $this->_parameters->getParameter('cli.longonly')
+        );
+        $separator          = $this->_parameters->getParameter('cli.separator');
 
         if(empty($commandline))
-            $commandline = $this->_parameters->getKeyword($this, 'group') .
+            $commandline = $this->_parameters->getKeyword('group') .
                            $separator .
-                           $this->_parameters->getKeyword($this, 'command');
+                           $this->_parameters->getKeyword('command');
 
         $this->_commandline->parse($commandline);
         $command = $this->_commandline->getCommand();
@@ -203,10 +177,10 @@ class Cli implements \Hoa\Core\Parameterizable\Readable {
         list($group, $command) = explode($separator, $command);
 
         if(!empty($group))
-            $this->_parameters->setKeyword($this, 'group', $group);
+            $this->_parameters->setKeyword('group', $group);
 
         if(!empty($command))
-            $this->_parameters->setKeyword($this, 'command', $command);
+            $this->_parameters->setKeyword('command', $command);
 
         return $old;
     }

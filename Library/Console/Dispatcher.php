@@ -72,10 +72,10 @@ namespace Hoa\Console {
  * @license    New BSD License
  */
 
-class Dispatcher implements \Hoa\Core\Parameterizable\Readable {
+class Dispatcher implements \Hoa\Core\Parameter\Parameterizable {
 
     /**
-     * Parameters of \Hoa\Console.
+     * Parameters.
      *
      * @var \Hoa\Core\Parameter object
      */
@@ -98,42 +98,14 @@ class Dispatcher implements \Hoa\Core\Parameterizable\Readable {
     }
 
     /**
-     * Get many parameters from a class.
+     * Get parameters.
      *
      * @access  public
-     * @return  array
-     * @throw   \Hoa\Core\Exception
+     * @return  \Hoa\Core\Parameter
      */
     public function getParameters ( ) {
 
-        return $this->_parameters->getParameters($this);
-    }
-
-    /**
-     * Get a parameter from a class.
-     *
-     * @access  public
-     * @param   string  $key      Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getParameter ( $key ) {
-
-        return $this->_parameters->getParameter($this, $key);
-    }
-
-    /**
-     * Get a formatted parameter from a class (i.e. zFormat with keywords and
-     * other parameters).
-     *
-     * @access  public
-     * @param   string  $key    Key.
-     * @return  mixed
-     * @throw   \Hoa\Core\Exception
-     */
-    public function getFormattedParameter ( $key ) {
-
-        return $this->_parameters->getFormattedParameter($this, $key);
+        return $this->_parameters;
     }
 
     /**
@@ -149,20 +121,17 @@ class Dispatcher implements \Hoa\Core\Parameterizable\Readable {
     public function dispatch ( ) {
 
         $cli = new Core\Cli($this->_parameters);
-        $this->_parameters->shareWith(
-            $this,
-            $cli,
-            \Hoa\Core\Parameter::PERMISSION_READ |
-            \Hoa\Core\Parameter::PERMISSION_WRITE
-        );
 
         do {
 
             $cli->newPrompt();
 
-            $class     = $this->getFormattedParameter('command.class');
-            $file      = $this->getFormattedParameter('command.file');
-            $directory = $this->getFormattedParameter('command.directory');
+            $class     = $this->_parameters
+                              ->getFormattedParameter('command.class');
+            $file      = $this->_parameters
+                              ->getFormattedParameter('command.file');
+            $directory = $this->_parameters
+                              ->getFormattedParameter('command.directory');
             $path      = $directory . '/' . $file;
 
             try {
@@ -180,12 +149,6 @@ class Dispatcher implements \Hoa\Core\Parameterizable\Readable {
                               );
                 $object     = $reflection->newInstanceArgs($argument);
                 $return     = HC_EXIT;
-
-                $this->_parameters->shareWith(
-                    $this,
-                    $object,
-                    \Hoa\Core\Parameter::PERMISSION_READ
-                );
 
                 if($object instanceof Command\Generic) {
 
