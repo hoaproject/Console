@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Console\Core\Exception
+ * \Hoa\Console\Exception
  */
--> import('Console.Core.Exception')
+-> import('Console.Exception')
 
 /**
  * \Hoa\Console\Environment\Window
@@ -57,10 +57,10 @@ _define('STDERR', fopen('php://stderr', 'wb'));
 
 }
 
-namespace Hoa\Console\Core {
+namespace Hoa\Console {
 
 /**
- * Class \Hoa\Console\Core\Io.
+ * Class \Hoa\Console\Io.
  *
  * This class allows to treat the STDIN, STDOUT, and STDERR stream.
  * Methods have options to make a bit more than just writte in a i/o stream,
@@ -138,7 +138,7 @@ class Io {
      * @param   bool    $ln              Whether add a \n at the end of data.
      * @param   bool
      * @return  mixed
-     * @throw   \Hoa\Console\Core\Exception
+     * @throw   \Hoa\Console\Exception
      * @todo    Remake the password system (maybe with the fflush() function,
      *          see the unix:///coreutils-6.11/lib/getpass.c)
      */
@@ -156,7 +156,7 @@ class Io {
                 self::cout("\033[8m", self::NO_NEW_LINE);
 
         if(false === $in = fgets(STDIN))
-            throw new \Hoa\Console\Core\Exception(
+            throw new Exception(
                 'Cannot read the standard input.', 0);
 
         if($comportement === self::TYPE_PASSWORD)
@@ -194,18 +194,18 @@ class Io {
      * @param   bool    $ln     Whether add a \n at the end of data.
      * @param   bool    $ww     Wordwrap the text or not.
      * @return  void
-     * @throw   \Hoa\Console\Core\Exception
+     * @throw   \Hoa\Console\Exception
      */
     public static function cout ( $out = null, $ln = self::NEW_LINE,
                                   $ww  = self::WORDWRAP ) {
 
         if(self::WORDWRAP === $ww)
             $out = wordwrap(
-                       $out,
-                       \Hoa\Console\Environment\Window::getColumns(),
-                       "\n",
-                       true
-                   );
+                $out,
+                Environment\Window::getColumns(),
+                "\n",
+                true
+            );
 
         if(self::NEW_LINE === $ln)
             $out .= "\n";
@@ -223,7 +223,7 @@ class Io {
 namespace {
 
 /**
- * Alias of \Hoa\Console\Core\Io::cin.
+ * Alias of \Hoa\Console\Io::cin.
  *
  * @access  public
  * @param   string  $prefix          The prefix text before getting data
@@ -233,31 +233,31 @@ namespace {
  *                                   string.
  * @param   bool    $ln              Whether add a \n at the end of data.
  * @return  string
- * @throw   \Hoa\Console\Core\Exception
+ * @throw   \Hoa\Console\Exception
  */
 if(!ƒ('cin')) {
 function cin ( $prefix       = null,
-               $comportement = \Hoa\Console\Core\Io::TYPE_NORMAL,
-               $ln           = \Hoa\Console\Core\Io::NEW_LINE ) {
+               $comportement = \Hoa\Console\Io::TYPE_NORMAL,
+               $ln           = \Hoa\Console\Io::NEW_LINE ) {
 
-    return \Hoa\Console\Core\Io::cin($prefix, $comportement, $ln);
+    return \Hoa\Console\Io::cin($prefix, $comportement, $ln);
 }}
 
 /**
- * Alias of \Hoa\Console\Core\Io::cout.
+ * Alias of \Hoa\Console\Io::cout.
  *
  * @access  public
  * @param   mixed   $out    Data to write.
  * @param   bool    $ln     Whether add a \n at the end of data.
  * @param   bool    $ww     Wordwrap the text or not.
  * @return  void
- * @throw   \Hoa\Console\Core\Exception
+ * @throw   \Hoa\Console\Exception
  */
 if(!ƒ('cout')) {
-function cout ( $out = null, $ln = \Hoa\Console\Core\Io::NEW_LINE,
-                $ww  = \Hoa\Console\Core\Io::WORDWRAP ) {
+function cout ( $out = null, $ln = \Hoa\Console\Io::NEW_LINE,
+                $ww  = \Hoa\Console\Io::WORDWRAP ) {
 
-    return \Hoa\Console\Core\Io::cout($out, $ln, $ww);
+    return \Hoa\Console\Io::cout($out, $ln, $ww);
 }}
 
 }

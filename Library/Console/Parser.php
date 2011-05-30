@@ -39,16 +39,16 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Console\Core\Cli\Exception
+ * \Hoa\Console\Exception
  */
--> import('Console.Core.Cli.Exception');
+-> import('Console.Exception');
 
 }
 
-namespace Hoa\Console\Core\Cli {
+namespace Hoa\Console {
 
 /**
- * Class \Hoa\Console\Core\Cli\Parser.
+ * Class \Hoa\Console\Parser.
  *
  * This class parses a command line.
  * See the parse() method to get more informations about command-line
@@ -65,35 +65,18 @@ class Parser {
      * If long value is not enabled, -abc is equivalent to -a -b -c, else -abc
      * is equivalent to --abc.
      *
-     * @var \Hoa\Console\Core\Cli\Parser
+     * @var \Hoa\Console\Parser
      */
-    protected $longonly = false;
+    protected $_longonly = false;
 
     /**
      * The parsed result in three categories : command, input, and switch.
      *
-     * @var \Hoa\Console\Core\Cli\Parser array
+     * @var \Hoa\Console\Parser array
      */
-    protected $parsed   =  array(
-        'command'       => array(),
-        'input'         => array(),
-        'switch'        => array()
-    );
+    protected $_parsed   = null;
 
 
-
-    /**
-     * Call parse method if the command is not null.
-     *
-     * @access  public
-     * @param   string  $command    The command to parse.
-     * @return  void
-     */
-    public function __construct ( $command = null ) {
-
-        if(null !== $command)
-            $this->parse($command);
-    }
 
     /**
      * Parse a command.
@@ -184,15 +167,16 @@ class Parser {
      * will work :).
      *
      * @access  public
-     * @param   string  $command    The command to parse.
+     * @param   string  $command    Command to parse.
      * @return  void
-     * @return  \Hoa\Console\Core\Cli\Exception
      */
-    public function parse ( $command = '' ) {
+    public function parse ( $command ) {
 
-        if(empty($command))
-            throw new Exception(
-                'The command could not be empty.', 0);
+        unset($this->_parsed);
+        $this->_parsed = array(
+            'input'  => array(),
+            'switch' => array()
+        );
 
         /**
          * Here we go …
@@ -227,7 +211,7 @@ class Parser {
          *     )
          *     #xSsm
          *
-         * Nice isn't it :D ?
+         * Nice isn't it :-D ?
          *
          * Note : this regular expression likes to capture empty array (near
          * <input>), why ?
@@ -238,118 +222,72 @@ class Parser {
         preg_match_all($regex, $command, $matches, PREG_SET_ORDER);
 
         foreach($matches as $i => $match)
-            if($this->isInput($match))
+            if(isset($match['i']) && !empty($match['i']))
                 $this->addInput($match);
-
-            elseif($this->isBoolSwitch($match))
+            elseif(!isset($match['i']) && !isset($match['s']))
                 $this->addBoolSwitch($match);
-
-            elseif($this->isValuedSwitch($match))
+            elseif(!isset($match['i']) && isset($match['s']))
                 $this->addValuedSwitch($match);
 
-        $this->setCommand(array_shift($this->parsed['input']));
-
         return;
-    }
-
-    /**
-     * Check if the match is an input.
-     *
-     * @access  protected
-     * @param   array      $match    The match result.
-     * @return  bool
-     */
-    protected function isInput ( Array $match ) {
-
-        return isset($match['i']);
-    }
-
-    /**
-     * Check if the match is an boolean switch.
-     *
-     * @access  protected
-     * @param   array      $match    The match result.
-     * @return  bool
-     */
-    protected function isBoolSwitch ( Array $match ) {
-
-        return !isset($match['i']) && !isset($match['s']);
-    }
-
-    /**
-     * Check if the match is a valued switch.
-     *
-     * @access  protected
-     * @param   array      $match    The match result.
-     * @return  bool
-     */
-    protected function isValuedSwitch ( Array $match ) {
-
-        return !isset($match['i']) && isset($match['s']);
     }
 
     /**
      * Add an input.
      *
      * @access  protected
-     * @param   array      $match    The match result.
+     * @param   array  $input    Intput.
      * @return  void
      */
-    protected function addInput ( Array $match ) {
+    protected function addInput ( Array $input ) {
 
-        if(false === $this->isInput($match))
-            return;
+        $handle = $input['i'];
 
-        if(empty($match['i']))
-            return;
-
-        $handle = $match['i'];
-
-        if(!empty($match[6]))
-            $handle = str_replace('\\' . $match[6], $match[6], $handle);
+        if(!empty($input[6]))
+            $handle = str_replace('\\' . $input[6], $input[6], $handle);
         else
             $handle = str_replace('\\ ', ' ', $handle);
 
-        $this->parsed['input'][] = $handle;
+        $this->_parsed['input'][] = $handle;
+
+        return;
     }
 
     /**
      * Add a boolean switch.
      *
      * @access  protected
-     * @param   array      $match    The match result.
+     * @param   array  $swich    Switch.
      * @return  void
      */
-    protected function addBoolSwitch ( Array $match ) {
+    protected function addBoolSwitch ( Array $switch ) {
 
-        if(false === $this->isBoolSwitch($match))
-            return;
+        $this->addSwitch($switch['b'], true);
 
-        $this->addSwitch($match['b'], true);
+        return;
     }
 
     /**
      * Add a valued switch.
      *
      * @access  protected
-     * @param   array      $match    The match result.
+     * @param   array  $switch    Switch.
      * @return  void
      */
-    protected function addValuedSwitch ( Array $match ) {
+    protected function addValuedSwitch ( Array $switch ) {
 
-        if(false === $this->isValuedSwitch($match))
-            return;
+        $this->addSwitch($switch['b'], $switch['s'], $switch[4]);
 
-        $this->addSwitch($match['b'], $match['s'], $match[4]);
+        return;
     }
 
     /**
      * Add a switch.
      *
      * @access  protected
-     * @param   string     $name      Switch name.
-     * @param   string     $value     Switch value.
-     * @param   string     $escape    Character to escape.
+     * @param   string  $name      Switch name.
+     * @param   string  $value     Switch value.
+     * @param   string  $escape    Character to escape.
      * @return  void
      */
     protected function addSwitch ( $name, $value, $escape = null ) {
@@ -370,7 +308,7 @@ class Parser {
 
         if(null !== $escape) {
 
-            $escape = $escape == '' ? ' ' : $escape;
+            $escape = '' == $escape ? ' ' : $escape;
 
             if(is_string($value))
                 $value = str_replace('\\' . $escape, $escape, $value);
@@ -379,16 +317,16 @@ class Parser {
             if(is_string($value))
                 $value = str_replace('\\ ', ' ', $value);
 
-        if(isset($this->parsed['switch'][$name]))
-            if(is_bool($this->parsed['switch'][$name]))
-                $value = !$this->parsed['switch'][$name];
+        if(isset($this->_parsed['switch'][$name]))
+            if(is_bool($this->_parsed['switch'][$name]))
+                $value = !$this->_parsed['switch'][$name];
             else
-                $value = array($this->parsed['switch'][$name], $value);
+                $value = array($this->_parsed['switch'][$name], $value);
 
         if(empty($name))
             return $this->addInput(array(6 => null, 'i' => $value));
 
-        $this->parsed['switch'][$name] = $value;
+        $this->_parsed['switch'][$name] = $value;
 
         return;
     }
@@ -403,37 +341,14 @@ class Parser {
      */
     public function transferSwitchToInput ( $name, &$value ) {
 
-        if(!isset($this->parsed['switch'][$name]))
+        if(!isset($this->_parsed['switch'][$name]))
             return;
 
-        $this->parsed['input'][] = $this->parsed['switch'][$name];
-        $value                   = true;
-        unset($this->parsed['switch'][$name]);
+        $this->_parsed['input'][] = $this->_parsed['switch'][$name];
+        $value                    = true;
+        unset($this->_parsed['switch'][$name]);
 
         return;
-    }
-
-    /**
-     * Set the command.
-     *
-     * @access  protected
-     * @param   string     $command    The command.
-     * @return  void
-     */
-    protected function setCommand ( $command ) {
-
-        $this->parsed['command'] = $command;
-    }
-
-    /**
-     * Get command.
-     *
-     * @access  protected
-     * @return  string
-     */
-    public function getCommand ( ) {
-
-        return $this->parsed['command'];
     }
 
     /**
@@ -444,7 +359,7 @@ class Parser {
      */
     public function getInputs ( ) {
 
-        return $this->parsed['input'];
+        return $this->_parsed['input'];
     }
 
     /**
@@ -459,17 +374,17 @@ class Parser {
      * @param   string  $z     26th input.
      * @return  void
      */
-    public function listInputs ( &$a,        &$b = null, &$c = null, &$d = null, &$e = null,
-                                 &$f = null, &$g = null, &$h = null, &$i = null, &$j = null,
-                                 &$k = null, &$l = null, &$m = null, &$n = null, &$o = null,
-                                 &$p = null, &$q = null, &$r = null, &$s = null, &$t = null,
-                                 &$u = null, &$v = null, &$w = null, &$x = null, &$y = null,
-                                 &$z = null ) {
+    public function listInputs ( &$a,        &$b = null, &$c = null, &$d = null,
+                                 &$e = null, &$f = null, &$g = null, &$h = null,
+                                 &$i = null, &$j = null, &$k = null, &$l = null,
+                                 &$m = null, &$n = null, &$o = null, &$p = null,
+                                 &$q = null, &$r = null, &$s = null, &$t = null,
+                                 &$u = null, &$v = null, &$w = null, &$x = null,
+                                 &$y = null, &$z = null ) {
 
         $inputs = $this->getInputs();
-
-        $i  = 'a';
-        $ii = -1;
+        $i      = 'a';
+        $ii     = -1;
 
         while(isset($inputs[++$ii]) && $i <= 'z')
             ${$i++} = $inputs[$ii];
@@ -480,12 +395,12 @@ class Parser {
     /**
      * Get all switches.
      *
-     * @access  protected
+     * @access  public
      * @return  array
      */
     public function getSwitches ( ) {
 
-        return $this->parsed['switch'];
+        return $this->_parsed['switch'];
     }
 
     /**
@@ -495,7 +410,7 @@ class Parser {
      * @param   string  $value       The value to parse.
      * @param   array   $keywords    Value of keywords.
      * @return  array
-     * @throw   \Hoa\Console\Core\Cli\Exception
+     * @throw   \Hoa\Console\Exception
      * @todo    Could be ameliorate with a ":" explode, and some eval.
      *          Check if operands are integer.
      */
@@ -506,25 +421,25 @@ class Parser {
         foreach(explode(',', $value) as $key => $subvalue) {
 
             $subvalue = str_replace(
-                            array_keys($keywords),
-                            array_values($keywords),
-                            $subvalue
-                        );
+                array_keys($keywords),
+                array_values($keywords),
+                $subvalue
+            );
 
             if(0 !== preg_match('#^(-?[0-9]+):(-?[0-9]+)$#', $subvalue, $matches)) {
 
-                if($matches[1] < 0 && $matches[2] < 0)
+                if(0 > $matches[1] && 0 > $matches[2])
                     throw new Exception(
                         'Cannot give two negative numbers, given %s.',
                         1, $subvalue);
 
                 array_shift($matches);
-                $max = max ($matches);
-                $min = min ($matches);
+                $max = max($matches);
+                $min = min($matches);
 
-                if($max < 0 || $min < 0) {
+                if(0 > $max || 0 > $min) {
 
-                    if($max - $min < 0)
+                    if(0 > $max - $min)
                         throw new Exception(
                             'The difference between operands must be ' .
                             'positive.', 2);
@@ -545,13 +460,13 @@ class Parser {
      * Set the long-only parameter.
      *
      * @access  public
-     * @param   bool    $longonly    The long-only value.
+     * @param   bool  $longonly    The long-only value.
      * @return  bool
      */
     public function setLongOnly ( $longonly = false ) {
 
-        $old            = $this->longonly;
-        $this->longonly = $longonly;
+        $old             = $this->_longonly;
+        $this->_longonly = $longonly;
 
         return $old;
     }
@@ -564,7 +479,7 @@ class Parser {
      */
     public function getLongOnly ( ) {
 
-        return $this->longonly;
+        return $this->_longonly;
     }
 }
 

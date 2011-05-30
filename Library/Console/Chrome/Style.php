@@ -133,7 +133,7 @@ abstract class Style {
      *                              combinaisons), or a style name.
      * @return  string
      */
-    public static function stylize ( $text = null, $options = array() ) {
+    public static function stylize ( $text, $options = array() ) {
 
         // Disable colors if not supported (windows or non tty console).
         if(OS_WIN || !function_exists('posix_isatty'))

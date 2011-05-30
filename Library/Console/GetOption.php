@@ -39,18 +39,23 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Console\Core\Exception
+ * \Hoa\Console\Exception
  */
--> import('Console.Core.Exception');
+-> import('Console.Exception')
+
+/**
+ * \Hoa\Console\Parser
+ */
+-> import('Console.Parser');
 
 }
 
-namespace Hoa\Console\Core {
+namespace Hoa\Console {
 
 /**
- * Class \Hoa\Console\Core\GetOption.
+ * Class \Hoa\Console\GetOption.
  *
- * This class is complementary to the \Hoa\Console\Core\Cli\Parser class.
+ * This class is complementary to the \Hoa\Console\Parser class.
  * This class manages the options profile for a command, i.e. argument,
  * interactivity, option name etc.
  * And, of course, it proposes the getOption method, that allow user to loop
@@ -64,30 +69,45 @@ namespace Hoa\Console\Core {
 class GetOption {
 
     /**
-     * Values of the has_arg field of options array.
+     * Argument: no argument is needed.
      *
      * @const int
      */
     const NO_ARGUMENT        = 0;
-    const REQUIRED_ARGUMENT  = 1;
-    const OPTIONAL_ARGUMENT  = 2;
 
     /**
-     * Interactive arguments.
+     * Argument: required.
      *
      * @const int
      */
-    const INTERACTIVE_NEVER  = 0; /* 0 : no option or --interactive=never    */
-    const INTERACTIVE_ONCE   = 1; /* 1 : -I or --interactive=once            */
-    const INTERACITVE_ALWAYS = 2; /* 2 : default, -i or --interactive=always */
+    const REQUIRED_ARGUMENT  = 1;
 
     /**
-     * Give the access to the option description.
+     * Argument: optional.
+     *
+     * @const int
+     */
+    const OPTIONAL_ARGUMENT  = 2;
+
+    /**
+     * Option bucket: name.
      *
      * @const int
      */
     const OPTION_NAME        = 0;
+
+    /**
+     * Option bucket: has argument.
+     *
+     * @const int
+     */
     const OPTION_HAS_ARG     = 1;
+
+    /**
+     * Option bucket: value.
+     *
+     * @const int
+     */
     const OPTION_VAL         = 2;
 
     /**
@@ -103,25 +123,14 @@ class GetOption {
      *
      * @var \Hoa\Console\Command\Generic array
      */
-    protected $options         = array();
-
-    /**
-     * The differents values for interactive arguments.
-     *
-     * @var \Hoa\Console\Command\Generic array
-     */
-    protected $interactiveArgs = array(
-        0 => array('false', '0', 'never',  'no',  'none'),
-        1 => array('once'),
-        2 => array('true',  '1', 'always', 'yes')
-    );
+    protected $_options = array();
 
     /**
      * The pipette contains all the short value of options.
      *
      * @var \Hoa\Console\Core\GetOption char
      */
-    protected $pipette         = array();
+    protected $_pipette = array();
 
 
 
@@ -132,15 +141,13 @@ class GetOption {
      * @param   array                         $options    The option definition.
      * @param   \Hoa\Console\Core\Cli\Parser  $parser     The parser.
      * @return  void
-     * @todo    Implement the INTERACTIVE_* constants.
      */
-    public function __construct ( Array                        $options,
-                                  \Hoa\Console\Core\Cli\Parser $parser   ) {
+    public function __construct ( Array $options, Parser $parser ) {
 
         if(empty($options))
-            $this->pipette[null] = null;
+            $this->_pipette[null] = null;
 
-        $this->options = $options;
+        $this->_options = $options;
 
         foreach($parser->getSwitches() as $name => $values) {
 
@@ -177,19 +184,18 @@ class GetOption {
                     if(!is_bool($value))
                         $parser->transferSwitchToInput($name, $value);
                 }
-
                 elseif(   $argument === self::REQUIRED_ARGUMENT
                        && !is_string($value))
                     throw new Exception(
                         'The argument %s requires a value (it is not a switch).',
                         0, $name);
 
-                $this->pipette[] = array($found, $value);
+                $this->_pipette[] = array($found, $value);
             }
         }
 
-        $this->pipette[null] = null;
-        reset($this->pipette);
+        $this->_pipette[null] = null;
+        reset($this->_pipette);
 
         return;
     }
@@ -217,14 +223,14 @@ class GetOption {
             return null;
         }
 
-        $k     = key($this->pipette);
-        $c     = current($this->pipette);
+        $k     = key($this->_pipette);
+        $c     = current($this->_pipette);
         $key   = $c[0];
         $value = $c[1];
 
         if('' === $k && null === $c) {
 
-            reset($this->pipette);
+            reset($this->_pipette);
             $first = true;
 
             return false;
@@ -233,7 +239,7 @@ class GetOption {
         $allow = array();
 
         if(null === $short)
-            foreach($this->options as $option)
+            foreach($this->_options as $option)
                 $allow[] = $option[self::OPTION_VAL];
         else
             $allow = str_split($short);
@@ -243,7 +249,7 @@ class GetOption {
 
         $optionValue = $value;
         $return      = $key;
-        next($this->pipette);
+        next($this->_pipette);
 
         return $return;
     }
@@ -256,7 +262,7 @@ class GetOption {
      */
     public function isPipetteEmpty ( ) {
 
-        return count($this->pipette) == 1;
+        return count($this->_pipette) == 1;
     }
 }
 
