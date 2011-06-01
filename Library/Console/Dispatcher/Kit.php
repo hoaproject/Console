@@ -64,6 +64,11 @@ from('Hoa')
 -> import('Console.Chrome.Text')
 
 /**
+ * \Hoa\Console\Environment
+ */
+-> import('Console.Environment.~')
+
+/**
  * \Hoa\Dispatcher\Kit
  */
 -> import('Dispatcher.Kit')
@@ -217,6 +222,32 @@ class Kit extends \Hoa\Dispatcher\Kit {
             0,
             '|: '
         );
+    }
+
+    /**
+     * Make a render of an operation.
+     *
+     * @accesss public
+     * @param string  $text      The operation text.
+     * @param bool    $status    The operation status.
+     * @return void
+     */
+    public function status ( $text, $status ) {
+
+        $out = ' ' . $this->stylize('*', 'info') . ' ' .
+               $text . str_pad(
+                   ' ',
+                   \Hoa\Console\Environment::get('window.columns')
+                   - strlen(preg_replace('#' . "\033". '\[[0-9]+m#', '', $text))
+                   - 8
+               ) .
+               ($status === true
+                   ? '[' . $this->stylize('ok', 'success') . ']'
+                   : '[' . $this->stylize('!!', 'nosuccess') . ']');
+
+        cout($out, \Hoa\Console\Io::NEW_LINE, \Hoa\Console\Io::NO_WORDWRAP);
+
+        return;
     }
 
     /**
