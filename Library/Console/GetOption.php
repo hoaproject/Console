@@ -220,7 +220,7 @@ class GetOption {
             $first       = false;
             $optionValue = null;
 
-            return null;
+            return false;
         }
 
         $k     = key($this->_pipette);
