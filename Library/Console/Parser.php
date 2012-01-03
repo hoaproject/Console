@@ -222,7 +222,8 @@ class Parser {
         preg_match_all($regex, $command, $matches, PREG_SET_ORDER);
 
         foreach($matches as $i => $match)
-            if(isset($match['i']) && !empty($match['i']))
+            if(   isset($match['i'])
+               && ('0' === $match['i'] || !empty($match['i'])))
                 $this->addInput($match);
             elseif(!isset($match['i']) && !isset($match['s']))
                 $this->addBoolSwitch($match);
