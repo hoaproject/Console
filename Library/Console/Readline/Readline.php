@@ -143,6 +143,13 @@ class Readline {
      */
     protected $_historySize    = 0;
 
+    /**
+     * Prefix.
+     *
+     * @var \Hoa\Console\Readline string
+     */
+    protected $_prefix         = null;
+
 
 
     /**
@@ -177,12 +184,14 @@ class Readline {
      * @access  public
      * @return  string
      */
-    public function readLine ( ) {
+    public function readLine ( $prefix = null ) {
 
         if(OS_WIN)
             return fgets(STDIN);
 
         $this->resetLine();
+        $this->setPrefix($prefix);
+        $this->_write($prefix);
         $read = array(STDIN);
 
         while(true) {
@@ -471,6 +480,30 @@ class Readline {
     }
 
     /**
+     * Set prefix.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function setPrefix ( $prefix ) {
+
+        $this->_prefix = $prefix;
+
+        return;
+    }
+
+    /**
+     * Get prefix.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getPrefix ( ) {
+
+        return $this->_prefix;
+    }
+
+    /**
      * Get buffer. Not for user.
      *
      * @access  public
@@ -560,7 +593,7 @@ class Readline {
      */
     public function _bindArrowUp ( Readline $self ) {
 
-        $self->_write("\r\033[K");
+        $self->_write("\r\033[K" . $self->getPrefix());
         $self->setBuffer($buffer = $self->previousHistory());
         $self->setLine($buffer);
 
@@ -576,7 +609,7 @@ class Readline {
      */
     public function _bindArrowDown ( Readline $self ) {
 
-        $self->_write("\r\033[K");
+        $self->_write("\r\033[K" . $self->getPrefix());
         $self->setBuffer($buffer = $self->nextHistory());
         $self->setLine($buffer);
 
