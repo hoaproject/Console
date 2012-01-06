@@ -1,0 +1,692 @@
+<?php
+
+/**
+ * Hoa
+ *
+ *
+ * @license
+ *
+ * New BSD License
+ *
+ * Copyright © 2007-2011, Ivan Enderlin. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Hoa nor the names of its contributors may be
+ *       used to endorse or promote products derived from this software without
+ *       specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ */
+
+namespace {
+
+from('Hoa')
+
+/*
+ * \Hoa\Console\System
+ */
+-> import('Console.System');
+
+}
+
+namespace Hoa\Console\Readline {
+
+/**
+ * Class \Hoa\Console\Readline.
+ *
+ * Read, edit, bind… a line from STDIN.
+ *
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
+ * @license    New BSD License
+ */
+
+class Readline {
+
+    /**
+     * State: continue to read.
+     *
+     * @const int
+     */
+    const STATE_CONTINUE = 1;
+
+    /**
+     * State: stop to read.
+     *
+     * @const int
+     */
+    const STATE_BREAK    = 2;
+
+    /**
+     * State: no output the current buffer.
+     *
+     * @const int
+     */
+    const STATE_NO_ECHO  = 4;
+
+    /**
+     * Old STTY options.
+     *
+     * @var \Hoa\Console\Readline string
+     */
+    protected $_oldStty        = null;
+
+    /**
+     * Current editing line.
+     *
+     * @var \Hoa\Console\Readline string
+     */
+    protected $_line           = null;
+
+    /**
+     * Current editing line seek.
+     *
+     * @var \Hoa\Console\Readline int
+     */
+    protected $_lineCurrent    = 0;
+
+    /**
+     * Current editing line length.
+     *
+     * @var \Hoa\Console\Readline int
+     */
+    protected $_lineLength     = 0;
+
+    /**
+     * Current buffer (most of the time, a char).
+     *
+     * @var \Hoa\Console\Readline string
+     */
+    protected $_buffer         = null;
+
+    /**
+     * Mapping.
+     *
+     * @var \Hoa\Console\Readline array
+     */
+    protected $_mapping        = array();
+
+    /**
+     * History.
+     *
+     * @var \Hoa\Console\Readline array
+     */
+    protected $_history        = array();
+
+    /**
+     * History current position.
+     *
+     * @var \Hoa\Console\Readline int
+     */
+    protected $_historyCurrent = 0;
+
+    /**
+     * History size.
+     *
+     * @var \Hoa\Console\Readline int
+     */
+    protected $_historySize    = 0;
+
+
+
+    /**
+     * Initialize the readline editor.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        if(OS_WIN)
+            return;
+
+        $this->_oldStty = \Hoa\Console\System::execute('stty -g');
+        \Hoa\Console\System::execute('stty -echo -icanon min 1 time 0');
+
+        $this->_mapping["\033"]           = array();
+        $this->_mapping["\033"]['[']      = array();
+        $this->_mapping["\033"]['[']['A'] = xcallable($this, '_bindArrowUp');
+        $this->_mapping["\033"]['[']['B'] = xcallable($this, '_bindArrowDown');
+        $this->_mapping["\033"]['[']['C'] = xcallable($this, '_bindArrowRight');
+        $this->_mapping["\033"]['[']['D'] = xcallable($this, '_bindArrowLeft');
+        $this->_mapping["\177"]           = xcallable($this, '_bindBackspace');
+        $this->_mapping["\n"]             = xcallable($this, '_bindNewline');
+
+        return;
+    }
+
+    /**
+     * Read a line from STDIN.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readLine ( ) {
+
+        if(OS_WIN)
+            return fgets(STDIN);
+
+        $this->resetLine();
+        $read = array(STDIN);
+
+        while(true) {
+
+            @stream_select($read, $write, $except, 30, 0);
+
+            if(empty($read)) {
+
+                $read = array(STDIN);
+                continue;
+            }
+
+            $mapping = &$this->_mapping;
+
+            while(   '' !== ($char = $this->_read())
+                  && isset($mapping[$char])
+                  && is_array($mapping = &$mapping[$char]));
+
+            $this->_buffer = $char;
+
+            if(is_callable($mapping))
+                $return = $mapping($this);
+            else {
+
+                if($this->getLineLength() == $this->getLineCurrent()) {
+
+                    $this->appendLine($this->_buffer);
+                    $return = static::STATE_CONTINUE;
+                }
+                else {
+
+                    $this->insertLine($this->_buffer);
+                    $tail          = substr(
+                        $this->getLine(),
+                        $this->getLineCurrent() - 1
+                    );
+                    $this->_buffer = "\033[K" . $tail . str_repeat(
+                        "\033[D",
+                        strlen($tail) - 1
+                    );
+
+                    $return = self::STATE_CONTINUE;
+                }
+            }
+
+            if(0 === ($return & self::STATE_NO_ECHO))
+                $this->_write($this->_buffer);
+
+            if(0 !== ($return & self::STATE_BREAK))
+                break;
+        }
+
+        return $this->getLine();
+    }
+
+    /**
+     * Add mappings.
+     *
+     * @access  public
+     * @param   array  $mappings    Mappings.
+     * @return  void
+     */
+    public function addMappings ( Array $mappings ) {
+
+        foreach($mappings as $key => $mapping)
+            $this->addMapping($key, $mapping);
+
+        return;
+    }
+
+    /**
+     * Add a mapping.
+     * Supported key:
+     *     • \e[… for \033[…;
+     *     • \C-… for Cltr-…;
+     *     • abc for a simple mapping.
+     * A mapping is a callable that has only one parameter of type
+     * Hoa\Console\Readline and that returns a self::STATE_* constant.
+     *
+     * @access  public
+     * @param   string  $key        Key.
+     * @param   mixed   $mapping    Mapping (a callable).
+     * @return  void
+     */
+    public function addMapping ( $key, $mapping ) {
+
+        if('\e[' == substr($key, 0, 3)) {
+
+            $_key = substr($key, 3);
+
+            if(!isset($this->_mapping["\033"]))
+                $this->_mapping["\033"] = array('[' => array());
+            elseif(!isset($this->_mapping["\033"]['[']))
+                $this->_mapping["\033"]['['] = array();
+
+            $this->_mapping["\033"]['['][$_key] = $mapping;
+        }
+        elseif('\C-' == substr($key, 0, 3)) {
+
+            $_key = ord(strtolower(substr($key, 3))) - 96;
+            $this->_mapping[chr($_key)] = $mapping;
+        }
+        else {
+
+            $handle = &$this->_mapping;
+            $split  = str_split($key);
+            $last   = array_pop($split);
+
+            foreach($split as $_key) {
+
+                if(!isset($handle[$_key]))
+                    $handle[$_key] = array();
+
+                $handle = &$handle[$_key];
+            }
+
+            $handle[$last] = $mapping;
+        }
+
+        return;
+    }
+
+    /**
+     * Add an entry in the history.
+     *
+     * @access  public
+     * @param   string  $line    Line.
+     * @return  void
+     */
+    public function addHistory ( $line = null ) {
+
+        if(empty($line))
+            return;
+
+        $this->_history[]      = $line;
+        $this->_historyCurrent = $this->_historySize++;
+
+        return;
+    }
+
+    /**
+     * Clear history.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function clearHistory ( ) {
+
+        unset($this->_history);
+        $this->_history        = array();
+        $this->_historyCurrent = 0;
+        $this->_historySize    = 1;
+
+        return;
+    }
+
+    /**
+     * Get an entry in the history.
+     *
+     * @access  public
+     * @param   int  $i    Index of the entry.
+     * @return  string
+     */
+    public function getHistory ( $i = null ) {
+
+        if(null === $i)
+            $i = $this->_historyCurrent;
+
+        if(!isset($this->_history[$i]))
+            return null;
+
+        return $this->_history[$i];
+    }
+
+    /**
+     * Go backward in the history.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function previousHistory ( ) {
+
+        if(0 >= $this->_historyCurrent)
+            return $this->getHistory(0);
+
+        return $this->getHistory($this->_historyCurrent--);
+    }
+
+    /**
+     * Go forward in the history.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function nextHistory ( ) {
+
+        if($this->_historyCurrent + 1 >= $this->_historySize)
+            return $this->getLine();
+
+        return $this->getHistory(++$this->_historyCurrent);
+    }
+
+    /**
+     * Get current line.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getLine ( ) {
+
+        return $this->_line;
+    }
+
+    /**
+     * Append to current line.
+     *
+     * @access  public
+     * @param   string  $append    String to append.
+     * @return  void
+     */
+    public function appendLine ( $append ) {
+
+        $this->_line       .= $append;
+        $this->_lineLength  = strlen($this->_line);
+        $this->_lineCurrent = $this->_lineLength;
+
+        return;
+    }
+
+    /**
+     * Insert into current line at the current seek.
+     *
+     * @access  public
+     * @param   string  $insert    String to insert.
+     * @return  void
+     */
+    public function insertLine ( $insert ) {
+
+        if($this->_lineLength == $this->_lineCurrent)
+            return $this->appendLine($insert);
+
+        $this->_line         = substr($this->_line, 0, $this->_lineCurrent) .
+                               $insert .
+                               substr($this->_line, $this->_lineCurrent);
+        $this->_lineLength   = strlen($this->_line);
+        $this->_lineCurrent += strlen($insert);
+
+        return;
+    }
+
+    /**
+     * Reset current line.
+     *
+     * @access  public
+     * @return  void
+     */
+    protected function resetLine ( ) {
+
+        $this->_line        = null;
+        $this->_lineCurrent = 0;
+        $this->_lineLength  = 0;
+
+        return;
+    }
+
+    /**
+     * Get current line seek.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getLineCurrent ( ) {
+
+        return $this->_lineCurrent;
+    }
+
+    /**
+     * Get current line length.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getLineLength ( ) {
+
+        return $this->_lineLength;
+    }
+
+    /**
+     * Get buffer. Not for user.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getBuffer ( ) {
+
+        return $this->_buffer;
+    }
+
+    /**
+     * Write on STDIN. Not for user.
+     *
+     * @access  public
+     * @param   string  $string    String to write.
+     * @return  void
+     */
+    public function _write ( $string ) {
+
+        fwrite(STDIN, $string);
+
+        return;
+    }
+
+    /**
+     * Read on STDIN. Not for user.
+     *
+     * @access  public
+     * @param   int  $length    Length.
+     * @return  string
+     */
+    public function _read ( $length = 1 ) {
+
+        return fread(STDIN, $length);
+    }
+
+    /**
+     * Set current line. Not for user.
+     *
+     * @access  public
+     * @param   string  $line    Line.
+     * @return  void
+     */
+    public function setLine ( $line ) {
+
+        $this->_line        = $line;
+        $this->_lineLength  = strlen($this->_line);
+        $this->_lineCurrent = $this->_lineLength;
+
+        return;
+    }
+
+    /**
+     * Set current line seek. Not for user.
+     *
+     * @access  public
+     * @param   int  $current    Seek.
+     * @return  void
+     */
+    public function setLineCurrent ( $current ) {
+
+        $this->_lineCurrent = $current;
+
+        return;
+    }
+
+    /**
+     * Set buffer. Not for user.
+     *
+     * @access  public
+     * @param   string  $buffer    Buffer.
+     * @return  string
+     */
+    public function setBuffer ( $buffer ) {
+
+        $this->_buffer = $buffer;
+
+        return;
+    }
+
+    /**
+     * Up arrow binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindArrowUp ( Readline $self ) {
+
+        $self->_write("\r\033[K");
+        $self->setBuffer($buffer = $self->previousHistory());
+        $self->setLine($buffer);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Down arrow binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindArrowDown ( Readline $self ) {
+
+        $self->_write("\r\033[K");
+        $self->setBuffer($buffer = $self->nextHistory());
+        $self->setLine($buffer);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Right arrow binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindArrowRight ( Readline $self ) {
+
+        if($self->getLineLength() > $self->getLineCurrent()) {
+
+            $self->_write("\033[C");
+            $self->setLineCurrent($self->getLineCurrent() + 1);
+        }
+
+        $self->setBuffer(null);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Left arrow binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindArrowLeft ( Readline $self ) {
+
+        if(0 < $self->getLineCurrent()) {
+
+            $self->_write("\033[D");
+            $self->setLineCurrent($this->getLineCurrent() - 1);
+        }
+
+        $self->setBuffer(null);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Backspace binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindBackspace ( Readline $self ) {
+
+        $buffer = null;
+
+        if(0 < $self->getLineCurrent()) {
+
+            $self->_write("\033[D\033[K");
+
+            if($self->getLineLength() == $current = $self->getLineCurrent())
+                $self->setLine(substr($this->getLine(), 0, -1));
+            else {
+
+                $line    = $self->getLine();
+                $current = $self->getLineCurrent();
+                $tail    = substr($line, $current);
+                $buffer  = $tail . str_repeat("\033[D", strlen($tail));
+                $self->setLine(substr($line, 0, $current - 1) . $tail);
+                $self->setLineCurrent($current - 1);
+            }
+        }
+
+        $self->setBuffer($buffer);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Newline binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindNewline ( Readline $self ) {
+
+        $line = $self->getLine();
+
+        if(empty($line))
+            $self->setLine($line = $buffer);
+
+        $self->addHistory($line);
+
+        return static::STATE_BREAK;
+    }
+
+    /**
+     * Restore STTY options.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __destruct ( ) {
+
+        \Hoa\Console\System::execute('stty ' . $this->_oldStty);
+
+        return;
+    }
+}
+
+}
