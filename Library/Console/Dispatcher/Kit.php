@@ -54,6 +54,16 @@ from('Hoa')
 -> import('Console.Io', true)
 
 /**
+ * \Hoa\Console\Readline
+ */
+-> import('Console.Readline.~')
+
+/**
+ * \Hoa\Console\Readline\Password
+ */
+-> import('Console.Readline.Password')
+
+/**
  * \Hoa\Console\Chrome\Style
  */
 -> import('Console.Chrome.Style')
@@ -261,6 +271,40 @@ class Kit extends \Hoa\Dispatcher\Kit {
     public function stylize ( $text, $options = array() ) {
 
         return \Hoa\Console\Chrome\Style::stylize($text, $options);
+    }
+
+    /**
+     * Read, edit, bind… a line from STDIN.
+     *
+     * @access  public
+     * @param   string  $prefix    Prefix.
+     * @return  string
+     */
+    public function readLine ( $prefix = null ) {
+
+        static $_rl = null;
+
+        if(null === $_rl)
+            $_rl = new \Hoa\Console\Readline();
+
+        return $_rl->readLine($prefix);
+    }
+
+    /**
+     * Read, edit, bind… a password from STDIN.
+     *
+     * @access  public
+     * @param   string  $prefix    Prefix.
+     * @return  string
+     */
+    public function readPassword ( $prefix = null ) {
+
+        static $_rl = null;
+
+        if(null === $_rl)
+            $_rl = new \Hoa\Console\Readline\Password();
+
+        return $_rl->readLine($prefix);
     }
 }
 
