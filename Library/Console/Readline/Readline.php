@@ -665,12 +665,7 @@ class Readline {
      */
     public function _bindNewline ( Readline $self ) {
 
-        $line = $self->getLine();
-
-        if(empty($line))
-            $self->setLine($line = $buffer);
-
-        $self->addHistory($line);
+        $self->addHistory($self->getLine());
 
         return static::STATE_BREAK;
     }
