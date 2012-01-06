@@ -172,7 +172,13 @@ class Readline {
         $this->_mapping["\033"]['[']['B'] = xcallable($this, '_bindArrowDown');
         $this->_mapping["\033"]['[']['C'] = xcallable($this, '_bindArrowRight');
         $this->_mapping["\033"]['[']['D'] = xcallable($this, '_bindArrowLeft');
+        $this->_mapping["\001"]           = xcallable($this, '_bindControlA');
+        $this->_mapping["\002"]           = xcallable($this, '_bindControlB');
+        $this->_mapping["\005"]           = xcallable($this, '_bindControlE');
+        $this->_mapping["\006"]           = xcallable($this, '_bindControlF');
+        $this->_mapping["\010"]           =
         $this->_mapping["\177"]           = xcallable($this, '_bindBackspace');
+        $this->_mapping["\027"]           = xcallable($this, '_bindControlW');
         $this->_mapping["\n"]             = xcallable($this, '_bindNewline');
 
         return;
@@ -586,6 +592,7 @@ class Readline {
 
     /**
      * Up arrow binding.
+     * Go backward in the history.
      *
      * @access  public
      * @param   \Hoa\Console\Readline  $self    Self.
@@ -602,6 +609,7 @@ class Readline {
 
     /**
      * Down arrow binding.
+     * Go forward in the history.
      *
      * @access  public
      * @param   \Hoa\Console\Readline  $self    Self.
@@ -618,6 +626,7 @@ class Readline {
 
     /**
      * Right arrow binding.
+     * Move cursor to the right.
      *
      * @access  public
      * @param   \Hoa\Console\Readline  $self    Self.
@@ -638,6 +647,7 @@ class Readline {
 
     /**
      * Left arrow binding.
+     * Move cursor to the left.
      *
      * @access  public
      * @param   \Hoa\Console\Readline  $self    Self.
@@ -657,7 +667,8 @@ class Readline {
     }
 
     /**
-     * Backspace binding.
+     * Backspace and Control-H binding.
+     * Delete the first character at the right of the cursor.
      *
      * @access  public
      * @param   \Hoa\Console\Readline  $self    Self.
@@ -685,6 +696,139 @@ class Readline {
         }
 
         $self->setBuffer($buffer);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Control-A binding.
+     * Move cursor to beginning of line.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindControlA ( Readline $self ) {
+
+        for($i = $self->getLineCurrent() - 1; 0 <= $i; --$i)
+            $self->_bindArrowLeft($self);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Control-B binding.
+     * Move cursor backward one word.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindControlB ( Readline $self ) {
+
+        $current = $self->getLineCurrent();
+
+        if(0 === $current)
+            return static::STATE_CONTINUE;
+
+        $words = preg_split(
+            '#\b#',
+            $self->getLine(),
+            -1,
+            PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+        );
+
+        for($i = 0, $max = count($words) - 1;
+            $i < $max && $words[$i + 1][1] < $current;
+            ++$i);
+
+        for($j = $words[$i][1] + 1; $current >= $j; ++$j)
+            $self->_bindArrowLeft($self);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Control-E binding.
+     * Move cursor to end of line.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindControlE ( Readline $self ) {
+
+        for($i = $self->getLineCurrent(), $max = $self->getLineLength();
+            $i < $max;
+            ++$i)
+            $self->_bindArrowRight($self);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Control-F binding.
+     * Move cursor forward one word.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindControlF ( Readline $self ) {
+
+        $current = $self->getLineCurrent();
+
+        if($this->getLineLength() === $current)
+            return static::STATE_CONTINUE;
+
+        $words = preg_split(
+            '#\b#',
+            $self->getLine(),
+            -1,
+            PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+        );
+
+        for($i = 0, $max = count($words) - 1;
+            $i < $max && $words[$i][1] < $current;
+            ++$i);
+
+        if(!isset($words[$i + 1]))
+            $words[$i + 1] = array(1 => $this->getLineLength());
+
+        for($j = $words[$i + 1][1]; $j > $current; --$j)
+            $self->_bindArrowRight($self);
+
+        return static::STATE_CONTINUE;
+    }
+
+    /**
+     * Control-W binding.
+     * Delete first backward word.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindControlW ( Readline $self ) {
+
+        $current = $self->getLineCurrent();
+
+        if(0 === $current)
+            return static::STATE_CONTINUE;
+
+        $words = preg_split(
+            '#\b#',
+            $self->getLine(),
+            -1,
+            PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+        );
+
+        for($i = 0, $max = count($words) - 1;
+            $i < $max && $words[$i + 1][1] < $current;
+            ++$i);
+
+        for($j = $words[$i][1] + 1; $current >= $j; ++$j)
+            $self->_bindBackspace($self);
 
         return static::STATE_CONTINUE;
     }
