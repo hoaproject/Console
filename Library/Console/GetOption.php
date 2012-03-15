@@ -46,7 +46,12 @@ from('Hoa')
 /**
  * \Hoa\Console\Parser
  */
--> import('Console.Parser');
+-> import('Console.Parser')
+
+/**
+ * \Hoa\String\Search
+ */
+-> import('String.Search');
 
 }
 
@@ -121,16 +126,30 @@ class GetOption {
      * OPTIONAL_ARGUMENT.
      * The val is the short option value.
      *
-     * @var \Hoa\Console\Command\Generic array
+     * @var \Hoa\Console\GetOption array
      */
-    protected $_options = array();
+    protected $_options       = array();
+
+    /**
+     * Parser.
+     *
+     * @var \Hoa\Console\Parser object
+     */
+    protected $_parser        = null;
 
     /**
      * The pipette contains all the short value of options.
      *
-     * @var \Hoa\Console\Core\GetOption char
+     * @var \Hoa\Console\GetOption char
      */
-    protected $_pipette = array();
+    protected $_pipette       = array();
+
+    /**
+     * Search in string object.
+     *
+     * @var \Hoa\String\Search object
+     */
+    protected static $_search = null;
 
 
 
@@ -141,57 +160,93 @@ class GetOption {
      * @param   array                         $options    The option definition.
      * @param   \Hoa\Console\Core\Cli\Parser  $parser     The parser.
      * @return  void
+     * @throw   \Hoa\Console\Exception
      */
     public function __construct ( Array $options, Parser $parser ) {
 
-        if(empty($options))
+        $this->_options = $options;
+        $this->_parser  = $parser;
+
+        if(empty($options)) {
+
             $this->_pipette[null] = null;
 
-        $this->_options = $options;
+            return;
+        }
 
-        foreach($parser->getSwitches() as $name => $values) {
+        $names  = array();
+        $_names = array();
 
-            if(!is_array($values))
-                $values = array($values);
+        foreach($options as $i => $option) {
 
-            foreach($values as $value) {
+            if(isset($option[self::OPTION_NAME]))
+                $names[$option[self::OPTION_NAME]] = $i;
 
-                $found    = null;
-                $argument = null;
+            if(isset($option[self::OPTION_VAL]))
+                $names[$option[self::OPTION_VAL]]  = $i;
+        }
 
-                foreach($options as $option) {
+        $_names   = array_keys($names);
+        $switches = $parser->getSwitches();
 
-                    if($option[self::OPTION_NAME] === "$name") {
+        foreach($switches as $name => $value) {
 
-                        $found    = $option[self::OPTION_VAL];
-                        $argument = $option[self::OPTION_HAS_ARG];
-                        break;
-                    }
+            if(false === in_array($name, $_names)) {
 
-                    if($option[self::OPTION_VAL] === "$name") {
-
-                        $found    = $option[self::OPTION_VAL];
-                        $argument = $option[self::OPTION_HAS_ARG];
-                        break;
-                    }
-                }
-
-                if(null === $found)
+                if(1 === strlen($name))
                     continue;
 
-                if($argument === self::NO_ARGUMENT) {
+                if(null === static::$_search)
+                    static::$_search = new \Hoa\String\Search();
 
-                    if(!is_bool($value))
-                        $parser->transferSwitchToInput($name, $value);
+                $haystack    = implode(';', $_names);
+                $differences = (int) ceil(strlen($name) / 3);
+                $searched    = static::$_search->approximated(
+                    $haystack,
+                    $name,
+                    $differences
+                );
+                $solutions   = array();
+
+                foreach($searched as $s) {
+
+                    $h = substr($haystack, $s['i'], $s['j'] - $s['i']);
+
+                    if(   false !== strpos($h, ';')
+                       || false !== in_array($h, array_keys($switches))
+                       || false === in_array($h, $_names))
+                        continue;
+
+                    $solutions[] = $h;
                 }
-                elseif(   $argument === self::REQUIRED_ARGUMENT
-                       && !is_string($value))
-                    throw new Exception(
-                        'The argument %s requires a value (it is not a switch).',
-                        0, $name);
 
-                $this->_pipette[] = array($found, $value);
+                if(empty($solutions))
+                    continue;
+
+                $this->_pipette[] = array('__ambiguous', array(
+                    'solutions' => $solutions,
+                    'value'     => $value,
+                    'option'    => $name
+                ));
+
+                continue;
             }
+
+            $option   = $options[$names[$name]];
+            $argument = $option[self::OPTION_HAS_ARG];
+
+            if(self::NO_ARGUMENT === $argument) {
+
+                if(!is_bool($value))
+                    $parser->transferSwitchToInput($name, $value);
+            }
+            elseif(   self::REQUIRED_ARGUMENT === $argument
+                   && !is_string($value))
+                throw new Exception(
+                    'The argument %s requires a value (it is not a switch).',
+                    0, $name);
+
+            $this->_pipette[] = array($option[self::OPTION_VAL], $value);
         }
 
         $this->_pipette[null] = null;
@@ -228,7 +283,7 @@ class GetOption {
         $key   = $c[0];
         $value = $c[1];
 
-        if('' === $k && null === $c) {
+        if(null == $k && null === $c) {
 
             reset($this->_pipette);
             $first = true;
@@ -244,7 +299,7 @@ class GetOption {
         else
             $allow = str_split($short);
 
-        if(!in_array($key, $allow))
+        if(!in_array($key, $allow) && '__ambiguous' != $key)
             return false;
 
         $optionValue = $value;
@@ -263,6 +318,63 @@ class GetOption {
     public function isPipetteEmpty ( ) {
 
         return count($this->_pipette) == 1;
+    }
+
+    /**
+     * Resolve option ambiguity. Please see the special pipette entry
+     * “ambiguous” in the self::__construct method.
+     * For a smarter resolving, you could use the console kit (please, see
+     * Hoa\Console\Dispatcher\Kit).
+     *
+     * @access  public
+     * @param   array  $solutions    Solutions.
+     * @return  void
+     * @throw   \Hoa\Console\Exception
+     */
+    public function resolveOptionAmbiguity ( Array $solution ) {
+
+        if(   !isset($solution['solutions'])
+           || !isset($solution['value'])
+           || !isset($solution['option']))
+            throw new Exception(
+                'Cannot resolve option ambiguity because the given solution ' .
+                'seems to be corruped.', 1);
+
+        $choices = $solution['solutions'];
+
+        if(1 < count($choices))
+            throw new Exception(
+                'Cannot resolve ambiguity, fix your typo in the option %s :-).',
+                2, $solution['option']);
+
+        $theSolution = $choices[0];
+
+        foreach($this->_options as $option)
+            if(   $theSolution == $option[self::OPTION_NAME]
+               || $theSolution == $option[self::OPTION_VAL]) {
+
+                $argument = $option[self::OPTION_HAS_ARG];
+                $value    = $solution['value'];
+
+                if(self::NO_ARGUMENT === $argument) {
+
+                    if(!is_bool($value))
+                        $this->_parser->transferSwitchToInput($theSolution, $value);
+                }
+                elseif(   self::REQUIRED_ARGUMENT === $argument
+                       && !is_string($value))
+                    throw new Exception(
+                        'The argument %s requires a value (it is not a switch).',
+                        3, $theSolution);
+
+                unset($this->_pipette[null]);
+                $this->_pipette[]     = array($option[self::OPTION_VAL], $value);
+                $this->_pipette[null] = null;
+
+                return;
+            }
+
+        return;
     }
 }
 
