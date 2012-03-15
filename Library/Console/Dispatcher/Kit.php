@@ -235,6 +235,31 @@ class Kit extends \Hoa\Dispatcher\Kit {
     }
 
     /**
+     * Resolve option ambiguity by asking the user to choose amongst some
+     * appropriated solutions.
+     *
+     * @access  public
+     * @param   array  $solutions    Solutions.
+     * @return  void
+     */
+    public function resolveOptionAmbiguity ( Array $solutions ) {
+
+        cout('You have made a typo in the option ' .
+             $solutions['option'] . '; it can match the following options: ' .
+             "\n" . '    • ' .  implode(";\n    • ", $solutions['solutions']) .
+             '.' . "\n" . 'Please, type the right option (empty to choose ' .
+             'the first one):');
+        $new = cin('> ', \Hoa\Console\Io::TYPE_NORMAL, \Hoa\Console\Io::NO_NEW_LINE);
+
+        if(empty($new))
+            $new = $solutions['solutions'][0];
+
+        $solutions['solutions'] = array(0 => $new);
+
+        return $this->_options->resolveOptionAmbiguity($solutions);
+    }
+
+    /**
      * Make a render of an operation.
      *
      * @accesss public
