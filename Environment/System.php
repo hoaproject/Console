@@ -36,10 +36,12 @@
 
 namespace {
 
+from('Hoa')
+
 /**
  * \Hoa\Console\Environment\Exception
  */
-import('Console.Environment.Exception')
+-> import('Console.Environment.Exception')
 
 /**
  * \Hoa\Console\System
