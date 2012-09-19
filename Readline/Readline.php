@@ -192,8 +192,12 @@ class Readline {
      */
     public function readLine ( $prefix = null ) {
 
-        if(OS_WIN)
+        if(OS_WIN) {
+
+            $this->_write($prefix);
+
             return fgets(STDIN);
+        }
 
         $this->resetLine();
         $this->setPrefix($prefix);
