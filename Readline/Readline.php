@@ -165,21 +165,21 @@ class Readline {
 
         $this->_oldStty = \Hoa\Console\System::execute('stty -g');
         \Hoa\Console\System::execute('stty -echo -icanon min 1 time 0');
+        mb_internal_encoding('UTF-8');
+        mb_regex_encoding('UTF-8');
 
-        $this->_mapping["\033"]           = array();
-        $this->_mapping["\033"]['[']      = array();
-        $this->_mapping["\033"]['[']['A'] = xcallable($this, '_bindArrowUp');
-        $this->_mapping["\033"]['[']['B'] = xcallable($this, '_bindArrowDown');
-        $this->_mapping["\033"]['[']['C'] = xcallable($this, '_bindArrowRight');
-        $this->_mapping["\033"]['[']['D'] = xcallable($this, '_bindArrowLeft');
-        $this->_mapping["\001"]           = xcallable($this, '_bindControlA');
-        $this->_mapping["\002"]           = xcallable($this, '_bindControlB');
-        $this->_mapping["\005"]           = xcallable($this, '_bindControlE');
-        $this->_mapping["\006"]           = xcallable($this, '_bindControlF');
-        $this->_mapping["\010"]           =
-        $this->_mapping["\177"]           = xcallable($this, '_bindBackspace');
-        $this->_mapping["\027"]           = xcallable($this, '_bindControlW');
-        $this->_mapping["\n"]             = xcallable($this, '_bindNewline');
+        $this->_mapping["\033[A"] = xcallable($this, '_bindArrowUp');
+        $this->_mapping["\033[B"] = xcallable($this, '_bindArrowDown');
+        $this->_mapping["\033[C"] = xcallable($this, '_bindArrowRight');
+        $this->_mapping["\033[D"] = xcallable($this, '_bindArrowLeft');
+        $this->_mapping["\001"]   = xcallable($this, '_bindControlA');
+        $this->_mapping["\002"]   = xcallable($this, '_bindControlB');
+        $this->_mapping["\005"]   = xcallable($this, '_bindControlE');
+        $this->_mapping["\006"]   = xcallable($this, '_bindControlF');
+        $this->_mapping["\010"]   =
+        $this->_mapping["\177"]   = xcallable($this, '_bindBackspace');
+        $this->_mapping["\027"]   = xcallable($this, '_bindControlW');
+        $this->_mapping["\n"]     = xcallable($this, '_bindNewline');
 
         return;
     }
@@ -214,16 +214,15 @@ class Readline {
                 continue;
             }
 
-            $mapping = &$this->_mapping;
-
-            while(   '' !== ($char = $this->_read())
-                  && isset($mapping[$char])
-                  && is_array($mapping = &$mapping[$char]));
-
+            $char          = $this->_read();
             $this->_buffer = $char;
 
-            if(is_callable($mapping))
-                $return = $mapping($this);
+            if(   isset($this->_mapping[$char])
+               && is_callable($this->_mapping[$char])) {
+
+                $mapping = $this->_mapping[$char];
+                $return  = $mapping($this);
+            }
             else {
 
                 if($this->getLineLength() == $this->getLineCurrent()) {
@@ -234,13 +233,13 @@ class Readline {
                 else {
 
                     $this->insertLine($this->_buffer);
-                    $tail          = substr(
+                    $tail          = mb_substr(
                         $this->getLine(),
                         $this->getLineCurrent() - 1
                     );
                     $this->_buffer = "\033[K" . $tail . str_repeat(
                         "\033[D",
-                        strlen($tail) - 1
+                        mb_strlen($tail) - 1
                     );
 
                     $return = self::STATE_CONTINUE;
@@ -288,38 +287,15 @@ class Readline {
      */
     public function addMapping ( $key, $mapping ) {
 
-        if('\e[' == substr($key, 0, 3)) {
-
-            $_key = substr($key, 3);
-
-            if(!isset($this->_mapping["\033"]))
-                $this->_mapping["\033"] = array('[' => array());
-            elseif(!isset($this->_mapping["\033"]['[']))
-                $this->_mapping["\033"]['['] = array();
-
-            $this->_mapping["\033"]['['][$_key] = $mapping;
-        }
+        if('\e[' == substr($key, 0, 3))
+            $this->_mapping["\033[" . substr($key, 3)] = $mapping;
         elseif('\C-' == substr($key, 0, 3)) {
 
             $_key = ord(strtolower(substr($key, 3))) - 96;
             $this->_mapping[chr($_key)] = $mapping;
         }
-        else {
-
-            $handle = &$this->_mapping;
-            $split  = str_split($key);
-            $last   = array_pop($split);
-
-            foreach($split as $_key) {
-
-                if(!isset($handle[$_key]))
-                    $handle[$_key] = array();
-
-                $handle = &$handle[$_key];
-            }
-
-            $handle[$last] = $mapping;
-        }
+        else
+            $this->_mapping[$key] = $mapping;
 
         return;
     }
@@ -425,7 +401,7 @@ class Readline {
     public function appendLine ( $append ) {
 
         $this->_line       .= $append;
-        $this->_lineLength  = strlen($this->_line);
+        $this->_lineLength  = mb_strlen($this->_line);
         $this->_lineCurrent = $this->_lineLength;
 
         return;
@@ -443,11 +419,11 @@ class Readline {
         if($this->_lineLength == $this->_lineCurrent)
             return $this->appendLine($insert);
 
-        $this->_line         = substr($this->_line, 0, $this->_lineCurrent) .
+        $this->_line         = mb_substr($this->_line, 0, $this->_lineCurrent) .
                                $insert .
-                               substr($this->_line, $this->_lineCurrent);
-        $this->_lineLength   = strlen($this->_line);
-        $this->_lineCurrent += strlen($insert);
+                               mb_substr($this->_line, $this->_lineCurrent);
+        $this->_lineLength   = mb_strlen($this->_line);
+        $this->_lineCurrent += mb_strlen($insert);
 
         return;
     }
@@ -545,7 +521,7 @@ class Readline {
      * @param   int  $length    Length.
      * @return  string
      */
-    public function _read ( $length = 1 ) {
+    public function _read ( $length = 512 ) {
 
         return fread(STDIN, $length);
     }
@@ -560,7 +536,7 @@ class Readline {
     public function setLine ( $line ) {
 
         $this->_line        = $line;
-        $this->_lineLength  = strlen($this->_line);
+        $this->_lineLength  = mb_strlen($this->_line);
         $this->_lineCurrent = $this->_lineLength;
 
         return;
@@ -687,14 +663,14 @@ class Readline {
             $self->_write("\033[D\033[K");
 
             if($self->getLineLength() == $current = $self->getLineCurrent())
-                $self->setLine(substr($this->getLine(), 0, -1));
+                $self->setLine(mb_substr($this->getLine(), 0, -1));
             else {
 
                 $line    = $self->getLine();
                 $current = $self->getLineCurrent();
-                $tail    = substr($line, $current);
-                $buffer  = $tail . str_repeat("\033[D", strlen($tail));
-                $self->setLine(substr($line, 0, $current - 1) . $tail);
+                $tail    = mb_substr($line, $current);
+                $buffer  = $tail . str_repeat("\033[D", mb_strlen($tail));
+                $self->setLine(mb_substr($line, 0, $current - 1) . $tail);
                 $self->setLineCurrent($current - 1);
             }
         }
@@ -736,7 +712,7 @@ class Readline {
             return static::STATE_CONTINUE;
 
         $words = preg_split(
-            '#\b#',
+            '#\b#u',
             $self->getLine(),
             -1,
             PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
@@ -786,7 +762,7 @@ class Readline {
             return static::STATE_CONTINUE;
 
         $words = preg_split(
-            '#\b#',
+            '#\b#u',
             $self->getLine(),
             -1,
             PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
@@ -821,7 +797,7 @@ class Readline {
             return static::STATE_CONTINUE;
 
         $words = preg_split(
-            '#\b#',
+            '#\b#u',
             $self->getLine(),
             -1,
             PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
