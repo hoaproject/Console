@@ -113,11 +113,18 @@ class Window {
 
             if(empty($out)) {
 
-                $out   = trim(\Hoa\Console\System::execute('stty -a'));
-                $regex = '#(?:;\s+(?P<c>[0-9]+)\s+columns;)|(?:;\s+columns\s+(?P<d>[0-9]+);)#';
+                try {
 
-                if(false !== preg_match($regex, $out, $match))
-                    $out = isset($match['c']) ? $match['c'] : $match['d'];
+                    $out   = trim(\Hoa\Console\System::execute('stty -a'));
+                    $regex = '#(?:;\s+(?P<c>[0-9]+)\s+columns;)|(?:;\s+columns\s+(?P<d>[0-9]+);)#';
+
+                    if(false !== preg_match($regex, $out, $match))
+                        $out = isset($match['c']) ? $match['c'] : $match['d'];
+                }
+                catch ( \Hoa\Console\Exception $e ) {
+
+                    $out = null;
+                }
             }
         }
 
