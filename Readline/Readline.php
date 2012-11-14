@@ -533,7 +533,7 @@ class Readline {
      * @access public
      * @return string|closure
      */
-    public function getAutocomplete ( $function ) {
+    public function getAutocomplete () {
         return $this->_autocomplete;
     }
 
