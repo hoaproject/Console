@@ -50,14 +50,14 @@ class CommandLine {
     /**
      * Avaliable commands
      * 
-     * @var \Hoa\Console\Readline\Autocomplete\Words array
+     * @var \Hoa\Console\Readline\Autocomplete\CommandLine array
      */
     protected $_command = [];
 
     /**
      * Lookup table
      * 
-     * @var \Hoa\Console\Readline\Autocomplete\Words array
+     * @var \Hoa\Console\Readline\Autocomplete\CommandLine array
      */
     protected $_lookup = [];
 

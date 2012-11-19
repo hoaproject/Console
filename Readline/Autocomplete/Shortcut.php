@@ -50,7 +50,7 @@ class Shortcut {
     /**
      * Avaliable shortcuts
      * 
-     * @var \Hoa\Console\Readline\Autocomplete\Words array
+     * @var \Hoa\Console\Readline\Autocomplete\Shortcut array
      */
     protected $_shortcuts = [];
 
