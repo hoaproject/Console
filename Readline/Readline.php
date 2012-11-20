@@ -150,7 +150,12 @@ class Readline {
      */
     protected $_prefix         = null;
 
-
+    /**
+     * Autocomplete Function
+     * 
+     * @var \Hoa\Console\Readline string
+     */
+    protected $_autocomplete    = null;
 
     /**
      * Initialize the readline editor.
@@ -164,7 +169,7 @@ class Readline {
             return;
 
         $this->_oldStty = \Hoa\Console\System::execute('stty -g');
-        \Hoa\Console\System::execute('stty -echo -icanon min 1 time 0');
+        $this->setStty();
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
 
@@ -180,6 +185,7 @@ class Readline {
         $this->_mapping["\177"]   = xcallable($this, '_bindBackspace');
         $this->_mapping["\027"]   = xcallable($this, '_bindControlW');
         $this->_mapping["\n"]     = xcallable($this, '_bindNewline');
+        $this->_mapping["\t"]     = xcallable($this, '_bindTab');
 
         return;
     }
@@ -487,6 +493,57 @@ class Readline {
     public function getPrefix ( ) {
 
         return $this->_prefix;
+    }
+
+    /**
+     * Set the STTY for Hoa\Console\Readline.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function setStty(){
+        \Hoa\Console\System::execute('stty -echo -icanon min 1 time 0');
+    }
+
+    /**
+     * Restore the STTY to the original Settings
+     *
+     * @access  public
+     * @return  string
+     */
+    public function restoreStty(){
+        \Hoa\Console\System::execute('stty ' . $this->_oldStty);
+    }
+
+    /**
+     * Set the function to be called to get possible autocomplete results.
+     *
+     * @access public
+     * @param string|closure $function Function to be called to determine autocomplete 
+     */
+    public function setAutocomplete ( $function ) {
+        if(!is_callable($function)) throw new Exception('Not callable');
+        $this->_autocomplete = $function;
+        return;
+    }
+
+    /**
+     * Get the currently set function for autocomplete
+     *
+     * @access public
+     * @return string|closure
+     */
+    public function getAutocomplete () {
+        return $this->_autocomplete;
+    }
+
+    /**
+     * Unset the autocomplete function and disable autocomplete
+     *
+     * @access public
+     */
+    public function removeAutocomplete(){
+        $this->_autocomplete = null;
     }
 
     /**
@@ -828,6 +885,76 @@ class Readline {
     }
 
     /**
+     * Tab binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindTab( Readline $self){
+        if(!$this->_autocomplete) return static::STATE_CONTINUE;
+        $raw = $this->getLine();
+        $words = explode(' ',$raw);
+        if(count($words)>1){
+            $current = array_pop($words);
+            $pre = implode(' ',$words).' ';
+        }elseif(count($words)==1){
+            $current = $words[0];
+            $pre = '';
+        }else{
+            $current = '';
+            $pre = '';
+        }
+        $len = strlen($current);
+        $func = $this->_autocomplete;
+        $matches = $func($pre,$current);
+        $count = count($matches);
+        if($count > 1){
+            $this->_write(PHP_EOL.implode(' ',$matches).PHP_EOL);
+            $self->_write("\r\033[K" . $self->getPrefix());
+
+            $best = '';
+            $match_arrays = array();
+            foreach($matches as $item)
+                $match_arrays[] = str_split($item);
+
+            $i = 0;
+            while(true){
+                $this_round_good = true;
+                $first = true;
+                $curLetter = '';
+                foreach($match_arrays as $arr){
+                    if(!isset($arr[$i])) break 2;
+                    if($first){
+                        $curLetter = $arr[$i];
+                        $first = false;
+                    }else{
+                        if($curLetter != $arr[$i]) break 2;
+                    }
+                }
+                $best .= $curLetter;
+                $i++;
+            }
+
+            $current = $pre.$best;
+            $self->setBuffer($buffer = $current);
+            $self->setLine($buffer);
+        }
+        else if($count == 1){
+            $self->_write("\r\033[K" . $self->getPrefix());
+            $self->setBuffer($buffer = $pre.$matches[0].' ');
+            $self->setLine($buffer);
+        }
+        else
+        {
+            $self->_write("\r\033[K" . $self->getPrefix());
+            $self->setBuffer($buffer = $raw);
+            $self->setLine($buffer);
+        }
+        return static::STATE_CONTINUE;
+    }
+
+    /**
      * Restore STTY options.
      *
      * @access  public
@@ -835,7 +962,7 @@ class Readline {
      */
     public function __destruct ( ) {
 
-        \Hoa\Console\System::execute('stty ' . $this->_oldStty);
+        $this->restoreStty();
 
         return;
     }
