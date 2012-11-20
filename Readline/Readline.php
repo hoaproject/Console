@@ -275,7 +275,7 @@ class Readline {
      * Add a mapping.
      * Supported key:
      *     • \e[… for \033[…;
-     *     • \C-… for Cltr-…;
+     *     • \C-… for Ctrl-…;
      *     • abc for a simple mapping.
      * A mapping is a callable that has only one parameter of type
      * Hoa\Console\Readline and that returns a self::STATE_* constant.
