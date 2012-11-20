@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console\Readline\Autocomplete {
+namespace Hoa\Console\Readline\Autocompleter {
 
 /**
- * Class \Hoa\Console\Readline\Autocomplete\Word.
+ * Class \Hoa\Console\Readline\Autocompleter\Word.
  *
  * Simple word completion for Readline's autocomplete
  *
@@ -46,18 +46,18 @@ namespace Hoa\Console\Readline\Autocomplete {
  * @license    New BSD License
  */
 
-class CommandLine {
+class PlaceHolder {
     /**
      * Avaliable commands
      * 
-     * @var \Hoa\Console\Readline\Autocomplete\CommandLine array
+     * @var \Hoa\Console\Readline\Autocompleter\PlaceHolder array
      */
     protected $_command = [];
 
     /**
      * Lookup table
      * 
-     * @var \Hoa\Console\Readline\Autocomplete\CommandLine array
+     * @var \Hoa\Console\Readline\Autocompleter\PlaceHolder array
      */
     protected $_lookup = [];
 

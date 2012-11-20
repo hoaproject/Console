@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console\Readline\Autocomplete {
+namespace Hoa\Console\Readline\Autocompleter {
 
 /**
- * Class \Hoa\Console\Readline\Autocomplete\Word.
+ * Class \Hoa\Console\Readline\Autocompleter\Word.
  *
  * Simple word completion for Readline's autocomplete
  *
@@ -50,7 +50,7 @@ class Word {
     /**
      * Avaliable Words
      * 
-     * @var \Hoa\Console\Readline\Autocomplete\Words array
+     * @var \Hoa\Console\Readline\Autocompleter\Words array
      */
     protected $_words = [];
 

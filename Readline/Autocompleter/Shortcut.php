@@ -34,10 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console\Readline\Autocomplete {
+namespace Hoa\Console\Readline\Autocompleter {
 
 /**
- * Class \Hoa\Console\Readline\Autocomplete\Shortcut.
+ * Class \Hoa\Console\Readline\Autocompleter\Shortcut.
  *
  * Simple shortcut replacement for Readline's autocomplete
  *
@@ -50,7 +50,7 @@ class Shortcut {
     /**
      * Avaliable shortcuts
      * 
-     * @var \Hoa\Console\Readline\Autocomplete\Shortcut array
+     * @var \Hoa\Console\Readline\Autocompleter\Shortcut array
      */
     protected $_shortcuts = [];
 
