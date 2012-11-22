@@ -150,6 +150,13 @@ class Readline {
      */
     protected $_prefix         = null;
 
+    /**
+     * Autocompleter.
+     *
+     * @var \Hoa\Console\Readline\Autocompleter object
+     */
+    protected $_autocompleter  = null;
+
 
 
     /**
@@ -180,6 +187,7 @@ class Readline {
         $this->_mapping["\177"]   = xcallable($this, '_bindBackspace');
         $this->_mapping["\027"]   = xcallable($this, '_bindControlW');
         $this->_mapping["\n"]     = xcallable($this, '_bindNewline');
+        $this->_mapping["\t"]     = xcallable($this, '_bindTab');
 
         return;
     }
@@ -498,6 +506,33 @@ class Readline {
     public function getBuffer ( ) {
 
         return $this->_buffer;
+    }
+
+    /**
+     * Set an autocompleter.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline\Autocompleter  $autocompleter    Auto-completer.
+     * @return  \Hoa\Console\Readline\Autocompleter
+     */
+    public function setAutocompleter ( Autocompleter $autocompleter ) {
+
+        $old                  = $this->_autocompleter;
+        $this->_autocompleter = $autocompleter;
+
+        return $old;
+    }
+
+    /**
+     * Get the autocompleter.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline\Autocompleter  $autocompleter    Auto-completer.
+     * @return  \Hoa\Console\Readline\Autocompleter
+     */
+    public function getAutocompleter ( ) {
+
+        return $this->_autocompleter;
     }
 
     /**
@@ -825,6 +860,78 @@ class Readline {
         $self->addHistory($self->getLine());
 
         return static::STATE_BREAK;
+    }
+
+    /**
+     * Tab binding.
+     *
+     * @access  public
+     * @param   \Hoa\Console\Readline  $self    Self.
+     * @return  int
+     */
+    public function _bindTab ( Readline $self ) {
+
+        $autocompleter = $this->getAutocompleter();
+
+        if(null === $autocompleter)
+            return static::STATE_CONTINUE;
+
+        $current = $self->getLineCurrent();
+        $line    = $self->getLine();
+        $state   = static::STATE_CONTINUE | static::STATE_NO_ECHO;
+
+        if(0 === $current)
+            return $state;
+
+        $words = preg_split(
+            '#\b#u',
+            $line,
+            -1,
+            PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+        );
+
+        for($i = 0, $max = count($words);
+            $i < $max && $current > $words[$i][1];
+            ++$i);
+
+        $word = $words[$i - 1];
+
+        if('' === trim($word[0]))
+            return $state;
+
+        $prefix   = mb_substr($word[0], 0, $current - $word[1]);
+        $solution = $autocompleter->complete($prefix);
+
+        if(null === $solution)
+            return $state;
+
+        if(is_array($solution)) {
+
+            $self->_write(
+                "\n" .
+                implode("\t", $solution) . "\n" .
+                $self->getPrefix() . $line . str_repeat(
+                    "\033[D",
+                    mb_strlen($line) - $current
+                )
+            );
+
+            return $state;
+        }
+
+        $tail = mb_substr($line, $current);
+        $self->_write($solution . "\033[K" . $tail . str_repeat(
+            "\033[D",
+            mb_strlen($tail)
+        ));
+        $self->setLine(
+            $a = mb_substr($line, 0, $current) .
+            $solution .
+            $tail
+        );
+        $self->setLineCurrent($current + mb_strlen($solution));
+
+        return $state;
     }
 
     /**
