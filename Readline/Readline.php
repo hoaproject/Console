@@ -924,12 +924,7 @@ class Readline {
             "\033[D",
             mb_strlen($tail)
         ));
-        $self->setLine(
-            $a = mb_substr($line, 0, $current) .
-            $solution .
-            $tail
-        );
-        $self->setLineCurrent($current + mb_strlen($solution));
+        $self->insertLine($solution);
 
         return $state;
     }
