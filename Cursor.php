@@ -245,8 +245,7 @@ class Cursor {
             // EL.
             case 'line':
             case '↔':
-                echo "\033[2K";
-                static::moveTo(1);
+                echo "\r\033[K";
               break;
         }
 
