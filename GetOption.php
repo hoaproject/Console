@@ -117,12 +117,12 @@ class GetOption {
 
     /**
      * Describe the command options (or switches).
-     * An option is describing like this :
+     * An option is describing like this:
      *     name, has_arg, val
      * (In C, we got the flag data before val, but it does not have sens here).
      *
      * The name is the option name and the long option value.
-     * The has_arg is a constant : NO_ARGUMENT, REQUIRED_ARGUMENT, and
+     * The has_arg is a constant: NO_ARGUMENT, REQUIRED_ARGUMENT, and
      * OPTIONAL_ARGUMENT.
      * The val is the short option value.
      *
