@@ -41,7 +41,13 @@ from('Hoa')
 /*
  * \Hoa\Console\System
  */
--> import('Console.System');
+-> import('Console.System')
+
+
+/**
+ * \Hoa\Console\Cursor
+ */
+-> import('Console.Cursor');
 
 }
 
@@ -202,15 +208,15 @@ class Readline {
 
         if(OS_WIN) {
 
-            $this->_write($prefix);
+            echo $prefix;
 
             return fgets(STDIN);
         }
 
         $this->resetLine();
         $this->setPrefix($prefix);
-        $this->_write($prefix);
         $read = array(STDIN);
+        echo $prefix;
 
         while(true) {
 
@@ -255,7 +261,7 @@ class Readline {
             }
 
             if(0 === ($return & self::STATE_NO_ECHO))
-                $this->_write($this->_buffer);
+                echo $this->_buffer;
 
             if(0 !== ($return & self::STATE_BREAK))
                 break;
@@ -536,20 +542,6 @@ class Readline {
     }
 
     /**
-     * Write on STDIN. Not for user.
-     *
-     * @access  public
-     * @param   string  $string    String to write.
-     * @return  void
-     */
-    public function _write ( $string ) {
-
-        fwrite(STDIN, $string);
-
-        return;
-    }
-
-    /**
      * Read on STDIN. Not for user.
      *
      * @access  public
@@ -615,7 +607,8 @@ class Readline {
      */
     public function _bindArrowUp ( Readline $self ) {
 
-        $self->_write("\r\033[K" . $self->getPrefix());
+        \Hoa\Console\Cursor::clear('↔');
+        echo $self->getPrefix();
         $self->setBuffer($buffer = $self->previousHistory());
         $self->setLine($buffer);
 
@@ -632,7 +625,8 @@ class Readline {
      */
     public function _bindArrowDown ( Readline $self ) {
 
-        $self->_write("\r\033[K" . $self->getPrefix());
+        \Hoa\Console\Cursor::clear('↔');
+        echo $self->getPrefix();
         $self->setBuffer($buffer = $self->nextHistory());
         $self->setLine($buffer);
 
@@ -651,7 +645,7 @@ class Readline {
 
         if($self->getLineLength() > $self->getLineCurrent()) {
 
-            $self->_write("\033[C");
+            \Hoa\Console\Cursor::move('→');
             $self->setLineCurrent($self->getLineCurrent() + 1);
         }
 
@@ -672,7 +666,7 @@ class Readline {
 
         if(0 < $self->getLineCurrent()) {
 
-            $self->_write("\033[D");
+            \Hoa\Console\Cursor::move('←');
             $self->setLineCurrent($this->getLineCurrent() - 1);
         }
 
@@ -695,7 +689,8 @@ class Readline {
 
         if(0 < $self->getLineCurrent()) {
 
-            $self->_write("\033[D\033[K");
+            \Hoa\Console\Cursor::move('←');
+            \Hoa\Console\Cursor::clear('→');
 
             if($self->getLineLength() == $current = $self->getLineCurrent())
                 $self->setLine(mb_substr($this->getLine(), 0, -1));
@@ -907,23 +902,19 @@ class Readline {
 
         if(is_array($solution)) {
 
-            $self->_write(
-                "\n" .
-                implode("\t", $solution) . "\n" .
-                $self->getPrefix() . $line . str_repeat(
-                    "\033[D",
-                    mb_strlen($line) - $current
-                )
-            );
+            \Hoa\Console\Cursor::save();
+            \Hoa\Console\Cursor::move('↓ LEFT');
+            \Hoa\Console\Cursor::clear('↓');
+            echo implode("\t", $solution);
+            \Hoa\Console\Cursor::restore();
 
             return $state;
         }
 
         $tail = mb_substr($line, $current);
-        $self->_write($solution . "\033[K" . $tail . str_repeat(
-            "\033[D",
-            mb_strlen($tail)
-        ));
+        echo $solution;
+        \Hoa\Console\Cursor::clear('→');
+        echo $tail . str_repeat("\033[D", mb_strlen($tail));
         $self->insertLine($solution);
 
         return $state;
