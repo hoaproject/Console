@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Console\Environment\Window
+ * \Hoa\Console\Window
  */
--> import('Console.Environment.Window');
+-> import('Console.Window');
 
 }
 
@@ -154,7 +154,8 @@ class Text {
 
         // If the sum of each column is greater than the window width, we reduce
         // all greaters columns.
-        $envWindow = \Hoa\Console\Environment\Window::getColumns();
+        $window    = \Hoa\Console\Window::getSize();
+        $envWindow = $window['x'];
 
         while($envWindow <= ($cWidthSum = $xtraWidth + array_sum($columnWidth))) {
 
@@ -274,8 +275,11 @@ class Text {
                                    $alignement = self::ALIGN_LEFT,
                                    $width      = null ) {
 
-        if(null === $width)
-            $width = \Hoa\Console\Environment\Window::getColumns();
+        if(null === $width) {
+
+            $window = \Hoa\Console\Window::getSize();
+            $width  = $window['x'];
+        }
 
         $out = null;
 
@@ -357,8 +361,11 @@ class Text {
      */
     public static function wordwrap ( $text, $width = null, $break = "\n" ) {
 
-        if(null === $width)
-            $width = \Hoa\Console\Environment\Window::getColumns();
+        if(null === $width) {
+
+            $window = \Hoa\Console\Window::getSize();
+            $width  = $window['x'];
+        }
 
         return wordwrap($text, $width, $break, true);
     }

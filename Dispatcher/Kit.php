@@ -49,11 +49,6 @@ from('Hoa')
 -> import('Console.GetOption')
 
 /**
- * \Hoa\Console\Io
- */
--> import('Console.Io', true)
-
-/**
  * \Hoa\Console\Readline
  */
 -> import('Console.Readline.~')
@@ -72,11 +67,6 @@ from('Hoa')
  * \Hoa\Console\Chrome\Text
  */
 -> import('Console.Chrome.Text')
-
-/**
- * \Hoa\Console\Environment
- */
--> import('Console.Environment.~')
 
 /**
  * \Hoa\Dispatcher\Kit
@@ -244,12 +234,11 @@ class Kit extends \Hoa\Dispatcher\Kit {
      */
     public function resolveOptionAmbiguity ( Array $solutions ) {
 
-        cout('You have made a typo in the option ' .
-             $solutions['option'] . '; it can match the following options: ' .
-             "\n" . '    • ' .  implode(";\n    • ", $solutions['solutions']) .
-             '.' . "\n" . 'Please, type the right option (empty to choose ' .
-             'the first one):');
-        $new = cin('> ', \Hoa\Console\Io::TYPE_NORMAL, \Hoa\Console\Io::NO_NEW_LINE);
+        echo 'You have made a typo in the option ',
+             $solutions['option'], '; it can match the following options: ', "\n",
+             '    • ',  implode(";\n    • ", $solutions['solutions']), '.', "\n",
+             'Please, type the right option (empty to choose the first one):', "\n";
+        $new = $this->readLine('> ');
 
         if(empty($new))
             $new = $solutions['solutions'][0];
@@ -269,10 +258,11 @@ class Kit extends \Hoa\Dispatcher\Kit {
      */
     public function status ( $text, $status ) {
 
+        $window = \Hoa\Console\Window::getSize();
         $out = ' ' . $this->stylize('*', 'info') . ' ' .
                $text . str_pad(
                    ' ',
-                   \Hoa\Console\Environment::get('window.columns')
+                   $window['x']
                    - strlen(preg_replace('#' . "\033". '\[[0-9]+m#', '', $text))
                    - 8
                ) .
@@ -280,7 +270,7 @@ class Kit extends \Hoa\Dispatcher\Kit {
                    ? '[' . $this->stylize('ok', 'success') . ']'
                    : '[' . $this->stylize('!!', 'nosuccess') . ']');
 
-        cout($out, \Hoa\Console\Io::NEW_LINE, \Hoa\Console\Io::NO_WORDWRAP);
+        echo $out, "\n";
 
         return;
     }

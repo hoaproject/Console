@@ -39,9 +39,9 @@ namespace {
 from('Hoa')
 
 /*
- * \Hoa\Console\System
+ * \Hoa\Console\Processus
  */
--> import('Console.System')
+-> import('Console.Processus')
 
 
 /**
@@ -176,8 +176,8 @@ class Readline {
         if(OS_WIN)
             return;
 
-        $this->_oldStty = \Hoa\Console\System::execute('stty -g');
-        \Hoa\Console\System::execute('stty -echo -icanon min 1 time 0');
+        $this->_oldStty = \Hoa\Console\Processus::execute('stty -g');
+        \Hoa\Console\Processus::execute('stty -echo -icanon min 1 time 0');
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
 
@@ -928,7 +928,7 @@ class Readline {
      */
     public function __destruct ( ) {
 
-        \Hoa\Console\System::execute('stty ' . $this->_oldStty);
+        \Hoa\Console\Processus::execute('stty ' . $this->_oldStty);
 
         return;
     }
