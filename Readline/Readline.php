@@ -87,13 +87,6 @@ class Readline {
     const STATE_NO_ECHO  = 4;
 
     /**
-     * Old STTY options.
-     *
-     * @var \Hoa\Console\Readline string
-     */
-    protected $_oldStty        = null;
-
-    /**
      * Current editing line.
      *
      * @var \Hoa\Console\Readline string
@@ -176,8 +169,6 @@ class Readline {
         if(OS_WIN)
             return;
 
-        $this->_oldStty = \Hoa\Console\Processus::execute('stty -g');
-        \Hoa\Console\Processus::execute('stty -echo -icanon min 1 time 0');
         mb_internal_encoding('UTF-8');
         mb_regex_encoding('UTF-8');
 
@@ -918,19 +909,6 @@ class Readline {
         $self->insertLine($solution);
 
         return $state;
-    }
-
-    /**
-     * Restore STTY options.
-     *
-     * @access  public
-     * @return  void
-     */
-    public function __destruct ( ) {
-
-        \Hoa\Console\Processus::execute('stty ' . $this->_oldStty);
-
-        return;
     }
 }
 
