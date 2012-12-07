@@ -167,7 +167,7 @@ class Window {
         // DECSLPP.
         echo "\033[13t";
 
-        // Read \033[3;y;xt.
+        // Read \033[3;x;yt.
         fread(STDIN, 4); // skip \033, [, 3 and ;.
 
         $x      = null;
