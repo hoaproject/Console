@@ -48,7 +48,8 @@ namespace Hoa\Console {
  *     • scroll;
  *     • hide;
  *     • show;
- *     • getPosition.
+ *     • getPosition;
+ *     • bip.
  * Please, see CSI codes (part of ANSI escape sequences).
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
@@ -363,6 +364,19 @@ class Cursor {
             'x' => (int) $x,
             'y' => (int) $y
         );
+    }
+
+    /**
+     * Make a stupid “bip”.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function bip ( ) {
+
+        echo "\007";
+
+        return;
     }
 }
 
