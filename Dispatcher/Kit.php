@@ -203,7 +203,7 @@ class Kit extends \Hoa\Dispatcher\Kit {
 
         foreach($this->options as $i => $options)
             $out[] = array(
-                ' -' . $options[\Hoa\Console\GetOption::OPTION_VAL] . ', --' .
+                '  -' . $options[\Hoa\Console\GetOption::OPTION_VAL] . ', --' .
                 $options[\Hoa\Console\GetOption::OPTION_NAME] .
                 ($options[\Hoa\Console\GetOption::OPTION_HAS_ARG] ===
                     \Hoa\Console\GetOption::REQUIRED_ARGUMENT
