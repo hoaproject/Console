@@ -49,6 +49,7 @@ namespace Hoa\Console {
  *     • hide;
  *     • show;
  *     • getPosition;
+ *     • setStyle;
  *     • bip.
  * Please, see CSI codes (part of ANSI escape sequences).
  *
@@ -364,6 +365,48 @@ class Cursor {
             'x' => (int) $x,
             'y' => (int) $y
         );
+    }
+
+    /**
+     * Set cursor style.
+     * Style can be:
+     *     • b, block,     ▋: block;
+     *     • u, underline, _: underline;
+     *     • v, vertical,  |: vertical.
+     *
+     * @access  public
+     * @param   int   $style    Style.
+     * @param   bool  $blink    Whether the cursor is blink or steady.
+     * @return  void
+     */
+    public static function setStyle ( $style, $blink = true ) {
+
+        switch($style) {
+
+            case 'b':
+            case 'block':
+            case '▋':
+                $_style = 1;
+              break;
+
+            case 'u':
+            case 'underline':
+            case '_':
+                $_style = 2;
+              break;
+
+            case 'v':
+            case 'vertical':
+            case '|':
+                $_style = 5;
+              break;
+        }
+
+        if(false === $blink)
+            ++$_style;
+
+        // DECSCUSR.
+        echo "\033[" . $_style . " q";
     }
 
     /**
