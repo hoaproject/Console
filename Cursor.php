@@ -51,7 +51,7 @@ namespace Hoa\Console {
  *     • getPosition;
  *     • setStyle;
  *     • bip.
- * Please, see CSI codes (part of ANSI escape sequences).
+ * Please, see C0 and C1 control codes.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
