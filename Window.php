@@ -55,8 +55,10 @@ namespace Hoa\Console {
  *     • getSize;
  *     • moveTo;
  *     • getPosition;
+ *     • minimize;
  *     • setTitle;
  *     • getTitle;
+ *     • getLabel;
  *     • refresh.
  * Please, see CSI and OSC codes (part of ANSI escape sequences).
  *
@@ -200,6 +202,19 @@ class Window {
     }
 
     /**
+     * Minimize the window.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function minimize ( ) {
+
+        echo "\033[2t";
+
+        return;
+    }
+
+    /**
      * Set title.
      *
      * @access  public
@@ -226,6 +241,42 @@ class Window {
 
         // Read \033]l<title>\033\
         fread(STDIN, 3); // skip \033, ] and l.
+        $out = null;
+
+        do {
+
+            $char = fread(STDIN, 1);
+
+            if("\033" === $char) {
+
+                $chaar = fread(STDIN, 1);
+
+                if('\\' === $chaar)
+                    break;
+
+                $char .= $chaar;
+            }
+
+            $out .= $char;
+
+        } while(true);
+
+        return $out;
+    }
+
+    /**
+     * Get label.
+     *
+     * @access  public
+     * @return  string
+     */
+    public static function getLabel ( ) {
+
+        // DECSLPP.
+        echo "\033[20t";
+
+        // Read \033]L<label>\033\
+        fread(STDIN, 3); // skip \033, ] and L.
         $out = null;
 
         do {
