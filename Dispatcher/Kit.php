@@ -143,7 +143,7 @@ class Kit extends \Hoa\Dispatcher\Kit {
      *
      * @access  public
      * @param   string  &$optionValue    Please, see original API.
-     * @param   string  &$short          Please, see original API.
+     * @param   string  $short   &       Please, see original API.
      * @return  mixed
      */
     public function getOption ( &$optionValue, $short = null ) {
