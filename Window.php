@@ -60,6 +60,11 @@ namespace Hoa\Console {
  *     • getTitle;
  *     • getLabel;
  *     • refresh.
+ *
+ * We can listen the event channel hoa://Event/Console/Window:resize to detect
+ * if the window has been resized. Please, see the constructor documentation to
+ * get more informations.
+ *
  * Please, see C0 and C1 control codes.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
@@ -67,7 +72,48 @@ namespace Hoa\Console {
  * @license    New BSD License
  */
 
-class Window {
+class Window implements \Hoa\Core\Event\Source {
+
+    /**
+     * Singleton (only for events).
+     *
+     * @var \Hoa\Console\Window object
+     */
+    private static $_instance = null;
+
+
+
+    /**
+     * Set the event channel.
+     * We need to declare(ticks = 1) in the main script to ensure that the event
+     * is fired. Also, we need the pcntl_signal() function enabled.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __construct ( ) {
+
+        \Hoa\Core\Event::register(
+            'hoa://Event/Console/Window:resize',
+            $this
+        );
+
+        return;
+    }
+
+    /**
+     * Singleton.
+     *
+     * @access  public
+     * @return  \Hoa\Console\Window
+     */
+    public static function getInstance ( ) {
+
+        if(null === static::$_instance)
+            static::$_instance = new static();
+
+        return static::$_instance;
+    }
 
     /**
      * Set size to X lines and Y columns.
@@ -311,6 +357,30 @@ class Window {
         // DECSLPP.
         echo "\033[7t";
     }
+}
+
+}
+
+namespace {
+
+if(ƒ('pcntl_signal')) {
+
+    \Hoa\Console\Window::getInstance();
+    pcntl_signal(SIGWINCH, function ( ) {
+
+        static $_window = null;
+
+        if(null === $_window)
+            $_window = \Hoa\Console\Window::getInstance();
+
+        \Hoa\Core\Event::notify(
+            'hoa://Event/Console/Window:resize',
+            $_window,
+            new \Hoa\Core\Event\Bucket(array(
+                'size' => \Hoa\Console\Window::getSize()
+            ))
+        );
+    });
 }
 
 }
