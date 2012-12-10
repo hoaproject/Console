@@ -76,12 +76,7 @@ from('Hoa')
 /**
  * \Hoa\Dispatcher\Kit
  */
--> import('Dispatcher.Kit')
-
-/**
- * \Hoa\Router
- */
--> import('Router.~');
+-> import('Dispatcher.Kit');
 
 }
 
