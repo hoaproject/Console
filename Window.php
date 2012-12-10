@@ -201,7 +201,7 @@ class Window implements \Hoa\Core\Event\Source {
     public static function moveTo ( $x, $y ) {
 
         // DECSLPP.
-        echo "\033[3;" . $x . ";" . $y . "t";
+        echo "\033[3;" . $y . ";" . $x . "t";
     }
 
     /**
