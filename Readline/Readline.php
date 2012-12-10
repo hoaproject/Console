@@ -230,6 +230,9 @@ class Readline {
             }
             else {
 
+                if(isset($this->_mapping[$char]))
+                    $this->_buffer = $this->_mapping[$char];
+
                 if($this->getLineLength() == $this->getLineCurrent()) {
 
                     $this->appendLine($this->_buffer);
