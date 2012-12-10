@@ -453,11 +453,12 @@ class          Processus
      * Test for end-of-file.
      *
      * @access  public
+     * @param   int  $pipe    Pipe descriptor.
      * @return  bool
      */
-    public function eof ( ) {
+    public function eof ( $pipe = 1 ) {
 
-        return feof($this->getStream());
+        return feof($this->getPipe($pipe));
     }
 
     /**
