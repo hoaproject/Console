@@ -130,8 +130,8 @@ Thus, to read one line:
 The `Hoa\Console\Readline\Password` allows the same operations but without
 printing on STDOUT.
 
-    $readline = new Hoa\Console\Readline\Password();
-    $password = $readline->readLine('password: ');
+    $password = new Hoa\Console\Readline\Password();
+    $line     = $password->readLine('password: ');
 
 We are able to add a mapping with the help of the
 `Hoa\Console\Readline::addMapping` method. We use `\e[…` for `\033[`, `\C-…` for
