@@ -2,8 +2,9 @@
     "name"       : "hoa/console",
     "description": "The Hoa\\Console library.",
     "type"       : "library",
-    "keywords"   : ["library", "console", "system", "getoption", "option",
-                    "cli", "parser", "readline", "chrome", "cursor", "window"],
+    "keywords"   : ["library", "console", "processus", "getoption", "option",
+                    "cli", "parser", "readline", "autocompletion", "chrome",
+                    "cursor", "window"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
@@ -23,9 +24,12 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core":       "master",
-        "hoa/router":     "master",
-        "hoa/dispatcher": "master",
-        "hoa/string":     "master"
+        "hoa/core"  : "master",
+        "hoa/string": "master"
+    },
+    "suggest": {
+        "hoa/dispatcher": "To use the console kit.",
+        "hoa/router"    : "To use the console kit.",
+        "ext-pcntl"     : "To enable hoa://Event/Console/Window:resize."
     }
 }
