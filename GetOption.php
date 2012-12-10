@@ -259,11 +259,11 @@ class GetOption {
      * Get option from the pipette.
      *
      * @access  public
-     * @param   string  $optionValue    Place a variable that will receive the
-     *                                  value of the current option.
-     * @param   string  $short          Short options to scan (in a single
-     *                                  string). If $short = null, all short
-     *                                  options will be selected.
+     * @param   string  &$optionValue    Place a variable that will receive the
+     *                                   value of the current option.
+     * @param   string  $short           Short options to scan (in a single
+     *                                   string). If $short = null, all short
+     *                                   options will be selected.
      * @return  mixed
      */
     public function getOption ( &$optionValue, $short = null ) {
