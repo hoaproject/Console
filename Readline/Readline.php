@@ -1067,7 +1067,7 @@ class Readline {
                             $tail = mb_substr($line, $current);
                             $s    = mb_substr($solution[$coord], $length);
                             echo $s;
-                            \Hoa\Console\Cursor::clear('→ ↓');
+                            \Hoa\Console\Cursor::clear('→');
                             echo $tail;
                             \Hoa\Console\Cursor::move('←', mb_strlen($tail));
                             $self->insertLine($s);
