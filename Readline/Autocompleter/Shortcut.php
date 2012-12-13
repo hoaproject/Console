@@ -52,7 +52,7 @@ namespace Hoa\Console\Readline\Autocompleter {
  *
  * The simplest auto-completer.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @author     Kevin Gravier <kevin@mrkmg.com>
  * @copyright  Copyright © 2007-2012 Ivan Enderlin.
  * @license    New BSD License
  */
