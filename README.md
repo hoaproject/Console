@@ -148,8 +148,10 @@ We are also able to manipulate the history, thanks to the `addHistory`,
 `clearHistory`, `getHistory`, `previousHistory` and `nextHistory` methods on the
 `Hoa\Console\Readline` class.
 
-Finally, we have autocompleters that are enabled on `Tab`. It is currently under
-development but the layout is working.
+Finally, we have autocompleters that are enabled on `Tab`. If one solution is
+proposed, it will be inserted directly. If many solutions are proposed, we are
+able to navigate in a menu to select the solution (with the help of keyboard
+arrows, Enter, Esc etc.).
 
 ### Processus
 
