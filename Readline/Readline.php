@@ -43,11 +43,15 @@ from('Hoa')
  */
 -> import('Console.Processus')
 
-
 /**
  * \Hoa\Console\Cursor
  */
--> import('Console.Cursor');
+-> import('Console.Cursor')
+
+/**
+ * \Hoa\Console\Window
+ */
+-> import('Console.Window');
 
 }
 
@@ -889,6 +893,7 @@ class Readline {
             return $state;
 
         $prefix   = mb_substr($word[0], 0, $current - $word[1]);
+        $length   = mb_strlen($prefix);
         $solution = $autocompleter->complete($prefix);
 
         if(null === $solution)
@@ -899,17 +904,197 @@ class Readline {
             \Hoa\Console\Cursor::save();
             \Hoa\Console\Cursor::move('↓ LEFT');
             \Hoa\Console\Cursor::clear('↓');
-            echo implode("\t", $solution);
+
+            $_solution = $solution;
+            $count     = count($_solution) - 1;
+            $cWidth    = 0;
+            $window    = \Hoa\Console\Window::getSize();
+            $wWidth    = $window['x'];
+
+            array_walk($_solution, function ( &$value ) use ( &$cWidth ) {
+
+                $handle = mb_strlen($value);
+
+                if($handle > $cWidth)
+                    $cWidth = $handle;
+
+                return;
+            });
+            array_walk($_solution, function ( &$value ) use ( &$cWidth ) {
+
+                $handle = mb_strlen($value);
+
+                if($handle >= $cWidth)
+                    return;
+
+                $value .= str_repeat(' ', $cWidth - $handle);
+
+                return;
+            });
+
+            $mColumns = (int) floor($wWidth / ($cWidth + 2));
+            $mLines   = (int) ceil(($count + 1) / $mColumns);
+            --$mColumns;
+            $i        = 0;
+
+            foreach($_solution as $s) {
+
+                echo "\033[0m" . $s . "\033[0m";
+
+                if($i++ < $mColumns)
+                    echo '  ';
+                else {
+
+                    $i = 0;
+                    echo "\n";
+                }
+            }
+
             \Hoa\Console\Cursor::restore();
+
+            ++$mColumns;
+            $read     = array(STDIN);
+            $mColumn  = -1;
+            $mLine    = -1;
+            $coord    = -1;
+            $unselect = function ( ) use ( &$mColumn, &$mLine, &$coord,
+                                           &$_solution, &$cWidth ) {
+
+                \Hoa\Console\Cursor::save();
+                \Hoa\Console\Cursor::move('↓ LEFT');
+                \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
+                \Hoa\Console\Cursor::move('↓', $mLine);
+                echo "\033[0m" . $_solution[$coord] . "\033[0m";
+                \Hoa\Console\Cursor::restore();
+
+                return;
+            };
+            $select = function ( ) use ( &$mColumn, &$mLine, &$coord,
+                                         &$_solution, &$cWidth ) {
+
+                \Hoa\Console\Cursor::save();
+                \Hoa\Console\Cursor::move('↓ LEFT');
+                \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
+                \Hoa\Console\Cursor::move('↓', $mLine);
+                echo "\033[7m" . $_solution[$coord] . "\033[0m";
+                \Hoa\Console\Cursor::restore();
+
+                return;
+            };
+            $init = function ( ) use ( &$mColumn, &$mLine, &$coord,
+                                       &$select ) {
+
+                $mColumn = 0;
+                $mLine   = 0;
+                $coord   = 0;
+                $select();
+
+                return 1;
+            };
+
+            while(true) {
+
+                @stream_select($read, $write, $except, 30, 0);
+
+                if(empty($read)) {
+
+                    $read = array(STDIN);
+                    continue;
+                }
+
+                switch($char = $this->_read()) {
+
+                    case "\033[A":
+                        if(-1 === $mColumn && -1 === $mLine) {
+
+                            $init();
+                            break;
+                        }
+
+                        $unselect();
+                        $coord   = max(0, $coord - $mColumns);
+                        $mLine   = (int) floor($coord / $mColumns);
+                        $mColumn = $coord % $mColumns;
+                        $select();
+                      break;
+
+                    case "\033[B":
+                        if(-1 === $mColumn && -1 === $mLine) {
+
+                            $init();
+                            break;
+                        }
+
+                        $unselect();
+                        $coord   = min($count, $coord + $mColumns);
+                        $mLine   = (int) floor($coord / $mColumns);
+                        $mColumn = $coord % $mColumns;
+                        $select();
+                      break;
+
+                    case "\t":
+                    case "\033[C":
+                        if(-1 === $mColumn && -1 === $mLine) {
+
+                            $init();
+                            break;
+                        }
+
+                        $unselect();
+                        $coord   = min($count, $coord + 1);
+                        $mLine   = (int) floor($coord / $mColumns);
+                        $mColumn = $coord % $mColumns;
+                        $select();
+                      break;
+
+                    case "\033[D":
+                        if(-1 === $mColumn && -1 === $mLine) {
+
+                            $init();
+                            break;
+                        }
+
+                        $unselect();
+                        $coord   = max(0, $coord - 1);
+                        $mLine   = (int) floor($coord / $mColumns);
+                        $mColumn = $coord % $mColumns;
+                        $select();
+                      break;
+
+                    case "\n":
+                        if(-1 !== $mColumn && -1 !== $mLine) {
+
+                            $tail = mb_substr($line, $current);
+                            $s    = mb_substr($solution[$coord], $length);
+                            echo $s;
+                            \Hoa\Console\Cursor::clear('→ ↓');
+                            echo $tail;
+                            \Hoa\Console\Cursor::move('←', mb_strlen($tail));
+                            $self->insertLine($s);
+                        }
+
+                    default:
+                        $mColumn = -1;
+                        $mLine   = -1;
+                        $coord   = -1;
+                        \Hoa\Console\Cursor::save();
+                        \Hoa\Console\Cursor::move('↓ LEFT');
+                        \Hoa\Console\Cursor::clear('↓');
+                        \Hoa\Console\Cursor::restore();
+                        break 2;
+                }
+            }
 
             return $state;
         }
 
         $tail = mb_substr($line, $current);
-        echo $solution;
+        $s    = mb_substr($solution, $length);
+        echo $s;
         \Hoa\Console\Cursor::clear('→');
-        echo $tail . str_repeat("\033[D", mb_strlen($tail));
-        $self->insertLine($solution);
+        echo $tail;
+        \Hoa\Console\Cursor::move('←', mb_strlen($tail));
+        $self->insertLine($s);
 
         return $state;
     }
