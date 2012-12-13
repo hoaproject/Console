@@ -71,22 +71,30 @@ class Cursor {
      *     • D, DOWN     : move to the last line;
      *     • l, left,  ← : move to the previous column;
      *     • L, LEFT     : move to the first column.
-     * Steps can be concatened by a single space.
+     * Steps can be concatened by a single space if $repeat is equal to 1.
      *
      * @access  public
-     * @param   string  $steps    Steps.
+     * @param   string  $steps     Steps.
+     * @param   int     $repeat    How many times do we move?
      * @return  void
      */
-    public static function move ( $steps ) {
+    public static function move ( $steps, $repeat = 1 ) {
 
-        foreach(explode(' ', $steps) as $step)
+        if(1 > $repeat)
+            return;
+        elseif(1 === $repeat)
+            $handle = explode(' ', $steps);
+        else
+            $handle = explode(' ', $steps, 1);
+
+        foreach($handle as $step)
             switch($step) {
 
                 // CUU.
                 case 'u':
                 case 'up':
                 case '↑':
-                    echo "\033[A";
+                    echo "\033[" . $repeat . 'A';
                   break;
 
                 case 'U':
@@ -98,7 +106,7 @@ class Cursor {
                 case 'r':
                 case 'right':
                 case '→':
-                    echo "\033[C";
+                    echo "\033[" . $repeat . 'C';
                   break;
 
                 case 'R':
@@ -110,7 +118,7 @@ class Cursor {
                 case 'd':
                 case 'down':
                 case '↓':
-                    echo "\033[B";
+                    echo "\033[" . $repeat . 'B';
                   break;
 
                 case 'D':
@@ -122,7 +130,7 @@ class Cursor {
                 case 'l':
                 case 'left':
                 case '←':
-                    echo "\033[D";
+                    echo "\033[" . $repeat . 'D';
                   break;
 
                 case 'L':
@@ -199,57 +207,59 @@ class Cursor {
      *     • d, down,  ↓ : clear from cursor to end of the screen;
      *     • l, left,  ← : clear from cursor to beginning of the screen;
      *     •    line,  ↔ : clear all the line and static::move(1).
+     * Parts can be concatenated by a single space.
      *
      * @access  public
-     * @param   string  $part    Part to clean.
+     * @param   string  $parts    Parts to clean.
      * @return  void
      */
-    public static function clear ( $part = 'all' ) {
+    public static function clear ( $parts = 'all' ) {
 
-        switch($part) {
+        foreach(explode(' ', $parts) as $part)
+            switch($part) {
 
-            // ED.
-            case 'a':
-            case 'all':
-            case '↕':
-                echo "\033[2J";
-                static::moveTo(1, 1);
-              break;
+                // ED.
+                case 'a':
+                case 'all':
+                case '↕':
+                    echo "\033[2J";
+                    static::moveTo(1, 1);
+                  break;
 
-            // ED.
-            case 'u':
-            case 'up':
-            case '↑':
-                echo "\033[1J";
-              break;
+                // ED.
+                case 'u':
+                case 'up':
+                case '↑':
+                    echo "\033[1J";
+                  break;
 
-            // EL.
-            case 'r':
-            case 'right':
-            case '→':
-                echo "\033[0K";
-              break;
+                // EL.
+                case 'r':
+                case 'right':
+                case '→':
+                    echo "\033[0K";
+                  break;
 
-            // ED.
-            case 'd':
-            case 'down':
-            case '↓':
-                echo "\033[0J";
-              break;
+                // ED.
+                case 'd':
+                case 'down':
+                case '↓':
+                    echo "\033[0J";
+                  break;
 
-            // EL.
-            case 'l':
-            case 'left':
-            case '←':
-                echo "\033[1K";
-              break;
+                // EL.
+                case 'l':
+                case 'left':
+                case '←':
+                    echo "\033[1K";
+                  break;
 
-            // EL.
-            case 'line':
-            case '↔':
-                echo "\r\033[K";
-              break;
-        }
+                // EL.
+                case 'line':
+                case '↔':
+                    echo "\r\033[K";
+                  break;
+            }
 
         return;
     }
