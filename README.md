@@ -51,7 +51,8 @@ then to restore the saved position:
     echo 'Something below…';        // write something
     Hoa\Console\Cursor::restore();  // restore
 
-Please, read the API documentation for more informations.
+Please, read the API documentation for more informations, and note that Windows
+support is very weak.
 
 ### Window
 
@@ -98,7 +99,8 @@ channel:
                  $size['y'], ' columns.', "\n";
         });
 
-Please, read the API documentation for more informations.
+Please, read the API documentation for more informations, and note that Windows
+support is very weak.
 
 ### Readline
 
@@ -152,6 +154,8 @@ Finally, we have autocompleters that are enabled on `Tab`. If one solution is
 proposed, it will be inserted directly. If many solutions are proposed, we are
 able to navigate in a menu to select the solution (with the help of keyboard
 arrows, Enter, Esc etc.).
+
+On Windows, a readline is equivalent to a simple `fgets(STDIN)`.
 
 ### Processus
 
