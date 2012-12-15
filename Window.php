@@ -125,8 +125,13 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public static function setSize ( $x, $y ) {
 
+        if(OS_WIN)
+            return;
+
         // DECSLPP.
         echo "\033[8;" . $x . ";" . $y . "t";
+
+        return;
     }
 
     /**
@@ -200,8 +205,13 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public static function moveTo ( $x, $y ) {
 
+        if(OS_WIN)
+            return;
+
         // DECSLPP.
         echo "\033[3;" . $y . ";" . $x . "t";
+
+        return;
     }
 
     /**
@@ -211,6 +221,9 @@ class Window implements \Hoa\Core\Event\Source {
      * @return  array
      */
     public static function getPosition ( ) {
+
+        if(OS_WIN)
+            return;
 
         // DECSLPP.
         echo "\033[13t";
@@ -255,6 +268,9 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public static function minimize ( ) {
 
+        if(OS_WIN)
+            return;
+
         echo "\033[2t";
 
         return;
@@ -269,6 +285,9 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public static function setTitle ( $title ) {
 
+        if(OS_WIN)
+            return;
+
         echo "\033]0;" . $title . "\033\\";
 
         return;
@@ -281,6 +300,9 @@ class Window implements \Hoa\Core\Event\Source {
      * @return  string
      */
     public static function getTitle ( ) {
+
+        if(OS_WIN)
+            return;
 
         // DECSLPP.
         echo "\033[21t";
@@ -318,6 +340,9 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public static function getLabel ( ) {
 
+        if(OS_WIN)
+            return;
+
         // DECSLPP.
         echo "\033[20t";
 
@@ -354,8 +379,13 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public static function refresh ( ) {
 
+        if(OS_WIN)
+            return;
+
         // DECSLPP.
         echo "\033[7t";
+
+        return;
     }
 }
 

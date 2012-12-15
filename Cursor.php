@@ -80,6 +80,9 @@ class Cursor {
      */
     public static function move ( $steps, $repeat = 1 ) {
 
+        if(OS_WIN)
+            return;
+
         if(1 > $repeat)
             return;
         elseif(1 === $repeat)
@@ -153,6 +156,9 @@ class Cursor {
      */
     public static function moveTo ( $x = null, $y = null ) {
 
+        if(OS_WIN)
+            return;
+
         if(null === $x || null === $y) {
 
             $position = static::getPosition();
@@ -178,6 +184,9 @@ class Cursor {
      */
     public static function save ( ) {
 
+        if(OS_WIN)
+            return;
+
         // SCP.
         echo "\033[s";
 
@@ -191,6 +200,9 @@ class Cursor {
      * @return  void
      */
     public static function restore ( ) {
+
+        if(OS_WIN)
+            return;
 
         // RCP.
         echo "\033[u";
@@ -214,6 +226,9 @@ class Cursor {
      * @return  void
      */
     public static function clear ( $parts = 'all' ) {
+
+        if(OS_WIN)
+            return;
 
         foreach(explode(' ', $parts) as $part)
             switch($part) {
@@ -277,6 +292,9 @@ class Cursor {
      */
     public static function scroll ( $directions ) {
 
+        if(OS_WIN)
+            return;
+
         $handle = array('up' => 0, 'down' => 0);
 
         foreach(explode(' ', $directions) as $direction)
@@ -314,6 +332,9 @@ class Cursor {
      */
     public static function hide ( ) {
 
+        if(OS_WIN)
+            return;
+
         // DECTCEM.
         echo "\033[?25l";
 
@@ -328,6 +349,9 @@ class Cursor {
      */
     public static function show ( ) {
 
+        if(OS_WIN)
+            return;
+
         // DECTCEM.
         echo "\033[?25h";
 
@@ -341,6 +365,9 @@ class Cursor {
      * @return  array
      */
     public static function getPosition ( ) {
+
+        if(OS_WIN)
+            return;
 
         // DSR.
         echo "\033[6n";
@@ -391,6 +418,9 @@ class Cursor {
      */
     public static function setStyle ( $style, $blink = true ) {
 
+        if(OS_WIN)
+            return;
+
         switch($style) {
 
             case 'b':
@@ -417,6 +447,8 @@ class Cursor {
 
         // DECSCUSR.
         echo "\033[" . $_style . " q";
+
+        return;
     }
 
     /**
