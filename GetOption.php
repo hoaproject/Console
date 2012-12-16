@@ -144,13 +144,6 @@ class GetOption {
      */
     protected $_pipette       = array();
 
-    /**
-     * Search in string object.
-     *
-     * @var \Hoa\String\Search object
-     */
-    protected static $_search = null;
-
 
 
     /**
@@ -196,12 +189,9 @@ class GetOption {
                 if(1 === strlen($name))
                     continue;
 
-                if(null === static::$_search)
-                    static::$_search = new \Hoa\String\Search();
-
                 $haystack    = implode(';', $_names);
                 $differences = (int) ceil(strlen($name) / 3);
-                $searched    = static::$_search->approximated(
+                $searched    = \Hoa\String\Search::approximated(
                     $haystack,
                     $name,
                     $differences
