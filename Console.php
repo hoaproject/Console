@@ -60,6 +60,15 @@ namespace Hoa\Console {
 class Console {
 
     /**
+     * Advanced interaction is on.
+     *
+     * @var \Hoa\Console bool
+     */
+    private static $_advanced = null;
+
+
+
+    /**
      * Prepare the environment for advanced interactions.
      *
      * @access  public
@@ -67,15 +76,21 @@ class Console {
      */
     public static function advancedInteraction ( ) {
 
-        static $_done = false;
+        if(null !== self::$_advanced)
+            return self::$_advanced;
 
-        if(OS_WIN || true === $_done)
-            return;
+        if(OS_WIN)
+            return self::$_advanced = false;
+
+        if(   function_exists('posix_isatty')
+           && false === posix_isatty(0)) {
+
+            return self::$_advanced = false;
+        }
 
         \Hoa\Console\Processus::execute('stty -echo -icanon min 1 time 0');
-        $_done = true;
 
-        return;
+        return self::$_advanced = true;
     }
 }
 
