@@ -595,6 +595,20 @@ class Readline {
     }
 
     /**
+     * Set line length. Not for user.
+     *
+     * @access  public
+     * @param   int  $length    Length.
+     * @return  void
+     */
+    public function setLineLength ( $length ) {
+
+        $this->_lineLength = $length;
+
+        return;
+    }
+
+    /**
      * Set buffer. Not for user.
      *
      * @access  public
@@ -1077,13 +1091,22 @@ class Readline {
                     case "\n":
                         if(-1 !== $mColumn && -1 !== $mLine) {
 
-                            $tail = mb_substr($line, $current);
-                            $s    = mb_substr($solution[$coord], $length);
-                            echo $s;
+                            $tail     = mb_substr($line, $current);
+                            $current -= $length;
+                            $self->setLine(
+                                mb_substr($line, 0, $current) .
+                                $solution[$coord] .
+                                $tail
+                            );
+                            $self->setLineCurrent(
+                                $current + mb_strlen($solution[$coord])
+                            );
+
+                            \Hoa\Console\Cursor::move('←', $length);
+                            echo $solution[$coord];
                             \Hoa\Console\Cursor::clear('→');
                             echo $tail;
                             \Hoa\Console\Cursor::move('←', mb_strlen($tail));
-                            $self->insertLine($s);
                         }
 
                     default:
@@ -1109,13 +1132,22 @@ class Readline {
             return $state;
         }
 
-        $tail = mb_substr($line, $current);
-        $s    = mb_substr($solution, $length);
-        echo $s;
+        $tail     = mb_substr($line, $current);
+        $current -= $length;
+        $self->setLine(
+            mb_substr($line, 0, $current) .
+            $solution .
+            $tail
+        );
+        $self->setLineCurrent(
+            $current + mb_strlen($solution)
+        );
+
+        \Hoa\Console\Cursor::move('←', $length);
+        echo $solution;
         \Hoa\Console\Cursor::clear('→');
         echo $tail;
         \Hoa\Console\Cursor::move('←', mb_strlen($tail));
-        $self->insertLine($s);
 
         return $state;
     }
