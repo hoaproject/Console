@@ -29,6 +29,7 @@ of some operations:
   * `hide`;
   * `show`;
   * `getPosition`;
+  * `colorize`;
   * etc.
 
 The API is very straightforward. For example, we can use `l`, `left` or `←` to
@@ -51,6 +52,10 @@ then to restore the saved position:
     echo 'Something below…';        // write something
     Hoa\Console\Cursor::restore();  // restore
 
+Another example with color:
+
+    Hoa\Console\Cursor::colorize('underlined foreground(yellow)');
+
 Please, read the API documentation for more informations, and note that Windows
 support is very weak.
 
@@ -66,6 +71,7 @@ of some operations:
   * `minimize`;
   * `setTitle`;
   * `getTitle`;
+  * `copy`;
   * etc.
 
 Furthermore, we have the `hoa://Event/Console/Window:resize` event channel to
