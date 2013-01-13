@@ -271,6 +271,7 @@ class Window implements \Hoa\Core\Event\Source {
         if(OS_WIN)
             return;
 
+        // DECSLPP.
         echo "\033[2t";
 
         return;
@@ -288,6 +289,7 @@ class Window implements \Hoa\Core\Event\Source {
         if(OS_WIN)
             return;
 
+        // DECSLPP.
         echo "\033]0;" . $title . "\033\\";
 
         return;
