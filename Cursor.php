@@ -50,6 +50,8 @@ namespace Hoa\Console {
  *     • show;
  *     • getPosition;
  *     • setStyle;
+ *     • colorize;
+ *     • changeColor;
  *     • bip.
  * Please, see C0 and C1 control codes.
  *
@@ -402,6 +404,194 @@ class Cursor {
             'x' => (int) $x,
             'y' => (int) $y
         );
+    }
+
+    /**
+     * Colorize cursor.
+     * Attributes can be:
+     *     •  n,         normal           : normal;
+     *     •  b,         bold             : bold;
+     *     •  u,         underlined       : underlined;
+     *     •  bl,        blink            : blink;
+     *     •  i,         inverse          : inverse;
+     *     • !b,        !bold             : normal weight;
+     *     • !u,        !underlined       : not underlined;
+     *     • !bl,       !blink            : steady;
+     *     • !i,        !inverse          : positive;
+     *     • fg(color), foreground(color) : set foreground to “color”;
+     *     • bg(color), background(color) : set background to “color”.
+     * “color” can be:
+     *     • default;
+     *     • black;
+     *     • red;
+     *     • green;
+     *     • yellow;
+     *     • blue;
+     *     • magenta;
+     *     • cyan;
+     *     • white;
+     *     • 0-256 (classic palette).
+     * Attributes can be concatenated by a single space.
+     *
+     * @access  public
+     * @param   string  $attributes    Attributes.
+     * @return  void
+     */
+    public static function colorize ( $attributes ) {
+
+        $handle = array();
+
+        foreach(explode(' ', $attributes) as $attribute) {
+
+            switch($attribute) {
+
+                case 'n':
+                case 'normal':
+                    $handle[] = 0;
+                  break;
+
+                case 'b':
+                case 'bold':
+                    $handle[] = 1;
+                  break;
+
+                case 'u':
+                case 'underlined':
+                    $handle[] = 4;
+                  break;
+
+                case 'bl':
+                case 'blink':
+                    $handle[] = 5;
+                  break;
+
+                case 'i':
+                case 'inverse':
+                    $handle[] = 7;
+                  break;
+
+                case '!b':
+                case '!bold':
+                    $handle[] = 22;
+                  break;
+
+                case '!u':
+                case '!underlined':
+                    $handle[] = 24;
+                  break;
+
+                case '!bl':
+                case '!blink':
+                    $handle[] = 25;
+                  break;
+
+                case '!i':
+                case '!inverse':
+                    $handle[] = 27;
+                  break;
+
+                default:
+                    if(0 === preg_match('#^([^\(]+)\(([^\)]+)\)$#', $attribute, $m))
+                        break;
+
+                    $shift = 0;
+
+                    switch($m[1]) {
+
+                        case 'fg':
+                        case 'foreground':
+                            $shift = 0;
+                          break;
+
+                        case 'bg':
+                        case 'background':
+                            $shift = 10;
+                          break;
+
+                        default:
+                          break 2;
+                    }
+
+                    $_handle  = 0;
+                    $_keyword = true;
+
+                    switch($m[2]) {
+
+                        case 'black':
+                            $_handle = 30;
+                          break;
+
+                        case 'red':
+                            $_handle = 31;
+                          break;
+
+                        case 'green':
+                            $_handle = 32;
+                          break;
+
+                        case 'yellow':
+                            $_handle = 33;
+                          break;
+
+                        case 'blue':
+                            $_handle = 34;
+                          break;
+
+                        case 'magenta':
+                            $_handle = 35;
+                          break;
+
+                        case 'cyan':
+                            $_handle = 36;
+                          break;
+
+                        case 'white':
+                            $_handle = 37;
+                          break;
+
+                        case 'default':
+                            $_handle = 39;
+                          break;
+
+                        default:
+                            $_handle  = intval($m[2]);
+                            $_keyword = false;
+                    }
+
+                    if(true === $_keyword)
+                        $handle[] = $_handle + $shift;
+                    else
+                        $handle[] = (38 + $shift) . ';5;' . $m[2];
+            }
+        }
+
+        echo "\033[" . implode($handle, ';') . "m";
+
+        return;
+    }
+
+    /**
+     * Change color number to a specific RGB color.
+     *
+     * @access  public
+     * @param   int  $fromCode    Color number.
+     * @param   int  $toColor     RGB color.
+     * @return  void
+     */
+    public static function changeColor ( $fromCode, $toColor ) {
+
+        if(OS_WIN)
+            return;
+
+        $red   = ($toColor >> 16) & 255;
+        $green = ($toColor >>  8) & 255;
+        $blue  =  $tocolor        & 255;
+
+        echo "\033]4;" . $fromCode . ";#" .
+             sprintf('%02x%02x%02x', $red, $green, $blue) .
+             "\033\\";
+
+        return;
     }
 
     /**
