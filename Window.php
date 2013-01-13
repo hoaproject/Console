@@ -400,6 +400,9 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public static function copy ( $data ) {
 
+        if(OS_WIN)
+            return;
+
         echo "\033]52;;" . base64_encode($data) . "\033\\";
 
         return;
