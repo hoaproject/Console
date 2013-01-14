@@ -83,10 +83,8 @@ class Console {
             return self::$_advanced = false;
 
         if(   function_exists('posix_isatty')
-           && false === posix_isatty(0)) {
-
+           && false === posix_isatty(0))
             return self::$_advanced = false;
-        }
 
         \Hoa\Console\Processus::execute('stty -echo -icanon min 1 time 0');
 
