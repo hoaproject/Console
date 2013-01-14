@@ -439,6 +439,9 @@ class Cursor {
      */
     public static function colorize ( $attributes ) {
 
+        if(OS_WIN)
+            return;
+
         static $_rgbTo256 = null;
 
         if(null === $_rgbTo256)
