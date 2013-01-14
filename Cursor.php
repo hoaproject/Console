@@ -430,7 +430,8 @@ class Cursor {
      *     • magenta;
      *     • cyan;
      *     • white;
-     *     • 0-256 (classic palette).
+     *     • 0-256 (classic palette);
+     *     • #hexa.
      * Attributes can be concatenated by a single space.
      *
      * @access  public
