@@ -54,7 +54,9 @@ then to restore the saved position:
 
 Another example with color:
 
-    Hoa\Console\Cursor::colorize('underlined foreground(yellow)');
+    Hoa\Console\Cursor::colorize(
+        'underlined foreground(yellow) background(#932e2e)'
+    );
 
 Please, read the API documentation for more informations, and note that Windows
 support is very weak.
