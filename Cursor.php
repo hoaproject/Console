@@ -39,20 +39,7 @@ namespace Hoa\Console {
 /**
  * Class \Hoa\Console\Cursor.
  *
- * Allow to manipulate the cursor:
- *     • move;
- *     • moveTo;
- *     • save;
- *     • restore;
- *     • clear;
- *     • scroll;
- *     • hide;
- *     • show;
- *     • getPosition;
- *     • setStyle;
- *     • colorize;
- *     • changeColor;
- *     • bip.
+ * Allow to manipulate the cursor.
  * Please, see C0 and C1 control codes.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
@@ -277,51 +264,6 @@ class Cursor {
                     echo "\r\033[K";
                   break;
             }
-
-        return;
-    }
-
-    /**
-     * Scroll whole page.
-     * Directions can be:
-     *     • u, up,    ↑ : scroll whole page up;
-     *     • d, down,  ↓ : scroll whole page down.
-     * Directions can be concatenated by a single space.
-     *
-     * @access  public
-     * @param   string  $directions    Directions.
-     * @reutrn  void
-     */
-    public static function scroll ( $directions ) {
-
-        if(OS_WIN)
-            return;
-
-        $handle = array('up' => 0, 'down' => 0);
-
-        foreach(explode(' ', $directions) as $direction)
-            switch($direction) {
-
-                case 'u':
-                case 'up':
-                case '↑':
-                    ++$handle['up'];
-                  break;
-
-                case 'd':
-                case 'down':
-                case '↓':
-                    ++$handle['down'];
-                  break;
-            }
-
-        if(0 < $handle['up'])
-            // SU.
-            echo "\033[" . $handle['up'] . "S";
-
-        if(0 < $handle['down'])
-            // SD.
-            echo "\033[" . $handle['up'] . "T";
 
         return;
     }

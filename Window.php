@@ -50,17 +50,7 @@ namespace Hoa\Console {
 /**
  * Class \Hoa\Console\Window.
  *
- * Allow to manipulate the window:
- *     • setSize;
- *     • getSize;
- *     • moveTo;
- *     • getPosition;
- *     • minimize;
- *     • setTitle;
- *     • getTitle;
- *     • getLabel;
- *     • refresh;
- *     • copy.
+ * Allow to manipulate the window.
  *
  * We can listen the event channel hoa://Event/Console/Window:resize to detect
  * if the window has been resized. Please, see the constructor documentation to
@@ -259,6 +249,59 @@ class Window implements \Hoa\Core\Event\Source {
             'x' => (int) $x,
             'y' => (int) $y
         );
+    }
+
+    /**
+     * Scroll whole page.
+     * Directions can be:
+     *     • u, up,    ↑ : scroll whole page up;
+     *     • d, down,  ↓ : scroll whole page down.
+     * Directions can be concatenated by a single space.
+     *
+     * @access  public
+     * @param   string  $directions    Directions.
+     * @param   int     $repeat        How many times do we scroll?
+     * @reutrn  void
+     */
+    public static function scroll ( $directions, $repeat = 1 ) {
+
+        if(OS_WIN)
+            return;
+
+        if(1 > $repeat)
+            return;
+        elseif(1 === $repeat)
+            $handle = explode(' ', $directions);
+        else
+            $handle = explode(' ', $directions, 1);
+
+        $count = array('up' => 0, 'down' => 0);
+
+        foreach($handle as $direction)
+            switch($direction) {
+
+                case 'u':
+                case 'up':
+                case '↑':
+                    ++$count['up'];
+                  break;
+
+                case 'd':
+                case 'down':
+                case '↓':
+                    ++$count['down'];
+                  break;
+            }
+
+        if(0 < $count['up'])
+            // SU.
+            echo "\033[" . ($count['up'] * $repeat) . "S";
+
+        if(0 < $count['down'])
+            // SD.
+            echo "\033[" . ($count['down'] * $repeat) . "T";
+
+        return;
     }
 
     /**
