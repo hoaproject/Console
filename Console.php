@@ -66,6 +66,13 @@ class Console {
      */
     private static $_advanced = null;
 
+    /**
+     * Previous STTY configuration.
+     *
+     * @var \Hoa\Console string
+     */
+    private static $_old      = null;
+
 
 
     /**
@@ -86,10 +93,32 @@ class Console {
            && false === posix_isatty(0))
             return self::$_advanced = false;
 
+        self::$_old = \Hoa\Console\Processus::execute('stty -g');
         \Hoa\Console\Processus::execute('stty -echo -icanon min 1 time 0');
 
         return self::$_advanced = true;
     }
+
+    /**
+     * Restore previous interaction options.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function restoreInteraction ( ) {
+
+        if(null === self::$_old)
+            return;
+
+        \Hoa\Console\Processus::execute('stty ' . self::$_old);
+
+        return;
+    }
 }
+
+/**
+ * Restore interaction.
+ */
+\Hoa\Core::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
 
 }
