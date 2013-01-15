@@ -293,13 +293,21 @@ class Window implements \Hoa\Core\Event\Source {
                   break;
             }
 
-        if(0 < $count['up'])
-            // SU.
-            echo "\033[" . ($count['up'] * $repeat) . "S";
+        if(0 < $count['up']) {
 
-        if(0 < $count['down'])
+            // SU.
+            $up = $count['up'] * $repeat;
+            echo "\033[" . $up . "S";
+            echo "\033[" . $up . "A";
+        }
+
+        if(0 < $count['down']) {
+
             // SD.
-            echo "\033[" . ($count['down'] * $repeat) . "T";
+            $down = $count['down'] * $repeat;
+            echo "\033[" . $down . "T";
+            echo "\033[" . $down . "B";
+        }
 
         return;
     }
