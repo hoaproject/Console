@@ -70,6 +70,7 @@ of some operations:
   * `getSize`;
   * `moveTo`;
   * `getPosition`;
+  * `scroll`;
   * `minimize`;
   * `setTitle`;
   * `getTitle`;
