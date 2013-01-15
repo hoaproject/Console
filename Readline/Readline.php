@@ -928,15 +928,12 @@ class Readline {
 
         if(is_array($solution)) {
 
-            \Hoa\Console\Cursor::save();
-            \Hoa\Console\Cursor::move('↓ LEFT');
-            \Hoa\Console\Cursor::clear('↓');
-
             $_solution = $solution;
             $count     = count($_solution) - 1;
             $cWidth    = 0;
             $window    = \Hoa\Console\Window::getSize();
             $wWidth    = $window['x'];
+            $cursor    = \Hoa\Console\Cursor::getPosition();
 
             array_walk($_solution, function ( &$value ) use ( &$cWidth ) {
 
@@ -964,16 +961,25 @@ class Readline {
             --$mColumns;
             $i        = 0;
 
-            foreach($_solution as $s) {
+            if(0 > $window['y'] - $cursor['y'] - $mLines)
+                \Hoa\Console\Window::scroll('↑', $mLines);
 
-                echo "\033[0m" . $s . "\033[0m";
+            \Hoa\Console\Cursor::save();
+            \Hoa\Console\Cursor::move('↓ LEFT');
+            \Hoa\Console\Cursor::clear('↓');
+
+            foreach($_solution as $j => $s) {
+
+                echo "\033[0m", $s, "\033[0m";
 
                 if($i++ < $mColumns)
                     echo '  ';
                 else {
 
                     $i = 0;
-                    echo "\n";
+
+                    if(isset($_solution[$j + 1]))
+                        echo "\n";
                 }
             }
 
