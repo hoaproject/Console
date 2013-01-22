@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Console
+ */
+-> import('Console.~')
+
+/**
  * \Hoa\Console\Processus
  */
 -> import('Console.Processus');
@@ -464,6 +469,14 @@ class Window implements \Hoa\Core\Event\Source {
 
 namespace {
 
+/**
+ * Advanced interaction.
+ */
+\Hoa\Console::advancedInteraction();
+
+/**
+ * Event.
+ */
 if(ƒ('pcntl_signal')) {
 
     \Hoa\Console\Window::getInstance();
