@@ -39,11 +39,6 @@ namespace {
 from('Hoa')
 
 /**
- * \Hoa\Console
- */
--> import('Console.~')
-
-/**
  * \Hoa\Console\Parser
  */
 -> import('Console.Parser')
@@ -132,7 +127,6 @@ class Kit extends \Hoa\Dispatcher\Kit {
 
         parent::__construct($router, $dispatcher, $view);
 
-        \Hoa\Console::advancedInteraction();
         $this->parser = new \Hoa\Console\Parser();
 
         return;
