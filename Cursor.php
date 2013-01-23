@@ -177,6 +177,52 @@ class Cursor {
     }
 
     /**
+     * Get current position (x and y) of the cursor.
+     *
+     * @access  public
+     * @return  array
+     */
+    public static function getPosition ( ) {
+
+        if(OS_WIN)
+            return;
+
+        // DSR.
+        echo "\033[6n";
+
+        // Read \033[y;xR.
+        fread(STDIN, 2); // skip \033 and [.
+
+        $x      = null;
+        $y      = null;
+        $handle = &$y;
+
+        do {
+
+            $char = fread(STDIN, 1);
+
+            switch($char) {
+
+                case ';':
+                    $handle = &$x;
+                  break;
+
+                case 'R':
+                    break 2;
+
+                default:
+                    $handle .= $char;
+            }
+
+        } while(true);
+
+        return array(
+            'x' => (int) $x,
+            'y' => (int) $y
+        );
+    }
+
+    /**
      * Save current position.
      *
      * @access  public
@@ -311,52 +357,6 @@ class Cursor {
         echo "\033[?25h";
 
         return;
-    }
-
-    /**
-     * Get current position (x and y) of the cursor.
-     *
-     * @access  public
-     * @return  array
-     */
-    public static function getPosition ( ) {
-
-        if(OS_WIN)
-            return;
-
-        // DSR.
-        echo "\033[6n";
-
-        // Read \033[y;xR.
-        fread(STDIN, 2); // skip \033 and [.
-
-        $x      = null;
-        $y      = null;
-        $handle = &$y;
-
-        do {
-
-            $char = fread(STDIN, 1);
-
-            switch($char) {
-
-                case ';':
-                    $handle = &$x;
-                  break;
-
-                case 'R':
-                    break 2;
-
-                default:
-                    $handle .= $char;
-            }
-
-        } while(true);
-
-        return array(
-            'x' => (int) $x,
-            'y' => (int) $y
-        );
     }
 
     /**
