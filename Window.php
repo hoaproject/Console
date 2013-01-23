@@ -303,7 +303,6 @@ class Window implements \Hoa\Core\Event\Source {
             // SU.
             $up = $count['up'] * $repeat;
             echo "\033[" . $up . "S";
-            echo "\033[" . $up . "A";
         }
 
         if(0 < $count['down']) {
@@ -311,7 +310,6 @@ class Window implements \Hoa\Core\Event\Source {
             // SD.
             $down = $count['down'] * $repeat;
             echo "\033[" . $down . "T";
-            echo "\033[" . $down . "B";
         }
 
         return;
