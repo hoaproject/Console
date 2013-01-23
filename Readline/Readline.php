@@ -968,6 +968,7 @@ class Readline {
             }
 
             \Hoa\Console\Cursor::save();
+            \Hoa\Console\Cursor::hide();
             \Hoa\Console\Cursor::move('↓ LEFT');
             \Hoa\Console\Cursor::clear('↓');
 
@@ -987,6 +988,7 @@ class Readline {
             }
 
             \Hoa\Console\Cursor::restore();
+            \Hoa\Console\Cursor::show();
 
             ++$mColumns;
             $read     = array(STDIN);
@@ -997,11 +999,13 @@ class Readline {
                                            &$_solution, &$cWidth ) {
 
                 \Hoa\Console\Cursor::save();
+                \Hoa\Console\Cursor::hide();
                 \Hoa\Console\Cursor::move('↓ LEFT');
                 \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
                 \Hoa\Console\Cursor::move('↓', $mLine);
                 echo "\033[0m" . $_solution[$coord] . "\033[0m";
                 \Hoa\Console\Cursor::restore();
+                \Hoa\Console\Cursor::show();
 
                 return;
             };
@@ -1009,11 +1013,13 @@ class Readline {
                                          &$_solution, &$cWidth ) {
 
                 \Hoa\Console\Cursor::save();
+                \Hoa\Console\Cursor::hide();
                 \Hoa\Console\Cursor::move('↓ LEFT');
                 \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
                 \Hoa\Console\Cursor::move('↓', $mLine);
                 echo "\033[7m" . $_solution[$coord] . "\033[0m";
                 \Hoa\Console\Cursor::restore();
+                \Hoa\Console\Cursor::show();
 
                 return;
             };
