@@ -961,8 +961,11 @@ class Readline {
             --$mColumns;
             $i        = 0;
 
-            if(0 > $window['y'] - $cursor['y'] - $mLines)
+            if(0 > $window['y'] - $cursor['y'] - $mLines) {
+
                 \Hoa\Console\Window::scroll('↑', $mLines);
+                \Hoa\Console\Cursor::move('↑', $mLines);
+            }
 
             \Hoa\Console\Cursor::save();
             \Hoa\Console\Cursor::move('↓ LEFT');
