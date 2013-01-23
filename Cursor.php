@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~');
+
+}
+
 namespace Hoa\Console {
 
 /**
@@ -680,5 +691,14 @@ class Cursor {
         return;
     }
 }
+
+}
+
+namespace {
+
+/**
+ * Advanced interaction.
+ */
+\Hoa\Console::advancedInteraction();
 
 }
