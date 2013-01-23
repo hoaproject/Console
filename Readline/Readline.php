@@ -38,6 +38,11 @@ namespace {
 
 from('Hoa')
 
+/**
+ * \Hoa\Console
+ */
+-> import('Console.~')
+
 /*
  * \Hoa\Console\Processus
  */
@@ -1167,5 +1172,14 @@ class Readline {
         return $state;
     }
 }
+
+}
+
+namespace {
+
+/**
+ * Advanced interaction.
+ */
+\Hoa\Console::advancedInteraction();
 
 }
