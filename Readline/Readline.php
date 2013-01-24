@@ -637,8 +637,11 @@ class Readline {
      */
     public function _bindArrowUp ( Readline $self ) {
 
-        \Hoa\Console\Cursor::clear('↔');
-        echo $self->getPrefix();
+        if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
+
+            \Hoa\Console\Cursor::clear('↔');
+            echo $self->getPrefix();
+        }
         $self->setBuffer($buffer = $self->previousHistory());
         $self->setLine($buffer);
 
@@ -655,8 +658,12 @@ class Readline {
      */
     public function _bindArrowDown ( Readline $self ) {
 
-        \Hoa\Console\Cursor::clear('↔');
-        echo $self->getPrefix();
+        if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
+
+            \Hoa\Console\Cursor::clear('↔');
+            echo $self->getPrefix();
+        }
+
         $self->setBuffer($buffer = $self->nextHistory());
         $self->setLine($buffer);
 
@@ -675,7 +682,9 @@ class Readline {
 
         if($self->getLineLength() > $self->getLineCurrent()) {
 
-            \Hoa\Console\Cursor::move('→');
+            if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO))
+                \Hoa\Console\Cursor::move('→');
+
             $self->setLineCurrent($self->getLineCurrent() + 1);
         }
 
@@ -696,7 +705,9 @@ class Readline {
 
         if(0 < $self->getLineCurrent()) {
 
-            \Hoa\Console\Cursor::move('←');
+            if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO))
+                \Hoa\Console\Cursor::move('←');
+
             $self->setLineCurrent($self->getLineCurrent() - 1);
         }
 
@@ -719,8 +730,11 @@ class Readline {
 
         if(0 < $self->getLineCurrent()) {
 
-            \Hoa\Console\Cursor::move('←');
-            \Hoa\Console\Cursor::clear('→');
+            if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
+
+                \Hoa\Console\Cursor::move('←');
+                \Hoa\Console\Cursor::clear('→');
+            }
 
             if($self->getLineLength() == $current = $self->getLineCurrent())
                 $self->setLine(mb_substr($self->getLine(), 0, -1));
