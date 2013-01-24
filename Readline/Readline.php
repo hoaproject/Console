@@ -697,7 +697,7 @@ class Readline {
         if(0 < $self->getLineCurrent()) {
 
             \Hoa\Console\Cursor::move('←');
-            $self->setLineCurrent($this->getLineCurrent() - 1);
+            $self->setLineCurrent($self->getLineCurrent() - 1);
         }
 
         $self->setBuffer(null);
@@ -723,7 +723,7 @@ class Readline {
             \Hoa\Console\Cursor::clear('→');
 
             if($self->getLineLength() == $current = $self->getLineCurrent())
-                $self->setLine(mb_substr($this->getLine(), 0, -1));
+                $self->setLine(mb_substr($self->getLine(), 0, -1));
             else {
 
                 $line    = $self->getLine();
@@ -818,7 +818,7 @@ class Readline {
 
         $current = $self->getLineCurrent();
 
-        if($this->getLineLength() === $current)
+        if($self->getLineLength() === $current)
             return static::STATE_CONTINUE;
 
         $words = preg_split(
@@ -833,7 +833,7 @@ class Readline {
             ++$i);
 
         if(!isset($words[$i + 1]))
-            $words[$i + 1] = array(1 => $this->getLineLength());
+            $words[$i + 1] = array(1 => $self->getLineLength());
 
         for($j = $words[$i + 1][1]; $j > $current; --$j)
             $self->_bindArrowRight($self);
@@ -896,7 +896,7 @@ class Readline {
      */
     public function _bindTab ( Readline $self ) {
 
-        $autocompleter = $this->getAutocompleter();
+        $autocompleter = $self->getAutocompleter();
 
         if(null === $autocompleter)
             return static::STATE_CONTINUE;
@@ -1049,7 +1049,7 @@ class Readline {
                     continue;
                 }
 
-                switch($char = $this->_read()) {
+                switch($char = $self->_read()) {
 
                     case "\033[A":
                         if(-1 === $mColumn && -1 === $mLine) {
