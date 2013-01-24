@@ -279,7 +279,7 @@ class Readline {
                     mb_strlen($tail) - 1
                 );
 
-                $return = self::STATE_CONTINUE;
+                $return = static::STATE_CONTINUE;
             }
         }
 
