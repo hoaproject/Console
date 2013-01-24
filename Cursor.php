@@ -622,7 +622,7 @@ class Cursor {
 
         $r = ($toColor >> 16) & 255;
         $g = ($toColor >>  8) & 255;
-        $b =  $tocolor        & 255;
+        $b =  $toColor        & 255;
 
         echo "\033]4;" . $fromCode . ";#" .
              sprintf('%02x%02x%02x', $r, $g, $b) .
