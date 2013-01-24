@@ -897,13 +897,13 @@ class Readline {
     public function _bindTab ( Readline $self ) {
 
         $autocompleter = $self->getAutocompleter();
+        $state         = static::STATE_CONTINUE | static::STATE_NO_ECHO;
 
         if(null === $autocompleter)
-            return static::STATE_CONTINUE;
+            return $state;
 
         $current = $self->getLineCurrent();
         $line    = $self->getLine();
-        $state   = static::STATE_CONTINUE | static::STATE_NO_ECHO;
 
         if(0 === $current)
             return $state;
