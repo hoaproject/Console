@@ -1050,7 +1050,7 @@ class Readline {
                 $coord   = 0;
                 $select();
 
-                return 1;
+                return;
             };
 
             while(true) {
