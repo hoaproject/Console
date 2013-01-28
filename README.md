@@ -217,7 +217,7 @@ And finally, we iterate over options:
     $short = false;
     $long  = null;
 
-    //          short name                 value
+    //          short name                  value
     //               ↓                        ↓
     while(false !== $c = $options->getOption($v)) switch($c) {
 
