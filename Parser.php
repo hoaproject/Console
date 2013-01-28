@@ -214,21 +214,49 @@ class Parser {
          * Nice isn't it :-D ?
          *
          * Note : this regular expression likes to capture empty array (near
-         * <input>), why ?
+         * <i>), why?
          */
 
         $regex = '#(?:(?<b>--?[^=\s]+)(?:(?:(=)|(\s))(?<!\\\)(?:("|\')|)(?<s>(?(3)[^-]|).*?)(?(4)(?<!\\\)\4|(?(2)(?<!\\\)\s|(?:(?:(?<!\\\)\s)|$))))?)|(?:(?<!\\\)(?:("|\')|)(?<i>.*?)(?(6)(?<!\\\)\6|(?:(?:(?<!\\\)\s)|$)))#Ssm';
 
         preg_match_all($regex, $command, $matches, PREG_SET_ORDER);
 
-        foreach($matches as $i => $match)
+        for($i = 0, $max = count($matches); $i < $max; ++$i) {
+
+            $match = $matches[$i];
+
             if(   isset($match['i'])
                && ('0' === $match['i'] || !empty($match['i'])))
                 $this->addInput($match);
-            elseif(!isset($match['i']) && !isset($match['s']))
+
+            elseif(!isset($match['i']) && !isset($match['s'])) {
+
+                if(isset($matches[$i + 1])) {
+
+                    $nextMatch = $matches[$i + 1];
+
+                    if(   !empty($nextMatch['i'])
+                       && '=' === $nextMatch['i'][0]) {
+
+                        ++$i;
+                        $match[2]   = '=';
+                        $match[3]   =
+                        $match[4]   = null;
+                        $match['s'] =
+                        $match[5]   = substr($nextMatch[7], 1);
+
+                        $this->addValuedSwitch($match);
+
+                        continue;
+                    }
+                }
+
                 $this->addBoolSwitch($match);
+            }
+
             elseif(!isset($match['i']) && isset($match['s']))
                 $this->addValuedSwitch($match);
+        }
 
         return;
     }
