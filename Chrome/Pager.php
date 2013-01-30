@@ -76,13 +76,6 @@ class Pager {
      */
     const MORE = 'more';
 
-    /**
-     * Current pager.
-     *
-     * @var \Hoa\Console\Chrome\Pager
-     */
-    private static $_pager = null;
-
 
 
     /**
@@ -95,11 +88,7 @@ class Pager {
      */
     public static function less ( $output, $mode ) {
 
-        self::$_pager = self::LESS;
-        $out          = self::pager($output, $mode);
-        self::$_pager = null;
-
-        return $out;
+        return self::pager($output, $mode, self::LESS);
     }
 
     /**
@@ -112,11 +101,7 @@ class Pager {
      */
     public static function more ( $output, $mode ) {
 
-        self::$_pager = self::MORE;
-        $out          = self::pager($output, $mode);
-        self::$_pager = null;
-
-        return $out;
+        return self::pager($output, $mode, self::MORE);
     }
 
     /**
@@ -127,15 +112,15 @@ class Pager {
      * @param   int     $mode      Mode (from the output buffer).
      * @return  string
      */
-    public static function pager ( $output, $mode ) {
+    public static function pager ( $output, $mode, $type = null ) {
 
         static $process = null;
         static $pipes   = null;
 
         if($mode & PHP_OUTPUT_HANDLER_START) {
 
-            $pager = null !== self::$_pager
-                         ? \Hoa\Console\Processus::locate(self::$_pager)
+            $pager = null !== $type
+                         ? \Hoa\Console\Processus::locate($type)
                          : (isset($_ENV['PAGER']) ? $_ENV['PAGER'] : null);
 
             if(null === $pager)
