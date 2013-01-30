@@ -175,6 +175,7 @@ which implements `Hoa\Stream\IStream\In`, `Hoa\Stream\IStream\Out` and
 Basically, we can read STDOUT like this:
 
     $processus = new Hoa\Console\Processus('ls');
+    $processus->open();
     echo $processus->readAll();
 
 And we can write on STDIN like this:
@@ -182,6 +183,17 @@ And we can write on STDIN like this:
     $processus->writeAll('foobar');
 
 etc. This is very classical.
+
+`Hoa\Console\Processus` also proposes many events: `start`, `stop`, `input`,
+`output` and `timeout`. Thus:
+
+    $processus = new Hoa\Console\Processus('ls');
+    $processus->on('output', function ( Hoa\Core\Event\Bucket $bucket ) {
+
+        $data = $bucket->getData();
+        echo '> ', $data['line'], "\n";
+    });
+    $processus->run();
 
 We are also able to read and write on more pipes than 0 (STDOUT), 1 (STDIN) and
 2 (STDERR). In the same way, we can set the current working directory of the
