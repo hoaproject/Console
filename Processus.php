@@ -904,7 +904,7 @@ class          Processus
     }
 
     /**
-     * Is process ended successfully ?
+     * Whether the processus have ended successfully.
      *
      * @access  public
      * @return  boolean
