@@ -904,6 +904,17 @@ class          Processus
     }
 
     /**
+     * Is process ended successfully ?
+     *
+     * @access  public
+     * @return  boolean
+     */
+    public function isSuccessful () {
+
+        return 0 === $this->getExitCode();
+    }
+
+    /**
      * Terminate the process.
      *
      * @access  public
