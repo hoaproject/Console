@@ -329,6 +329,13 @@ class          Processus
     protected $_environment = null;
 
     /**
+     * Timeout.
+     *
+     * @var \Hoa\Console\Processus int
+     */
+    protected $_timeout     = 30;
+
+    /**
      * Descriptor.
      *
      * @var \Hoa\Console\Processus array
@@ -354,28 +361,29 @@ class          Processus
      * @access  public
      * @param   string  $command        Command name.
      * @param   array   $options        Command options.
-     * @param   string  $cwd            Current working directory.
-     * @param   array   $environment    Environment.
      * @param   array   $descriptors    Descriptors (descriptor => mode —r, w or
      *                                  a—).
+     * @param   string  $cwd            Current working directory.
+     * @param   array   $environment    Environment.
      * @return  void
      * @throw   \Hoa\Console\Exception
      */
-    public function __construct ( $command, Array $options = null, $cwd = null,
+    public function __construct (       $command,
+                                  Array $options     = null,
+                                  Array $descriptors = null,
+                                        $cwd         = null,
                                   Array $environment = null,
-                                  Array $descriptors = null ) {
+                                        $timeout     = 30 ) {
 
         $this->setCommand($command);
 
         if(null !== $options)
             $this->setOptions($options);
 
-        $this->setCwd($cwd ?: getcwd());
+        if(null !== $descriptors) {
 
-        if(null !== $environment)
-            $this->setEnvironment($environment);
+            $this->_descriptors = array();
 
-        if(null !== $descriptors)
             foreach($descriptors as $descriptor => $mode) {
 
                 if(isset($this->_descriptors[$descriptor]))
@@ -384,10 +392,18 @@ class          Processus
                         'redefine it.',
                         0, $descriptor);
 
-                $this->_descriptors[$descriptor] = array('pipe' => $mode);
+                $this->_descriptors[$descriptor] = array('pipe', $mode);
             }
+        }
 
-        parent::__construct($this->getCommandLine());
+        $this->setCwd($cwd ?: getcwd());
+
+        if(null !== $environment)
+            $this->setEnvironment($environment);
+
+        $this->setTimeout($timeout);
+        parent::__construct($this->getCommandLine(), null, true);
+        $this->_on->addIds(array('input', 'output', 'timeout', 'start', 'stop'));
 
         return;
     }
@@ -429,6 +445,105 @@ class          Processus
             @fclose($pipe);
 
         return @proc_close($this->getStream());
+    }
+
+    /**
+     * Run the process and fire events (amongst start, stop, input, output and
+     * timeout).
+     * If an event returns false, it will close the current pipe.
+     * For a simple run without firing events, use the $this->open() method.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function run ( ) {
+
+        $this->open();
+        $this->_on->fire('start', new \Hoa\Core\Event\Bucket());
+
+        $_read   = array();
+        $_write  = array();
+        $_except = array();
+
+        foreach($this->_pipes as $p => $pipe) {
+
+            stream_set_blocking($pipe, false);
+
+            switch($this->_descriptors[$p][1]) {
+
+                case 'r':
+                    $_write[] = $pipe;
+                  break;
+
+                case 'w':
+                case 'a':
+                    $_read[]  = $pipe;
+                  break;
+            }
+        }
+
+        while(true) {
+
+            $read   = $_read;
+            $write  = $_write;
+            $except = $_except;
+            $select = stream_select($read, $write, $except, $this->getTimeout());
+
+            if(0 === $select) {
+
+                $this->_on->fire('timeout', new \Hoa\Core\Event\Bucket());
+
+                break;
+            }
+
+            foreach($read as $i => $_r) {
+
+                $pipe = array_search($_r, $this->_pipes);
+                $line = $this->readLine($pipe);
+
+                if(false === $line)
+                    $result = array(false);
+                else
+                    $result = $this->_on->fire(
+                        'output',
+                        new \Hoa\Core\Event\Bucket(array(
+                            'pipe' => $pipe,
+                            'line' => $line
+                        ))
+                    );
+
+                if(true === feof($_r) || in_array(false, $result, true)) {
+
+                    fclose($_r);
+                    unset($_read[$i]);
+
+                    break;
+                }
+            }
+
+            foreach($write as $j => $_w) {
+
+                $result = $this->_on->fire(
+                    'input',
+                    new \Hoa\Core\Event\Bucket(array(
+                        'pipe' => array_search($_w, $this->_pipes)
+                    ))
+                );
+
+                if(true === feof($_w) || in_array(false, $result, true)) {
+
+                    fclose($_w);
+                    unset($_write[$j]);
+                }
+            }
+
+            if(empty($_read))
+                break;
+        }
+
+        $this->_on->fire('stop', new \Hoa\Core\Event\Bucket());
+
+        return;
     }
 
     /**
@@ -929,6 +1044,32 @@ class          Processus
     }
 
     /**
+     * Set timeout of the process.
+     *
+     * @access  public
+     * @param   int  $timeout    Timeout.
+     * @return  int
+     */
+    public function setTimeout ( $timeout ) {
+
+        $old            = $this->_timeout;
+        $this->_timeout = $timeout;
+
+        return $old;
+    }
+
+    /**
+     * Get timeout of the process.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getTimeout ( ) {
+
+        return $this->_timeout;
+    }
+
+    /**
      * Found the place of a binary.
      *
      * @access  public
@@ -953,7 +1094,7 @@ class          Processus
             if(true === file_exists($out = $directory . DS . $binary))
                 return $out;
 
-        return $file;
+        return null;
     }
 
     /**
