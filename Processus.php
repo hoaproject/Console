@@ -422,6 +422,7 @@ class          Processus
             $streamName,
             $this->_descriptors,
             $this->_pipes,
+            $this->getCwd(),
             $this->getEnvironment()
         );
 
