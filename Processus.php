@@ -384,7 +384,7 @@ class          Processus
 
             $this->_descriptors = array();
 
-            foreach($descriptors as $descriptor => $mode) {
+            foreach($descriptors as $descriptor => $nature) {
 
                 if(isset($this->_descriptors[$descriptor]))
                     throw new Exception(
@@ -392,7 +392,7 @@ class          Processus
                         'redefine it.',
                         0, $descriptor);
 
-                $this->_descriptors[$descriptor] = array('pipe', $mode);
+                $this->_descriptors[$descriptor] = $nature;
             }
         }
 
