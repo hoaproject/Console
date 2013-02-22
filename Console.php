@@ -60,6 +60,62 @@ namespace Hoa\Console {
 class Console {
 
     /**
+     * Pipe mode: FIFO.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_FIFO      = 0;
+
+    /**
+     * Pipe mode: character.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_CHARACTER = 1;
+
+    /**
+     * Pipe mode: directory.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_DIRECTORY = 2;
+
+    /**
+     * Pipe mode: block.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_BLOCK     = 3;
+
+    /**
+     * Pipe mode: regular.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_REGULAR   = 4;
+
+    /**
+     * Pipe mode: link.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_LINK      = 5;
+
+    /**
+     * Pipe mode: socket.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_SOCKET    = 6;
+
+    /**
+     * Pipe mode: whiteout.
+     *
+     * @var \Hoa\Console int
+     */
+    const IS_WHITEOUT  = 7;
+
+    /**
      * Advanced interaction is on.
      *
      * @var \Hoa\Console bool
@@ -72,6 +128,13 @@ class Console {
      * @var \Hoa\Console string
      */
     private static $_old      = null;
+
+    /**
+     * Mode.
+     *
+     * @var \Hoa\Console array
+     */
+    protected static $_mode   = array();
 
 
 
@@ -89,8 +152,7 @@ class Console {
         if(OS_WIN)
             return self::$_advanced = false;
 
-        if(   function_exists('posix_isatty')
-           && false === posix_isatty(0))
+        if(false === self::isDirect(STDIN))
             return self::$_advanced = false;
 
         self::$_old = \Hoa\Console\Processus::execute('stty -g');
@@ -113,6 +175,124 @@ class Console {
         \Hoa\Console\Processus::execute('stty ' . self::$_old);
 
         return;
+    }
+
+    /**
+     * Get mode of a certain pipe.
+     * Inspired by sys/stat.h.
+     *
+     * @access  public
+     * @param   resource  $pipe    Pipe.
+     * @return  int
+     */
+    public static function getMode ( $pipe = STDIN ) {
+
+        $_pipe = (int) $pipe;
+
+        if(isset(self::$_mode[$_pipe]))
+            return self::$_mode[$_pipe];
+
+        $stat = fstat($pipe);
+
+        switch($stat['mode'] & 0170000) {
+
+            // named pipe (fifo).
+            case 0010000:
+                $mode = self::IS_FIFO;
+              break;
+
+            // character special.
+            case 0020000:
+                $mode = self::IS_CHARACTER;
+              break;
+
+            // directory.
+            case 0040000:
+                $mode = self::IS_DIRECTORY;
+              break;
+
+            // block special.
+            case 0060000:
+                $mode = self::IS_BLOCK;
+              break;
+
+            // regular.
+            case 0100000:
+                $mode = self::IS_REGULAR;
+              break;
+
+            // symbolic link.
+            case 0120000:
+                $mode = self::IS_LINK;
+               break;
+
+            // socket.
+            case 0140000:
+                $mode = self::IS_SOCKET;
+              break;
+
+            // whiteout.
+            case 0160000:
+                $mode = self::IS_WHITEOUT;
+              break;
+
+            default:
+                $mode = -1;
+        }
+
+        return self::$_mode[$_pipe] = $mode;
+    }
+
+    /**
+     * Check whether a certain pipe is a character device (keyboard, screen
+     * etc.).
+     * For example:
+     *     $ php Mode.php
+     * In this case, self::isDirect(STDOUT) will return true.
+     *
+     * @access  public
+     * @param   resource  $pipe    Pipe.
+     * @return  bool
+     */
+    public static function isDirect ( $pipe ) {
+
+        return self::IS_CHARACTER === self::getMode($pipe);
+    }
+
+    /**
+     * Check whether a certain pipe is a pipe.
+     * For example:
+     *     $ php Mode.php | foobar
+     * In this case, self::isPipe(STDOUT) will return true.
+     *
+     * @access  public
+     * @param   resource  $pipe    Pipe.
+     * @return  bool
+     */
+    public static function isPipe ( $pipe ) {
+
+        return self::IS_FIFO === self::getMode($pipe);
+    }
+
+    /**
+     * Check whether a certain pipe is a redirection.
+     * For example:
+     *     $ php Mode.php < foobar
+     * In this case, self::isRedirection(STDIN) will return true.
+     *
+     * @access  public
+     * @param   resource  $pipe    Pipe.
+     * @return  bool
+     */
+    public static function isRedirection ( $pipe ) {
+
+        $mode = self::getMode($pipe);
+
+        return    self::IS_REGULAR   === $mode
+               || self::IS_DIRECTORY === $mode
+               || self::IS_LINK      === $mode
+               || self::IS_SOCKET    === $mode
+               || self::IS_BLOCK     === $mode;
     }
 }
 
