@@ -202,15 +202,31 @@ class Readline {
      * Read a line from STDIN.
      *
      * @access  public
+     * @param   string  $prefix    Prefix.
      * @return  string
      */
     public function readLine ( $prefix = null ) {
 
-        if(OS_WIN) {
+        if(feof(STDIN))
+            return false;
 
-            echo $prefix;
+        $direct = \Hoa\Console::isDirect(STDIN);
 
-            return fgets(STDIN);
+        if(false === $direct || OS_WIN) {
+
+            $out = fgets(STDIN);
+
+            if(false === $out)
+                return false;
+
+            $out = substr($out, 0, -1);
+
+            if(true === $direct)
+                echo $prefix;
+            else
+                echo $prefix, $out, "\n";
+
+            return $out;
         }
 
         $this->resetLine();
