@@ -155,8 +155,8 @@ class Console {
         if(false === self::isDirect(STDIN))
             return self::$_advanced = false;
 
-        self::$_old = \Hoa\Console\Processus::execute('stty -g');
-        \Hoa\Console\Processus::execute('stty -echo -icanon min 1 time 0');
+        self::$_old = Processus::execute('stty -g');
+        Processus::execute('stty -echo -icanon min 1 time 0');
 
         return self::$_advanced = true;
     }
@@ -172,7 +172,7 @@ class Console {
         if(null === self::$_old)
             return;
 
-        \Hoa\Console\Processus::execute('stty ' . self::$_old);
+        Processus::execute('stty ' . self::$_old);
 
         return;
     }
