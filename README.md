@@ -13,9 +13,6 @@ window, processus, readline etc.
 We propose a quick overview of some features: cursor, window, readline,
 processus and finally getOption.
 
-Note: some features need an “advanced interaction”, thus we should write
-`Hoa\Console::advancedInteraction();`.
-
 ### Cursor
 
 The `Hoa\Console\Cursor` class allows to manipulate the cursor. Here is a list
