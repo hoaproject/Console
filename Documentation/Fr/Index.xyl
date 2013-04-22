@@ -288,7 +288,7 @@ print_r(Hoa\Console\Cursor::getPosition());
  *         [y] => 7
  *     )
  */</code></pre>
-  <p>Enfin, il arrive très régulièrement que nous voulons déplacer le curseur
+  <p>Enfin, il arrive très régulièrement que nous voulions déplacer le curseur
   <strong>temporairement</strong> pour quelques opérations. Dans ce cas, il est
   inutile de récupérer la position actuelle, le déplacer, puis le
   repositionner ; nous pouvons profiter des méthodes <code>save</code> et
@@ -1071,7 +1071,7 @@ try {
         'main'
     );
 
-    // Prepare the dispatcheur.
+    // Prepare the dispatcher.
     $dispatcher = new Hoa\Dispatcher\Basic();
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
 
