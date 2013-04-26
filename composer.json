@@ -24,9 +24,10 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"  : "master",
-        "hoa/string": "master"
+        "hoa/core"  : "dev-master",
+        "hoa/string": "dev-master"
     },
+    "minimum-stability": "dev",
     "suggest": {
         "hoa/dispatcher": "To use the console kit.",
         "hoa/router"    : "To use the console kit.",
