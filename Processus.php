@@ -1105,6 +1105,8 @@ class          Processus
             $separator = ';';
             $path      = &$_SERVER['Path'];
         }
+        else
+            return null;
 
         foreach(explode($separator, $path) as $directory)
             if(true === file_exists($out = $directory . DS . $binary))
