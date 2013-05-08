@@ -1090,11 +1090,15 @@ class          Processus
      */
     public static function locate ( $binary ) {
 
-        // Unix.
         if(isset($_ENV['PATH'])) {
 
             $separator = ':';
             $path      = &$_ENV['PATH'];
+        }
+        elseif(isset($_SERVER['PATH'])) {
+
+            $separator = ':';
+            $path      = &$_SERVER['PATH'];
         }
         elseif(isset($_SERVER['Path'])) {
 
