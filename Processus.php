@@ -1120,6 +1120,7 @@ class          Processus
      * Returns only the STDOUT.
      *
      * @access  public
+     * @param   string  $commandLine    Command line to execute.
      * @return  string
      */
     public static function execute ( $commandLine ) {
