@@ -1224,6 +1224,9 @@ var_dump(Hoa\Console\Processus::execute('id -u -n'));
  * Could output:
  *     string(3) "hoa"
  */</code></pre>
+  <p>Par défaut, la commande sera échappée pour des raisons de sécurité. Si vous
+  avez confiance dans la commande, vous pouvez désactiver l'échappement en
+  passant <code>false</code> en second argument.</p>
   <p>Nous n'avons aucun contrôle sur les <em lang="en">pipes</em> et même si ça
   convient dans la plupart des cas, ce n'est pas suffisant quand nous souhaitons
   un minimum d'interaction avec le processus.</p>
