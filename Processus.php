@@ -1082,6 +1082,37 @@ class          Processus
     }
 
     /**
+     * Set process title.
+     *
+     * @access  public
+     * @param   string  $title    Title.
+     * @return  void
+     */
+    public static function setTitle ( $title ) {
+
+        if(PHP_VERSION_ID < 50500)
+            return;
+
+        cli_set_process_title($title);
+
+        return;
+    }
+
+    /**
+     * Get process title.
+     *
+     * @access  public
+     * @return  string
+     */
+    public static function getTitle ( ) {
+
+        if(PHP_VERSION_ID < 50500)
+            return null;
+
+        return cli_get_process_title();
+    }
+
+    /**
      * Found the place of a binary.
      *
      * @access  public

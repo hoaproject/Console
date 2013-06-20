@@ -171,7 +171,10 @@ while(true) {
   <strong>label</strong> correspond au nom associé au <strong>processus</strong>
   actuel. Nous trouvons les méthodes <code>setTitle</code>,
   <code>getTitle</code> et <code>getLabel</code>, il n'est pas prévu de modifier
-  le label. Ainsi :</p>
+  le label. Pour définir le titre du processus (ce que nous voyons avec la
+  commande <code>top</code> ou <code>ps</code> par exemple), il faudra se
+  référer à <code>Hoa\Console\Processus::setTitle</code> et à
+  <code>Hoa\Console\Processus::getTitle</code> pour l'obtenir. Ainsi :</p>
   <pre><code class="language-php">Hoa\Console\Window::setTitle('Foobar');
 var_dump(Hoa\Console\Window::getTitle());
 var_dump(Hoa\Console\Window::getLabel());
@@ -1621,6 +1624,33 @@ $processus->run();
   <a href="http://freebsd.org/cgi/man.cgi?query=signal"
      title="signal(3), FreeBSD Library Functions Manual">la page
      <code>signal</code></a>.</p>
+
+  <h3 id="Miscellaneous" for="main-toc">Miscellaneous</h3>
+
+  <p>Les méthodes statiques <code>getTitle</code> et <code>setTitle</code> sur
+  la classe <code>Hoa\Console\Processus</code> permettent respectivement
+  d'obtenir et de définir le titre du processus. Ainsi :</p>
+  <pre><code class="language-php">Hoa\Console\Processus::setTitle('hoa #1');</code></pre>
+  <p>Et dans un autre terminal :</p>
+  <pre data-line="2"><code class="language-shell">$ ps | grep hoa
+69578 ttys006    0:00.01 hoa #1
+70874 ttys008    0:00.00 grep hoa</code></pre>
+  <p>Ces méthodes sont très pratiques lorsque nous manipulons beaucoup de
+  processus et que nous voulons les identifier efficacement (par exemple avec
+  des outils comme <code>top</code> ou <code>ps</code>). Notons qu'elles ne sont
+  fonctionnelles que si vous avez PHP5.5 au minimum.</p>
+  <p>Une autre méthode statique intéressante est
+  <code>Hoa\Console\Processus::locate</code> qui permet de déterminer le chemin
+  vers un programme. Par exemple :</p>
+  <pre><code class="language-php">var_dump(Hoa\Console\Processus::locate('php'));
+
+/**
+ * Could output:
+ *     string(12) "/usr/bin/php"
+ */</code></pre>
+  <p>Dans le cas où le programme n'est pas trouvé, <code>null</code> sera
+  retournée. Cette méthode se base sur le <code>PATH</code> de votre
+  système.</p>
 
   <h3 id="Processus_interactifs_et_pseudo-terminaux" for="main-toc">Processus
   interactifs et pseudo-terminaux</h3>
