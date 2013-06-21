@@ -993,14 +993,13 @@ print_r($directory);</code></pre>
   <code>Hoa\Router\Cli::getURI</code>, qui va nous donner toutes les options et
   les entrées du programme courant, que nous pourrons alors
   <strong>fournir</strong> à notre analyseur. Ainsi :</p>
-  <pre data-line="8"><code class="language-php">from('Hoa')
+  <pre data-line="7"><code class="language-php">from('Hoa')
 -> import('Router.Cli')
 -> import('Console.Parser')
 -> import('Console.GetOption');
 
-$router = new Hoa\Router\Cli();
 $parser = new Hoa\Console\Parser();
-$parser->parse($router->getURI());
+$parser->parse(Hoa\Router\Cli::getURI());
 
 // …</code></pre>
   <p>Il est maintenant possible d'interpréter les options que nous donnons à
