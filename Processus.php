@@ -459,7 +459,17 @@ class          Processus
      */
     public function run ( ) {
 
-        $this->open();
+        if(false === $this->isOpened())
+            $this->open();
+        else {
+
+            $this->_close();
+            $this->_setStream($this->_open(
+                $this->getStreamName(),
+                $this->getStreamContext()
+            ));
+        }
+
         $this->_on->fire('start', new \Hoa\Core\Event\Bucket());
 
         $_read   = array();
