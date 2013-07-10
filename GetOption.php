@@ -186,8 +186,16 @@ class GetOption {
 
             if(false === in_array($name, $_names)) {
 
-                if(1 === strlen($name))
+                if(1 === strlen($name)) {
+
+                    $this->_pipette[] = array('__ambiguous', array(
+                        'solutions' => array(),
+                        'value'     => $value,
+                        'option'    => $name
+                    ));
+
                     continue;
+                }
 
                 $haystack    = implode(';', $_names);
                 $differences = (int) ceil(strlen($name) / 3);
