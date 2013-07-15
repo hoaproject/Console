@@ -208,7 +208,7 @@ class GetOption {
 
                 foreach($searched as $s) {
 
-                    $h = substr($haystack, $s['i'], $s['j'] - $s['i']);
+                    $h = substr($haystack, $s['i'], $s['l']);
 
                     if(   false !== strpos($h, ';')
                        || false !== in_array($h, array_keys($switches))
