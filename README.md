@@ -69,6 +69,8 @@ of some operations:
   * `getPosition`;
   * `scroll`;
   * `minimize`;
+  * `restore`;
+  * `raise`;
   * `setTitle`;
   * `getTitle`;
   * `copy`;
@@ -86,6 +88,8 @@ the window to 400px horizontally and 100px vertically:
 If we do not like our user, we are able to minimize its window:
 
     Hoa\Console\Window::minimize();
+    sleep(2);
+    Hoa\Console\Window::restore();
 
 We are also able to set or get the title of the window:
 
