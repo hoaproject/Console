@@ -159,9 +159,22 @@ while(true) {
   exemple : <samp>New size (45, 67)</samp>, et ce pour chaque redimensionnement.
   Cet événement est intéressant si nous voulons <strong>ré-adapter</strong>
   notre présentation.</p>
-  <p>Enfin, si vous décidez d'<strong>embêter</strong> votre utilisateur, vous
-  pouvez utiliser la méthode <code>minimize</code> qui va réduire la fenêtre.
-  Amusant mais totalement <strong>inutile</strong>.</p>
+  <p>Enfin, nous pouvons minimiser ou restaurer la fenêtre grâce aux méthodes
+  statiques <code>Hoa\Console\Window::minimize</code> et
+  <code>Hoa\Console\Window::restore</code>. Par ailleurs, nous pouvons placer la
+  fenêtre en arrière-plan (derrière toutes les autres fenêtres) grâce à la
+  méthode statique <code>Hoa\Console\Window::lower</code>, tout comme nous
+  pouvons la placer en avant-plan avec <code>Hoa\Console\Window::raise</code>.
+  Par exemple :</p>
+  <pre><code class="language-php">Hoa\Console\Window::minimize();
+sleep(2);
+Hoa\Console\Window::restore();
+sleep(2);
+Hoa\Console\Window::lower();
+sleep(2);
+Hoa\Console\Window::raise();
+
+echo 'Back!', "\n";</code></pre>
 
   <h3 id="Titre_et_label" for="main-toc">Titre et label</h3>
 
