@@ -333,6 +333,54 @@ class Window implements \Hoa\Core\Event\Source {
     }
 
     /**
+     * Restore the window (de-minimize).
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function restore ( ) {
+
+        if(OS_WIN)
+            return;
+
+        echo "\033[1t";
+
+        return;
+    }
+
+    /**
+     * Raise the window to the front of the stacking order.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function raise ( ) {
+
+        if(OS_WIN)
+            return;
+
+        echo "\033[5t";
+
+        return;
+    }
+
+    /**
+     * Lower the window to the bottom of the stacking order.
+     *
+     * @access  public
+     * @return  void
+     */
+    public static function lower ( ) {
+
+        if(OS_WIN)
+            return;
+
+        echo "\033[6t";
+
+        return;
+    }
+
+    /**
      * Set title.
      *
      * @access  public
