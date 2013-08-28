@@ -353,6 +353,13 @@ class          Processus
      */
     protected $_pipes       = null;
 
+    /**
+     * Seekability of pipes.
+     *
+     * @var \Hoa\Console\Processus array
+     */
+    protected $_seekable    = array();
+
 
 
     /**
@@ -576,6 +583,25 @@ class          Processus
     }
 
     /**
+     * Check if a pipe is seekable or not.
+     *
+     * @access  protected
+     * @param   int  $pipe    Pipe descriptor.
+     * @return  bool
+     */
+    protected function isPipeSeekable ( $pipe ) {
+
+        if(!isset($this->_seekable[$pipe])) {
+
+            $_pipe                  = $this->getPipe($pipe);
+            $data                   = stream_get_meta_data($_pipe);
+            $this->_seekable[$pipe] = $data['seekable'];
+        }
+
+        return $this->_seekable[$pipe];
+    }
+
+    /**
      * Test for end-of-file.
      *
      * @access  public
@@ -698,12 +724,20 @@ class          Processus
      * Read all, i.e. read as much as possible.
      *
      * @access  public
-     * @param   int  $pipe    Pipe descriptor.
+     * @param   int  $offset    Offset.
+     * @param   int  $pipe      Pipe descriptor.
      * @return  string
      */
-    public function readAll ( $pipe = 1 ) {
+    public function readAll ( $offset = -1, $pipe = 1 ) {
 
-        return stream_get_contents($this->getPipe($pipe));
+        $_pipe = $this->getPipe($pipe);
+
+        if(true === $this->isPipeSeekable($pipe))
+            $offset += ftell($_pipe);
+        else
+            $offset  = -1;
+
+        return stream_get_contents($_pipe, -1, $offset);
     }
 
     /**
