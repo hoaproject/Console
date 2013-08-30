@@ -178,9 +178,6 @@ class Readline {
         if(OS_WIN)
             return;
 
-        mb_internal_encoding('UTF-8');
-        mb_regex_encoding('UTF-8');
-
         $this->_mapping["\033[A"] = xcallable($this, '_bindArrowUp');
         $this->_mapping["\033[B"] = xcallable($this, '_bindArrowDown');
         $this->_mapping["\033[C"] = xcallable($this, '_bindArrowRight');
