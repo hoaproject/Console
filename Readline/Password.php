@@ -38,7 +38,7 @@ namespace {
 
 from('Hoa')
 
-/*
+/**
  * \Hoa\Console\Readline
  */
 -> import('Console.Readline.~');

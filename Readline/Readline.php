@@ -43,7 +43,7 @@ from('Hoa')
  */
 -> import('Console.~')
 
-/*
+/**
  * \Hoa\Console\Processus
  */
 -> import('Console.Processus')
