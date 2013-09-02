@@ -172,10 +172,10 @@ class Text {
 
         // Manage the horizontal right padding.
         $columnWidth     = array_map(
-                               create_function(
-                                   '$x',
-                                   'return $x + ' . (2 * $horizontalPadding) . ';'
-                               ),
+                               function ( $x ) use ( $horizontalPadding ) {
+
+                                   return $x + 2 * $horizontalPadding;
+                               },
                                $columnWidth
                            );
 
