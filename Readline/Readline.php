@@ -1207,6 +1207,11 @@ namespace {
 /**
  * Advanced interaction.
  */
-\Hoa\Console::advancedInteraction();
+Hoa\Console::advancedInteraction();
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Console\Readline\Readline');
 
 }

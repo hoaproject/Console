@@ -296,9 +296,18 @@ class Console {
     }
 }
 
+}
+
+namespace {
+
 /**
  * Restore interaction.
  */
-\Hoa\Core::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
+Hoa\Core::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Console\Console');
 
 }

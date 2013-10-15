@@ -60,3 +60,12 @@ interface Autocompleter {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\Console\Readline\Autocompleter\Autocompleter');
+
+}
