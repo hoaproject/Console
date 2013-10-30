@@ -110,6 +110,7 @@ class Pager {
      * @access  public
      * @param   string  $output    Output (from the output buffer).
      * @param   int     $mode      Mode (from the output buffer).
+     * @param   string  $type      Type. Please, see self::LESS or self::MORE.
      * @return  string
      */
     public static function pager ( $output, $mode, $type = null ) {
