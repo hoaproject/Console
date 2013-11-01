@@ -114,8 +114,8 @@ support is very weak.
 
 ### Readline
 
-The `Hoa\Console\Readline` class proposes an advanced readline which allows the
-following operations:
+The `Hoa\Console\Readline\Readline` class proposes an advanced readline which
+allows the following operations:
 
   * edition;
   * history;
@@ -136,7 +136,7 @@ It supports UTF-8. It is based on bindings, and here are some:
 
 Thus, to read one line:
 
-    $readline = new Hoa\Console\Readline();
+    $readline = new Hoa\Console\Readline\Readline();
     $line     = $readline->readLine('> '); // “> ” is the prefix of the line.
 
 The `Hoa\Console\Readline\Password` allows the same operations but without
@@ -146,9 +146,9 @@ printing on STDOUT.
     $line     = $password->readLine('password: ');
 
 We are able to add a mapping with the help of the
-`Hoa\Console\Readline::addMapping` method. We use `\e[…` for `\033[`, `\C-…` for
-`Ctrl-…` and a character for the rest. We can associate a character or a
-callable:
+`Hoa\Console\Readline\Readline::addMapping` method. We use `\e[…` for `\033[`,
+`\C-…` for `Ctrl-…` and a character for the rest. We can associate a character
+or a callable:
 
     $readline->addMapping('a', 'z'); // crazy, we replace “a” by “z”.
     $readline->addMapping('\C-R', function ( $readline ) {
@@ -158,7 +158,7 @@ callable:
 
 We are also able to manipulate the history, thanks to the `addHistory`,
 `clearHistory`, `getHistory`, `previousHistory` and `nextHistory` methods on the
-`Hoa\Console\Readline` class.
+`Hoa\Console\Readline\Readline` class.
 
 Finally, we have autocompleters that are enabled on `Tab`. If one solution is
 proposed, it will be inserted directly. If many solutions are proposed, we are

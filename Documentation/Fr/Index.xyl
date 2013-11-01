@@ -90,10 +90,7 @@
   <code>getPosition</code>. La taille se définie avec les unités
   <em>colonne</em> × <em>ligne</em> et la position se définie en pixels.
   Ainsi :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.Window');
-
-Hoa\Console\Window::setSize(80, 50);
+  <pre><code class="language-php">Hoa\Console\Window::setSize(80, 50);
 print_r(Hoa\Console\Window::getSize());
 print_r(Hoa\Console\Window::getPosition());
 
@@ -267,10 +264,7 @@ var_dump(Hoa\Console\Window::getLabel());
   </ul>
   <p>Ces directions peuvent être concaténées par des espaces, ou alors nous
   pouvons préciser le nombre de fois où une direction sera répétée.</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.Cursor');
-
-echo 'abcdef', "\n",
+  <pre><code class="language-php">echo 'abcdef', "\n",
      'ghijkl', "\n",
      'mnopqr', "\n",
      'stuvwx';
@@ -492,14 +486,14 @@ sleep(3);
   C'est pourquoi il existe la « lecture en ligne », ou
   <em lang="en">readline</em> en anglais, qui reste une lecture sur le flux
   <code>STDIN</code>, mais plus <strong>évoluée</strong>. La bibliothèque
-  <code>Hoa\Console\Readline</code> propose plusieurs fonctionnalités que nous
-  allons décrire.</p>
+  <code>Hoa\Console\Readline\Readline</code> propose plusieurs fonctionnalités
+  que nous allons décrire.</p>
 
   <h3 id="Usage_basique" for="main-toc">Usage basique</h3>
 
   <p>Pour <strong>lire une ligne</strong> (c'est à dire une entrée de
   l'utilisateur), nous allons instancier la classe
-  <code>Hoa\Console\Readline</code> et appeler dessus la méthode
+  <code>Hoa\Console\Readline\Readline</code> et appeler dessus la méthode
   <code>readLine</code>. Chaque appel de cette méthode va attendre que
   l'utilisateur <strong>saisisse</strong> une donnée puis appuye sur
   <kbd title="Enter">↵</kbd>. À ce moment là, la méthode retournera la saisie de
@@ -511,10 +505,7 @@ sleep(3);
   <p>Ainsi, nous allons écrire un programme qui va lire les entrées de
   l'utilisateur et faire un écho. Le programme terminera si l'utilisateur saisit
   <samp>quit</samp> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.Readline.~');
-
-$rl = new Hoa\Console\Readline();
+  <pre><code class="language-php">$rl = new Hoa\Console\Readline\Readline();
 
 do {
 
@@ -523,7 +514,7 @@ do {
 
 } while(false !== $line &amp;amp;&amp;amp; 'quit' !== $line);</code></pre>
   <p>Maintenant, détaillons les services que nous offre
-  <code>Hoa\Console\Readline</code>.</p>
+  <code>Hoa\Console\Readline\Readline</code>.</p>
   <p>Nous sommes capables de nous <strong>déplacer</strong> (comprendre,
   déplacer le curseur) dans la ligne à l'aide des touches <kbd>←</kbd> et
   <kbd>→</kbd>. Nous pouvons à tout moment <strong>effacer</strong> un caractère
@@ -551,10 +542,7 @@ do {
   permet d'avoir un lecteur de lignes avec exactement les mêmes services mais
   les caractères <strong>ne s'impriment pas</strong> à l'écran, très utile pour
   lire un <strong>mot de passe</strong> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.Readline.Password');
-
-$rl  = new Hoa\Console\Readline\Password();
+  <pre><code class="language-php">$rl  = new Hoa\Console\Readline\Password();
 $pwd = $rl->readLine('Password: ');
 
 echo 'Your password is: ', $pwd, "\n";</code></pre>
@@ -563,13 +551,14 @@ echo 'Your password is: ', $pwd, "\n";</code></pre>
 
   <p>Pour comprendre comment créer des raccourcis, il faut un tout petit peu
   comprendre le fonctionnement <strong>interne</strong> de
-  <code>Hoa\Console\Readline</code>, et il est très simple. À chaque fois que
-  nous appuyons sur une ou plusieurs touches, une <strong>chaîne</strong> de
-  caractères représentant cette <strong>combinaison</strong> est reçue par notre
-  lecteur. Il regarde si une action est associée à cette chaîne : si oui, il
-  l'exécute, si non, il en utilise une par défaut qui consiste à afficher la
-  chaîne telle quelle. Chaque action retourne un <strong>état</strong> pour le
-  lecteur (qui sont des constantes sur <code>Hoa\Console\Readline</code>) :</p>
+  <code>Hoa\Console\Readline\Readline</code>, et il est très simple. À chaque
+  fois que nous appuyons sur une ou plusieurs touches, une
+  <strong>chaîne</strong> de caractères représentant cette
+  <strong>combinaison</strong> est reçue par notre lecteur. Il regarde si une
+  action est associée à cette chaîne : si oui, il l'exécute, si non, il en
+  utilise une par défaut qui consiste à afficher la chaîne telle quelle. Chaque
+  action retourne un <strong>état</strong> pour le lecteur (qui sont des
+  constantes sur <code>Hoa\Console\Readline\Readline</code>) :</p>
   <ul>
     <li><code>STATE_CONTINUE</code>, pour continuer la lecture ;</li>
     <li><code>STATE_BREAK</code>, pour arrêter la lecture ;</li>
@@ -595,15 +584,15 @@ echo 'Your password is: ', $pwd, "\n";</code></pre>
   <p>Plus compliqué maintenant, nous pouvons utiliser un
   <em lang="en">callable</em> en second paramètre de
   <code>addMapping</code>. Ce <em lang="en">callable</em> va recevoir l'instance
-  de <code>Hoa\Console\Readline</code> en seul argument. Plusieurs méthodes sont
-  là pour aider à <strong>manipuler</strong> le lecteur (gestion de
-  l'historique, de la ligne etc.). Par exemple, à chaque fois que nous
+  de <code>Hoa\Console\Readline\Readline</code> en seul argument. Plusieurs
+  méthodes sont là pour aider à <strong>manipuler</strong> le lecteur (gestion
+  de l'historique, de la ligne etc.). Par exemple, à chaque fois que nous
   appuyerons sur <kbd>Ctrl</kbd> + <kbd>R</kbd>, nous inverserons la casse de la
   ligne :</p>
-  <pre><code class="language-php">$rl = new Hoa\Console\Readline();
+  <pre><code class="language-php">$rl = new Hoa\Console\Readline\Readline();
 
 // Add mapping.
-$rl->addMapping('\C-R', function ( Hoa\Console\Readline $self ) {
+$rl->addMapping('\C-R', function ( Hoa\Console\Readline\Readline $self ) {
 
     // Clear the line.
     Hoa\Console\Cursor::clear('↔');
@@ -648,11 +637,11 @@ var_dump($rl->readLine('> '));</code></pre>
   touche <kbd title="Tabulation">⇥</kbd> si un auto-compléteur a été défini à
   l'aide de la méthode <code>setAutocompleter</code>.</p>
   <p>Tous les auto-compléteurs doivent implémenter l'interface
-  <code>Hoa\Console\Readline\Autocompleter</code>. Quelqu'uns sont déjà présents
-  pour nous <strong>aider</strong> dans notre développement, comme
+  <code>Hoa\Console\Readline\Autocompleter\Autocompleter</code>. Quelqu'uns sont
+  déjà présents pour nous <strong>aider</strong> dans notre développement, comme
   <code>Hoa\Console\Readline\Autocompleter\Word</code> qui va auto-compléter la
   saisie à partir d'une <strong>liste de mots</strong>. Par exemple :</p>
-  <pre><code class="language-php">$rl = new Hoa\Console\Readline();
+  <pre><code class="language-php">$rl = new Hoa\Console\Readline\Readline();
 $rl->setAutocompleter(new Hoa\Console\Readline\Autocompleter\Word(array(
     'hoa',
     'console',
@@ -836,11 +825,7 @@ print_r($parser->getSwitches());
   <strong>préalablement</strong> effectuée). Ainsi nous décrivons deux options :
   <code>extract</code> qui est une option booléenne, et <code>directory</code>
   qui est une option valuée :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.Parser')
--> import('Console.GetOption');
-
-$parser = new Hoa\Console\Parser();
+  <pre><code class="language-php">$parser = new Hoa\Console\Parser();
 $parser->parse('-x --directory=value inputA inputB inputC');
 
 $options = new Hoa\Console\GetOption(
@@ -1006,12 +991,7 @@ print_r($directory);</code></pre>
   <code>Hoa\Router\Cli::getURI</code>, qui va nous donner toutes les options et
   les entrées du programme courant, que nous pourrons alors
   <strong>fournir</strong> à notre analyseur. Ainsi :</p>
-  <pre data-line="7"><code class="language-php">from('Hoa')
--> import('Router.Cli')
--> import('Console.Parser')
--> import('Console.GetOption');
-
-$parser = new Hoa\Console\Parser();
+  <pre data-line="2"><code class="language-php">$parser = new Hoa\Console\Parser();
 $parser->parse(Hoa\Router\Cli::getURI());
 
 // …</code></pre>
@@ -1041,9 +1021,9 @@ NULL</code></pre>
   ou classes et les appeler en fonction des options et entrées données à notre
   programme. Nous vous conseillons de regarder le code source de
   <code>hoa://Library/Core/Bin/Hoa.php</code> pour vous aider, ainsi que les
-  chapitres de <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> et <a
-  href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>. Nous proposons
-  un exemple rapide sans donner trop de détails sur les bibliothèques
+  chapitres de <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> et
+  <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>. Nous
+  proposons un exemple rapide sans donner trop de détails sur les bibliothèques
   précédement citées.</p>
   <p>L'idée est la suivante. Grâce à <code>Hoa\Router\Cli</code>, nous allons
   extraire des données de la forme suivante : <code>$ php script.php
@@ -1065,13 +1045,8 @@ NULL</code></pre>
   retour de notre programme sera donné par la valeur de retour de notre
   contrôleur et de notre action. En cas d'erreur, nous l'afficherons et nous
   forcerons un code de retour supérieur à zéro. Ainsi :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Router.Cli')
--> import('Dispatcher.Basic')
--> import('Console.Dispatcher.Kit');
-
-// Where is our Application/ directory?
-Hoa\Core::getInstance()->initialize(array(
+  <pre><code class="language-php">// Where is our Application/ directory?
+Hoa\Core\Core::getInstance()->initialize(array(
     'root.application' => '(:cwd:)/Application'
 ));
 
@@ -1230,10 +1205,7 @@ directory: Array
   <strong>rapide</strong> d'exécuter un processus et d'obtenir le résultat de
   <code>STDOUT</code>. C'est le cas le plus commun. Ainsi, nous allons utiliser
   la méthode statique <code>execute</code> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.Processus');
-
-var_dump(Hoa\Console\Processus::execute('id -u -n'));
+  <pre><code class="language-php">var_dump(Hoa\Console\Processus::execute('id -u -n'));
 
 /**
  * Could output:
@@ -1470,22 +1442,19 @@ $processus->run();
   <em lang="en">pipes</em>, c'est à dire si c'est une utilisation
   <strong>directe</strong>, un <strong><em lang="en">pipe</em></strong> ou une
   <strong>redirection</strong>. Nous allons nous aider de la classe
-  <code>Hoa\Console</code> et de ses méthodes statiques <code>isDirect</code>,
-  <code>isPipe</code> et <code>isRedirection</code> pour obtenir ces
-  informations.</p>
+  <code>Hoa\Console\Console</code> et de ses méthodes statiques
+  <code>isDirect</code>, <code>isPipe</code> et <code>isRedirection</code> pour
+  obtenir ces informations.</p>
   <p>Prenons un exemple pour comprendre plus rapidement. Écrivons le fichier
   <code>Type.php</code> qui va étudier le type de <code>STDOUT</code> :</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.~');
-
-echo 'is direct:      ';
-var_dump(Hoa\Console::isDirect(STDOUT));
+  <pre><code class="language-php">echo 'is direct:      ';
+var_dump(Hoa\Console\Console::isDirect(STDOUT));
 
 echo 'is pipe:        ';
-var_dump(Hoa\Console::isPipe(STDOUT));
+var_dump(Hoa\Console\Console::isPipe(STDOUT));
 
 echo 'is redirection: ';
-var_dump(Hoa\Console::isRedirection(STDOUT));</code></pre>
+var_dump(Hoa\Console\Console::isRedirection(STDOUT));</code></pre>
   <p>Et maintenant, exécutons ce fichier pour voir le résultat :</p>
   <pre><code class="language-shell">$ php Type.php
 is direct:      bool(true)
@@ -1514,13 +1483,13 @@ is redirection: bool(true)</code></pre>
   n'importe quelle autre ressource.</p>
   <p>Connaître le type des <em lang="en">pipes</em> peut permettre des
   comportements différents selon le <strong>contexte</strong>. Par exemple,
-  <code>Hoa\Console\Readline</code> lit sur <code>STDIN</code>. Si son type est
-  un <em lang="en">pipe</em> ou une redirection, le mode d'édition de ligne
-  avancé sera désactivé et il retourne <code>false</code> quand il n'a plus rien
-  à lire. Autre exemple, la verbosité des commandes du script <code>hoa</code>
-  utilise le type de <code>STDOUT</code> comme valeur par défaut : direct pour
-  être verbeux, sinon non-verbeux. Essayez les exemples suivants pour voir la
-  différence :</p>
+  <code>Hoa\Console\Readline\Readline</code> lit sur <code>STDIN</code>. Si son
+  type est un <em lang="en">pipe</em> ou une redirection, le mode d'édition de
+  ligne avancé sera désactivé et il retourne <code>false</code> quand il n'a
+  plus rien à lire. Autre exemple, la verbosité des commandes du script
+  <code>hoa</code> utilise le type de <code>STDOUT</code> comme valeur par
+  défaut : direct pour être verbeux, sinon non-verbeux. Essayez les exemples
+  suivants pour voir la différence :</p>
   <pre><code class="language-shell">$ hoa --no-verbose
 $ hoa | xargs -I@ echo @</code></pre>
   <p>Les exemples ne manquent pas mais attention à utiliser cette fonctionnalité
