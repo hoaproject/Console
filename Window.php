@@ -61,8 +61,6 @@ namespace Hoa\Console {
  * if the window has been resized. Please, see the constructor documentation to
  * get more informations.
  *
- * Please, see C0 and C1 control codes.
- *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
@@ -280,6 +278,7 @@ class Window implements \Hoa\Core\Event\Source {
         else
             $handle = explode(' ', $directions, 1);
 
+        $tput  = \Hoa\Console::getTput();
         $count = array('up' => 0, 'down' => 0);
 
         foreach($handle as $direction)
@@ -298,19 +297,19 @@ class Window implements \Hoa\Core\Event\Source {
                   break;
             }
 
-        if(0 < $count['up']) {
+        if(0 < $count['up'])
+            echo str_repeat(
+                '%p1%d',
+                $count['up'] * $repeat,
+                $tput->get('parm_index')
+            );
 
-            // SU.
-            $up = $count['up'] * $repeat;
-            echo "\033[" . $up . "S";
-        }
-
-        if(0 < $count['down']) {
-
-            // SD.
-            $down = $count['down'] * $repeat;
-            echo "\033[" . $down . "T";
-        }
+        if(0 < $count['down'])
+            echo str_replace(
+                '%p1%d',
+                $count['down'] * $repeat,
+                $tput->get('parm_rindex')
+            );
 
         return;
     }
