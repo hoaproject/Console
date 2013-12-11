@@ -41,7 +41,12 @@ from('Hoa')
 /**
  * \Hoa\Console\Processus
  */
--> import('Console.Processus');
+-> import('Console.Processus')
+
+/**
+ * \Hoa\Console\Tput
+ */
+-> import('Console.Tput');
 
 }
 
@@ -135,6 +140,13 @@ class Console {
      * @var \Hoa\Console array
      */
     protected static $_mode   = array();
+
+    /**
+     * Tput.
+     *
+     * @var \Hoa\Console\Tput object
+     */
+    protected static $_tput   = null;
 
 
 
@@ -293,6 +305,14 @@ class Console {
                || self::IS_LINK      === $mode
                || self::IS_SOCKET    === $mode
                || self::IS_BLOCK     === $mode;
+    }
+
+    public static function getTput ( ) {
+
+        if(null === static::$_tput)
+            static::$_tput = new Tput();
+
+        return static::$_tput;
     }
 }
 
