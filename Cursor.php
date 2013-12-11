@@ -51,7 +51,6 @@ namespace Hoa\Console {
  * Class \Hoa\Console\Cursor.
  *
  * Allow to manipulate the cursor.
- * Please, see C0 and C1 control codes.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
@@ -80,9 +79,6 @@ class Cursor {
      */
     public static function move ( $steps, $repeat = 1 ) {
 
-        if(OS_WIN)
-            return;
-
         if(1 > $repeat)
             return;
         elseif(1 === $repeat)
@@ -90,14 +86,19 @@ class Cursor {
         else
             $handle = explode(' ', $steps, 1);
 
+        $tput = \Hoa\Console::getTput();
+
         foreach($handle as $step)
             switch($step) {
 
-                // CUU.
                 case 'u':
                 case 'up':
                 case '↑':
-                    echo "\033[" . $repeat . 'A';
+                    echo str_replace(
+                        '%p1%d',
+                        $repeat,
+                        $tput->get('parm_up_cursor')
+                    );
                   break;
 
                 case 'U':
@@ -105,11 +106,14 @@ class Cursor {
                     static::moveTo(null, 1);
                   break;
 
-                // CUF.
                 case 'r':
                 case 'right':
                 case '→':
-                    echo "\033[" . $repeat . 'C';
+                    echo str_replace(
+                        '%p1%d',
+                        $repeat,
+                        $tput->get('parm_right_cursor')
+                    );
                   break;
 
                 case 'R':
@@ -117,11 +121,14 @@ class Cursor {
                     static::moveTo(9999);
                   break;
 
-                // CUD.
                 case 'd':
                 case 'down':
                 case '↓':
-                    echo "\033[" . $repeat . 'B';
+                    echo str_replace(
+                        '%p1%d',
+                        $repeat,
+                        $tput->get('parm_down_cursor')
+                    );
                   break;
 
                 case 'D':
@@ -129,11 +136,14 @@ class Cursor {
                     static::moveTo(null, 9999);
                   break;
 
-                // CUB.
                 case 'l':
                 case 'left':
                 case '←':
-                    echo "\033[" . $repeat . 'D';
+                    echo str_replace(
+                        '%p1%d',
+                        $repeat,
+                        $tput->get('parm_left_cursor')
+                    );
                   break;
 
                 case 'L':
@@ -156,9 +166,6 @@ class Cursor {
      */
     public static function moveTo ( $x = null, $y = null ) {
 
-        if(OS_WIN)
-            return;
-
         if(null === $x || null === $y) {
 
             $position = static::getPosition();
@@ -170,8 +177,11 @@ class Cursor {
                 $y = $position['y'];
         }
 
-        // CUP.
-        echo "\033[" . $y . ";" . $x . "H";
+        echo str_replace(
+            array('%i%p1%d', '%p2%d'),
+            array($y, $x),
+            \Hoa\Console::getTput()->get('cursor_address')
+        );
 
         return;
     }
@@ -184,13 +194,18 @@ class Cursor {
      */
     public static function getPosition ( ) {
 
-        if(OS_WIN)
-            return;
+        $tput  = \Hoa\Console::getTput();
+        $user7 = $tput->get('user7');
 
-        // DSR.
-        echo "\033[6n";
+        if(null === $user7)
+            return array(
+                'x' => 0,
+                'y' => 0
+            );
 
-        // Read \033[y;xR.
+        echo $user7;
+
+        // Read $tput->get('user6').
         fread(STDIN, 2); // skip \033 and [.
 
         $x      = null;
@@ -230,11 +245,7 @@ class Cursor {
      */
     public static function save ( ) {
 
-        if(OS_WIN)
-            return;
-
-        // SCP.
-        echo "\033[s";
+        echo \Hoa\Console::getTput()->get('save_cursor');
 
         return;
     }
@@ -247,11 +258,7 @@ class Cursor {
      */
     public static function restore ( ) {
 
-        if(OS_WIN)
-            return;
-
-        // RCP.
-        echo "\033[u";
+        echo \Hoa\Console::getTput()->get('restore_cursor');
 
         return;
     }
@@ -273,52 +280,45 @@ class Cursor {
      */
     public static function clear ( $parts = 'all' ) {
 
-        if(OS_WIN)
-            return;
+        $tput = \Hoa\Console::getTput();
 
         foreach(explode(' ', $parts) as $part)
             switch($part) {
 
-                // ED.
                 case 'a':
                 case 'all':
                 case '↕':
-                    echo "\033[2J";
+                    echo $tput->get('clear_screen');
                     static::moveTo(1, 1);
                   break;
 
-                // ED.
                 case 'u':
                 case 'up':
                 case '↑':
                     echo "\033[1J";
                   break;
 
-                // EL.
                 case 'r':
                 case 'right':
                 case '→':
-                    echo "\033[0K";
+                    echo $tput->get('clr_eol');
                   break;
 
-                // ED.
                 case 'd':
                 case 'down':
                 case '↓':
-                    echo "\033[0J";
+                    echo $tput->get('clr_eos');
                   break;
 
-                // EL.
                 case 'l':
                 case 'left':
                 case '←':
-                    echo "\033[1K";
+                    echo $tput->get('clr_bol');
                   break;
 
-                // EL.
                 case 'line':
                 case '↔':
-                    echo "\r\033[K";
+                    echo "\r" . $tput->get('clr_eol');
                   break;
             }
 
@@ -333,11 +333,7 @@ class Cursor {
      */
     public static function hide ( ) {
 
-        if(OS_WIN)
-            return;
-
-        // DECTCEM.
-        echo "\033[?25l";
+        echo \Hoa\Console::getTput()->get('cursor_invisible');
 
         return;
     }
@@ -350,11 +346,7 @@ class Cursor {
      */
     public static function show ( ) {
 
-        if(OS_WIN)
-            return;
-
-        // DECTCEM.
-        echo "\033[?25h";
+        echo \Hoa\Console::getTput()->get('cursor_visible');
 
         return;
     }
@@ -392,9 +384,6 @@ class Cursor {
      * @return  void
      */
     public static function colorize ( $attributes ) {
-
-        if(OS_WIN)
-            return;
 
         static $_rgbTo256 = null;
 
@@ -444,6 +433,11 @@ class Cursor {
                 '949494', '9e9e9e', 'a8a8a8', 'b2b2b2', 'bcbcbc', 'c6c6c6',
                 'd0d0d0', 'dadada', 'e4e4e4', 'eeeeee'
             );
+
+        $tput = \Hoa\Console::getTput();
+
+        if(1 >= $tput->count('max_colors'))
+            return;
 
         $handle = array();
 
@@ -562,7 +556,8 @@ class Cursor {
                         default:
                             $_keyword = false;
 
-                            if('#' === $m[2][0]) {
+                            if(   256 <=  $tput->count('max_colors')
+                               && '#' === $m[2][0]) {
 
                                 $rgb      = hexdec(substr($m[2], 1));
                                 $r        = ($rgb >> 16) & 255;
@@ -617,16 +612,32 @@ class Cursor {
      */
     public static function changeColor ( $fromCode, $toColor ) {
 
-        if(OS_WIN)
+        $tput = \Hoa\Console::getTput();
+
+        if(true !== $tput->has('can_change'))
             return;
 
         $r = ($toColor >> 16) & 255;
         $g = ($toColor >>  8) & 255;
         $b =  $toColor        & 255;
 
-        echo "\033]4;" . $fromCode . ";#" .
-             sprintf('%02x%02x%02x', $r, $g, $b) .
-             "\033\\";
+        echo str_replace(
+            array(
+                '%p1%d',
+                'rgb:',
+                '%p2%{255}%*%{1000}%/%2.2X/',
+                '%p3%{255}%*%{1000}%/%2.2X/',
+                '%p4%{255}%*%{1000}%/%2.2X'
+            ),
+            array(
+                $fromCode,
+                '',
+                sprintf('%02x', $r),
+                sprintf('%02x', $g),
+                sprintf('%02x', $b)
+            ),
+            $tput->get('initialize_color')
+        );
 
         return;
     }
@@ -672,7 +683,7 @@ class Cursor {
         if(false === $blink)
             ++$_style;
 
-        // DECSCUSR.
+        // Not sure what tput entry we can use here…
         echo "\033[" . $_style . " q";
 
         return;
@@ -686,7 +697,7 @@ class Cursor {
      */
     public static function bip ( ) {
 
-        echo "\007";
+        echo \Hoa\Console::getTput()->get('bell');
 
         return;
     }
