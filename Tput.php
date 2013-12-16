@@ -576,13 +576,6 @@ class Tput {
     );
 
     /**
-     * Current stream.
-     *
-     * @var \Hoa\Stream\IStream\In object
-     */
-    protected $_stream       = null;
-
-    /**
      * Computed informations.
      *
      * @var \Hoa\Console\Tput array
