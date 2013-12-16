@@ -34,6 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+namespace {
+
+from('Hoa')
+
+/**
+ * \Hoa\Console\Exception
+ */
+-> import('Console.Exception');
+
+}
+
 namespace Hoa\Console {
 
 /**
@@ -607,8 +618,13 @@ class Tput {
      * @access  protected
      * @param   string  $terminfo    Terminfo file.
      * @return  array
+     * @throw   \Hoa\Console\Exception
      */
     protected function parse ( $terminfo ) {
+
+        if(!file_exists($terminfo))
+            throw new Exception(
+                'Terminfo file %s does not exist.', 0, $terminfo);
 
         $data    = file_get_contents($terminfo);
         $length  = strlen($data);
