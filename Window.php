@@ -298,7 +298,7 @@ class Window implements \Hoa\Core\Event\Source {
             }
 
         if(0 < $count['up'])
-            echo str_repeat(
+            echo str_replace(
                 '%p1%d',
                 $count['up'] * $repeat,
                 $tput->get('parm_index')
