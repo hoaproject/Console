@@ -28,12 +28,8 @@
         "hoa/string": "dev-master"
     },
     "minimum-stability": "dev",
-    "target-dir": "Hoa/Console",
-    "autoload": {
-        "psr-0": {
-            "Hoa\\Console": "."
-        }
-    },
+    "target-dir"       : "Hoa/Console",
+    "autoload"         : { "psr-0": { "Hoa\\Console": "." } },
     "suggest": {
         "hoa/dispatcher": "To use the console kit.",
         "hoa/router"    : "To use the console kit.",
