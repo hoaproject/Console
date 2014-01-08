@@ -810,6 +810,7 @@ class Tput {
 
         $paths[] = '/usr/share/terminfo';
         $paths[] = '/usr/share/lib/terminfo';
+        $paths[] = '/lib/terminfo';
         $paths[] = '/usr/lib/terminfo';
         $paths[] = '/usr/local/share/terminfo';
         $paths[] = '/usr/local/share/lib/terminfo';
