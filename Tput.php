@@ -824,7 +824,7 @@ class Tput {
 
         foreach($paths as $path)
             if(   file_exists($_ = $path . DS . $fileHexa)
-               || file_exists($_ = $path . DS . $fileAlpha) {
+               || file_exists($_ = $path . DS . $fileAlpha)) {
 
                 $pathname = $_;
                 break;
