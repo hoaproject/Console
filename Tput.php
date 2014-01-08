@@ -817,12 +817,14 @@ class Tput {
         $paths[] = '/usr/local/ncurses/lib/terminfo';
         $paths[] = 'hoa://Library/Console/Terminfo';
 
-        $term     = static::getTerm();
-        $file     = dechex(ord($term[0])) . DS . $term;
-        $pathname = null;
+        $term      = static::getTerm();
+        $fileHexa  = dechex(ord($term[0])) . DS . $term;
+        $fileAlpha = $term[0] . DS . $term;
+        $pathname  = null;
 
         foreach($paths as $path)
-            if(file_exists($_ = $path . DS . $file)) {
+            if(   file_exists($_ = $path . DS . $fileHexa)
+               || file_exists($_ = $path . DS . $fileAlpha) {
 
                 $pathname = $_;
                 break;
