@@ -178,10 +178,19 @@ class Window implements \Hoa\Core\Event\Source {
                     break 2;
 
                 default:
+                    if(false === ctype_digit($char))
+                        break 2;
+
                     $handle .= $char;
             }
 
         } while(true);
+
+        if(null === $x || null === $y)
+            return array(
+                'x' => 0,
+                'y' => 0
+            );
 
         return array(
             'x' => (int) $x,
