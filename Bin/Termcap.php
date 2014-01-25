@@ -148,7 +148,7 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
      */
     public function usage ( ) {
 
-        echo 'Usage   : console:terminfo', "\n",
+        echo 'Usage   : console:termcap', "\n",
              'Options :', "\n",
              $this->makeUsageOptionsList(array(
                  't'    => 'Get terminal name.',
@@ -162,8 +162,8 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
                  'help' => 'This help.'
              )), "\n",
              'Examples:', "\n",
-             '    $ hoa console:terminfo --count max_colors', "\n",
-             '    $ TERM=vt200 hoa console:terminfo --has back_color_erase', "\n";
+             '    $ hoa console:termcap --count max_colors', "\n",
+             '    $ TERM=vt200 hoa console:termcap --has back_color_erase', "\n";
 
         return;
     }
