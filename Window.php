@@ -122,7 +122,6 @@ class Window implements \Hoa\Core\Event\Source {
         if(OS_WIN)
             return;
 
-        // DECSLPP.
         echo "\033[8;" . $y . ";" . $x . "t";
 
         return;
@@ -151,6 +150,18 @@ class Window implements \Hoa\Core\Event\Source {
             return array(
                 'x' => $x,
                 'y' => $y
+            );
+        }
+
+        $tput = Processus::execute('echo "co\nli" | tput -S', false);
+
+        if(!empty($tput)) {
+
+            list($x, $y) = explode("\n", $tput);
+
+            return array(
+                'x' => intval($x),
+                'y' => intval($y)
             );
         }
 
