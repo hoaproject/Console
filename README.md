@@ -3,7 +3,7 @@
 Hoa is a **modular**, **extensible** and **structured** set of PHP libraries.
 Moreover, Hoa aims at being a bridge between industrial and research worlds.
 
-# Hoa\Console
+# Hoa\Console ![status](http://central.hoa-project.net/Console)
 
 This library allows to interact easily with a terminal: getoption, cursor,
 window, processus, readline etc.
