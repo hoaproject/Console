@@ -58,6 +58,46 @@ Another example with color:
 Please, read the API documentation for more informations, and note that Windows
 support is very weak.
 
+### Mouse
+
+The `Hoa\Console\Mouse` class allows to listen the mouse actions and provides
+the following listeners: `mouseup`, `mousedown`, `wheelup` and `wheeldown`.
+Example:
+
+    $mouse = Hoa\Console\Mouse::getInstance();
+    $mouse->on('mousedown', function ( $bucket ) {
+
+        print_r($bucket->getData());
+    });
+
+    $mouse::track();
+
+And then, when we left-click, we will see:
+
+    Array
+    (
+        [x] => 69
+        [y] => 30
+        [button] => left
+        [shift] =>
+        [meta] =>
+        [ctrl] =>
+    )
+
+When we left-click while hiting the shift key, we will see:
+
+    Array
+    (
+        [x] => 71
+        [y] => 32
+        [button] => left
+        [shift] => 1
+        [meta] =>
+        [ctrl] =>
+    )
+
+This is an experimental API.
+
 ### Window
 
 The `Hoa\Console\Window` class allows to manipulate the window. Here is a list
