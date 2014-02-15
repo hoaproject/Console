@@ -78,7 +78,7 @@ class Mouse implements \Hoa\Core\Event\Listenable {
      *
      * @var \Hoa\Core\Event\Listener object
      */
-    protected $_on             = null;
+    protected $_on              = null;
 
 
 
