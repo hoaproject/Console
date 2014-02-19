@@ -303,6 +303,17 @@ Thanks to `Hoa\Router` and `Hoa\Dispatcher` (with its dedicated kit
 all `Bin/` directories in different libraries (for example
 `Hoa\Core\Bin\Resolve`) and `Hoa/Core/Bin/Hoa.php` to learn more.
 
+## Awecode
+
+The following awecodes show this library in action:
+
+  * [`Hoa\Console\Readline`](http://hoa-project.net/Awecode/Console-readline.html):
+    *why and how to use `Hoa\Console\Readline`? Simple examples will help us to
+    use default shortcuts and we will even see the auto-completion*,
+  * [`Hoa\Websocket`](http://hoa-project.net/Awecode/Websocket.html):
+    *why and how to use `Hoa\Websocket\Server` and `Hoa\Websocket\Client`? A
+    simple example will illustrate the WebSocket protocol*.
+
 ## Documentation
 
 Different documentations can be found on the website:
