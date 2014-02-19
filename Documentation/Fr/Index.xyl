@@ -8,7 +8,7 @@
   <code>Hoa\Console</code> permet d'écrire des <strong>outils</strong> adaptés à
   ce type d'environnement.</p>
 
-  <h2 id="Table_des_matieres">Table des matières</h2>
+  <h2 id="Table_of_contents">Table des matières</h2>
 
   <tableofcontents id="main-toc" />
 
@@ -74,7 +74,7 @@
   les processus etc., <code>Hoa\Console</code> est parfaitement
   <strong>compatible</strong> et fonctionnel.</p>
 
-  <h2 id="Fenetre" for="main-toc">Fenêtre</h2>
+  <h2 id="Window" for="main-toc">Fenêtre</h2>
 
   <p>La fenêtre d'un terminal doit être vue comme un <strong>canevas</strong> de
   <strong>colonnes</strong> et de <strong>lignes</strong>. La classe
@@ -82,7 +82,7 @@
   <strong>fenêtre</strong> du terminal et son <strong>contenu</strong> à travers
   des méthodes statiques.</p>
 
-  <h3 id="Taille_et_position" for="main-toc">Taille et position</h3>
+  <h3 id="Size_and_position" for="main-toc">Taille et position</h3>
 
   <p>Les premières opérations élémentaires concernent la <strong>taille</strong>
   et la <strong>position</strong> de la fenêtre, grâce aux méthode
@@ -173,7 +173,7 @@ Hoa\Console\Window::raise();
 
 echo 'Back!', "\n";</code></pre>
 
-  <h3 id="Titre_et_label" for="main-toc">Titre et label</h3>
+  <h3 id="Title_and_label" for="main-toc">Titre et label</h3>
 
   <p>Le <strong>titre</strong> d'une fenêtre correspond au texte affiché dans sa
   <strong>barre</strong> supérieure, dans laquelle sont souvent placés les
@@ -197,7 +197,7 @@ var_dump(Hoa\Console\Window::getLabel());
   <p>Encore une fois, le titre et le label ne sont pas stockés en mémoire, ils
   sont calculés à chaque appel de méthode.</p>
 
-  <h3 id="Interagir_avec_le_contenu" for="main-toc">Interagir avec le
+  <h3 id="Interact_with_the_content" for="main-toc">Interagir avec le
   contenu</h3>
 
   <p><code>Hoa\Console\Window</code> permet aussi de contrôler le
@@ -225,14 +225,14 @@ var_dump(Hoa\Console\Window::getLabel());
   <p>Puis si l'utilisateur colle ce qui est dans son presse-papier, il verra
   <samp>Foobar</samp> s'afficher.</p>
 
-  <h2 id="Curseur" for="main-toc">Curseur</h2>
+  <h2 id="Cursor" for="main-toc">Curseur</h2>
 
   <p>À l'intérieur d'une fenêtre, nous avons un curseur qui peut être vu comme
   la <strong>pointe</strong> d'un stylo. La classe
   <code>Hoa\Console\Cursor</code> permet de manipuler le
   <strong>curseur</strong> du terminal à travers des méthodes statiques.</p>
 
-  <h3 id="Deplacement" for="main-toc">Déplacement</h3>
+  <h3 id="Moving" for="main-toc">Déplacement</h3>
 
   <p>Nous allons commencer par <strong>déplacer</strong> le curseur. Il se
   déplace partout dans le <em lang="en">viewport</em>, c'est à dire le contenu
@@ -341,7 +341,7 @@ echo '!';</code></pre>
   chaque fois qu'un caractère est écrit, le curseur se
   <strong>déplace</strong>.</p>
 
-  <h3 id="Affichage" for="main-toc">Affichage</h3>
+  <h3 id="Content" for="main-toc">Affichage</h3>
 
   <p>Maintenant que le déplacement est acquis, nous allons voir comment
   <strong>nettoyer</strong> des lignes et/ou des colonnes. Pour cela, nous nous
@@ -469,7 +469,7 @@ sleep(3);
   d'<strong>interactions</strong> différents, comme le pointeur de la
   souris.</p>
 
-  <h3 id="Son" for="main-toc">Son</h3>
+  <h3 id="Sound" for="main-toc">Son</h3>
 
   <p>Le curseur est aussi capable d'émettre un petit « bip », souvent pour
   <strong>attirer</strong> l'attention de l'utilisateur. Nous allons utiliser la
@@ -477,7 +477,7 @@ sleep(3);
   <pre><code class="language-php">Hoa\Console\Cursor::bip();</code></pre>
   <p>Il n'y a qu'une seule <strong>tonalité</strong> disponible.</p>
 
-  <h2 id="Lecture_en_ligne" for="main-toc">Lecture en ligne</h2>
+  <h2 id="Readline" for="main-toc">Lecture en ligne</h2>
 
   <p>Une manière d'<strong>interagir</strong> avec les utilisateurs est de lire
   le flux <code>STDIN</code>, à savoir le flux d'entrée. Cette
@@ -489,7 +489,7 @@ sleep(3);
   <code>Hoa\Console\Readline\Readline</code> propose plusieurs fonctionnalités
   que nous allons décrire.</p>
 
-  <h3 id="Usage_basique" for="main-toc">Usage basique</h3>
+  <h3 id="Basic_usage" for="main-toc">Usage basique</h3>
 
   <p>Pour <strong>lire une ligne</strong> (c'est à dire une entrée de
   l'utilisateur), nous allons instancier la classe
@@ -547,7 +547,7 @@ $pwd = $rl->readLine('Password: ');
 
 echo 'Your password is: ', $pwd, "\n";</code></pre>
 
-  <h3 id="Raccourcis" for="main-toc">Raccourcis</h3>
+  <h3 id="Shortcuts" for="main-toc">Raccourcis</h3>
 
   <p>Pour comprendre comment créer des raccourcis, il faut un tout petit peu
   comprendre le fonctionnement <strong>interne</strong> de
@@ -669,7 +669,7 @@ var_dump($rl->readLine('> '));</code></pre>
   <strong>sélectionner</strong> un mot. Le comportement est assez
   <strong>naturel</strong>.</p>
 
-  <h2 id="Lecture_d-options" for="main-toc">Lecture d'options</h2>
+  <h2 id="Reading_options" for="main-toc">Lecture d'options</h2>
 
   <p>Une grande force des programmes en ligne de commande est leur
   <strong>flexibilité</strong>.  Ils sont <strong>dédiés</strong> à une seule
@@ -680,7 +680,7 @@ var_dump($rl->readLine('> '));</code></pre>
   <code>Hoa\Console\GetOption</code> fonctionnent en <strong>duo</strong> afin
   de répondre à cette problématique.</p>
 
-  <h3 id="Analyser_les_options" for="main-toc">Analyser les options</h3>
+  <h3 id="Analyzing_options" for="main-toc">Analyser les options</h3>
 
   <p>Nous allons commencer par utiliser <code>Hoa\Console\Parser</code> qui
   permet d'<strong>analyser</strong> les options données à un programme. Peu
@@ -798,8 +798,8 @@ print_r($parser->getSwitches());
   <code>Hoa\Console\Parser::parseSpecialValue</code> comme nous allons le voir
   très prochainement.</p>
 
-  <h3 id="Lire_les_options_et_les_entrees" for="main-toc">Lire les options et
-  les entrées</h3>
+  <h3 id="Read_options_and_inputs" for="main-toc">Lire les options et les
+  entrées</h3>
 
   <p>Nous savons analyser les options mais ce n'est pas suffisant pour les lire
   correctement. Il faut leur donner une petite <strong>sémantique</strong> :
@@ -904,7 +904,7 @@ var_dump($inputA, $inputB, $inputC);
   <code>Hoa\Console\Parser::getInputs</code> qui retournera toutes les
   entrées.</p>
 
-  <h3 id="Options_speciales_ou_ambigues" for="main-toc">Options spéciales ou
+  <h3 id="Special_or_ambiguous_options" for="main-toc">Options spéciales ou
   ambiguës</h3>
 
   <p>Revenons sur la méthode <code>Hoa\Console\Parser::parseSpecialValue</code>.
@@ -982,7 +982,7 @@ print_r($directory);</code></pre>
   y a une ambiguïté et de lui demander son avis. Il peut parfois être
   <strong>dangereux</strong> de prendre la décision à sa place.</p>
 
-  <h3 id="Integrer_un_routeur_et_un_dispatcheur" for="main-toc">Intégrer un
+  <h3 id="Integrate_a_router_and_a_dispatcher" for="main-toc">Intégrer un
   routeur et un dispatcheur</h3>
 
   <p>Jusqu'à maintenant, nous forcions des options et des entrées à l'analyseur.
@@ -1199,7 +1199,7 @@ directory: Array
   <code>php://fd/<em>i</em></code> permet d'accéder au fichier ayant le
   <strong>descripteur</strong> <code><em>i</em></code>.</p>
 
-  <h3 id="Execution_tres_basique" for="main-toc">Exécution très basique</h3>
+  <h3 id="Very_basic_execution" for="main-toc">Exécution très basique</h3>
 
   <p>La classe <code>Hoa\Console\Processus</code> propose une manière très
   <strong>rapide</strong> d'exécuter un processus et d'obtenir le résultat de
@@ -1218,7 +1218,7 @@ directory: Array
   convient dans la plupart des cas, ce n'est pas suffisant quand nous souhaitons
   un minimum d'interaction avec le processus.</p>
 
-  <h3 id="Lecture_et_ecriture" for="main-toc">Lecture et écriture</h3>
+  <h3 id="Reading_and_writing" for="main-toc">Lecture et écriture</h3>
 
   <p>Voyons comment <strong>interagir</strong> avec un processus. Nous allons
   considérer le programme <code>LittleProcessus.php</code> suivant :</p>
@@ -1435,7 +1435,7 @@ $processus->run();
   <code>Hoa\Console\Processus::isSuccessful</code> pour savoir si le processus
   s'est exécuté avec succès ou pas.</p>
 
-  <h3 id="Detecter_le_mode_des_pipes" for="main-toc">Détecter le type des
+  <h3 id="Detect_the_type_of_pipes" for="main-toc">Détecter le type des
   <em lang="en">pipes</em></h3>
 
   <p>Parfois, il est utile de connaître le <strong>type</strong> des
@@ -1496,7 +1496,7 @@ $ hoa | xargs -I@ echo @</code></pre>
   avec intelligence. Il faut adapter les comportements mais rester
   <strong>cohérent</strong>.</p>
 
-  <h3 id="Condition_d-execution" for="main-toc">Condition d'exécution</h3>
+  <h3 id="Execution_conditions" for="main-toc">Condition d'exécution</h3>
 
   <p>Le processus s'exécute dans un <strong>dossier</strong> particulier et un
   <strong>environnement</strong> particulier. Le dossier est appelé
@@ -1633,7 +1633,7 @@ $processus->run();
   retournée. Cette méthode se base sur le <code>PATH</code> de votre
   système.</p>
 
-  <h3 id="Processus_interactifs_et_pseudo-terminaux" for="main-toc">Processus
+  <h3 id="Interactive_processus_and_pseudo-terminals" for="main-toc">Processus
   interactifs et pseudo-terminaux</h3>
 
   <p>Cette section est un peu plus technique mais explique un
