@@ -15,7 +15,7 @@
   <h2 id="Introduction" for="main-toc">Introduction</h2>
 
   <p>De nos jours, nous comptons deux types d'interfaces :
-  <strong>textuelle</strong> et <strong>graphique</strong>. L'interfaces
+  <strong>textuelle</strong> et <strong>graphique</strong>. L'interface
   textuelle existe depuis l'origine des ordinateurs, alors appelés
   <strong>terminaux</strong>. Cette interface, malgré son aspect « brut », est
   fonctionnellement très <strong>puissante</strong> grâce à plusieurs concepts
@@ -47,7 +47,7 @@
   <strong>inspirée</strong> de systèmes comme
   <a href="http://linux.org/">Linux</a>, <a href="http://freebsd.org/">FreeBSD</a> ou
   encore <a href="https://en.wikipedia.org/wiki/UNIX_System_V">System V</a>.
-  D'ailleurs, si vous êtes familiés avec plusieurs bibliothèques C, vous ne
+  D'ailleurs, si vous êtes familier avec plusieurs bibliothèques C, vous ne
   serez pas déroutés. Et <em>a contrario</em>, si vous apprenez à utiliser
   <code>Hoa\Console</code>, vous ne serez pas perdus en retournant sur des
   langages de plus bas niveaux comme le C.</p>
@@ -61,7 +61,7 @@
   tournez-vous vers
   <a href="http://msdn.microsoft.com/library/ms682087.aspx"
      title="Console Reference">la bibliothèque <code>Wincon</code></a>. Il est
-  souvent recommandé d'utiliser une machine Unix <strong>virtuelle</strong> et
+  souvent recommandé d'utiliser une machine Unix <strong>virtuelle</strong> ou
   un <strong>émulateur</strong> de terminal, comme
   <a href="http://ttssh2.sourceforge.jp/">TeraTerm</a>, très complet. Même sur
   des systèmes proches de la famille BSD, les terminaux distribués par défaut ne
@@ -304,7 +304,7 @@ print_r(Hoa\Console\Cursor::getPosition());
   repositionner ; nous pouvons profiter des méthodes <code>save</code> et
   <code>restore</code>. Comme leur nom l'indique, ces méthodes respectivement
   <strong>enregistre</strong> la position du curseur puis
-  <strong>restore</strong> le curseur à la position précédemment enregistrée.
+  <strong>restaure</strong> le curseur à la position précédemment enregistrée.
   Ces fonctions ne manipulent pas de <strong>pile</strong>, il est impossible
   d'enregistrer plus d'une seule position à la fois (le nouvel enregistrement
   <strong>écrasera</strong> l'ancien). Ainsi, nous allons écrire un texte,
@@ -395,8 +395,8 @@ echo '!';</code></pre>
     <code>yellow</code>, <code>blue</code>, <code>magenta</code>,
     <code>cyan</code> ou <code>white</code>, respectivement pour noir, rouge,
     vert, jaune, bleu, magenta, cyan ou blanc ;</li>
-    <li>un numéro en <code>0</code> et <code>256</code>, correspond au numéro de
-    la couleur dans la palette des 256 couleurs ;</li>
+    <li>un numéro entre <code>0</code> et <code>256</code>, correspondant au
+    numéro de la couleur dans la palette des 256 couleurs ;</li>
     <li><code>#<em>rrggbb</em></code> où <code><em>rrggbb</em></code> est un
     nombre en hexadécimal correspondant au numéro de la couleur dans la palette
     des 2<sup>64</sup> couleurs.</li>
@@ -747,7 +747,7 @@ print_r($parser->getSwitches());
  *     )
  */</code></pre>
   <p>Une option peut être de deux sortes : <strong>booléenne</strong> ou
-  <strong>valuées</strong>. Si aucune valeur ne lui est associée, elle est
+  <strong>valuée</strong>. Si aucune valeur ne lui est associée, elle est
   considérée comme booléenne. Ainsi, <code>-s</code> vaut <code>true</code>,
   mais <code>-s -s</code> vaut <code>false</code>, et du coup <code>-s -s
   -s</code> vaut <code>true</code> et ainsi de suite. Une option booléenne
@@ -1038,8 +1038,8 @@ NULL</code></pre>
   obligatoires. Ensuite, nous allons utiliser <code>Hoa\Dispatcher\Basic</code>
   avec le kit dédié aux terminaux, à savoir
   <code>Hoa\Console\Dispatcher\Kit</code>. Le dispatcheur va chercher à charger
-  les classes <code>Hoa\Dispatcher\<em>controller</em></code> par défaut, et
-  l'auto-chargeur va les chercher dans le dossier
+  les classes <code>Application\Controller\<em>controller</em></code> par
+  défaut, et l'auto-chargeur va les chercher dans le dossier
   <code>hoa://Application/Controller/<em>controller</em></code>. Nous allons
   donc préciser où se trouve l'application très rapidement. Enfin, le code de
   retour de notre programme sera donné par la valeur de retour de notre
@@ -1135,7 +1135,7 @@ class Foo extends \Hoa\Console\Dispatcher\Kit {
   <code>resolveOptionAmbiguity</code> qui demande une confirmation à
   l'utilisateur, l'accès au routeur à travers l'attribut <code>$router</code>
   etc. Les kits offrent des <strong>services</strong> à l'application, ils
-  <strong>aggrègent</strong> des services offerts pas les bibliothèques.
+  <strong>aggrègent</strong> des services offerts par les bibliothèques.
   Maintenant testons :</p>
   <pre><code class="language-shell">$ php Test.php foo -x -d=1:3
 extract:   bool(true)
@@ -1317,8 +1317,6 @@ while(false !== $line = fgets(STDIN))
   <code>php LittleProcessus.php</code> et attacher des fonctions aux écouteurs
   suivants : <code>input</code> pour écrire une série de chiffres et
   <code>output</code> pour lire le résultat.</p>
-
-
   <pre><code class="language-php">$processus = new Hoa\Console\Processus('php LittleProcessus.php');
 $processus->on('input', function ( $bucket ) {
 
@@ -1371,16 +1369,16 @@ $processus->run();
   <code>1</code>.</p>
   <p>Quand un <em lang="en">callable</em> attaché à un écouteur retourne
   <code>false</code>, le <em lang="en">pipe</em> qui a déclenché cet appel sera
-  <strong>fermé</strong> juste après. Dans notre cas, la méthode attachée à
+  <strong>fermé</strong> juste après. Dans notre cas, la fonction attachée à
   <code>input</code> retourne <code>false</code> juste après avoir écrit, nous
   n'avons plus besoin de ce <em lang="en">pipe</em>. Il est important pour des
   raisons de <strong>performances</strong> de fermer les
   <em lang="en">pipes</em> dès que possible.</p>
   <p>Enfin, pour <strong>exécuter</strong> le processus, nous utilisons la
   méthode <code>Hoa\Console\Processus::run</code> d'arité nulle.</p>
-  <p>Dans notre exemple, nous écrivons toutes les données d'un coup. Mais nous
+  <p>Dans notre exemple, nous écrivons toutes les données d'un coup  mais nous
   pouvons envoyer les données dès qu'elles sont disponibles, ce qui est plus
-  performant car le processus n'attend pas un gros paquet de données mais peut
+  performant car le processus n'attend pas un gros paquet de données : il peut
   les traiter au fur et à mesure. Modifions notre exemple pour écrire une donnée
   à chaque fois que <code>STDIN</code> est prêt :</p>
   <pre><code class="language-php">$processus->on('input', function ( $bucket ) {
@@ -1500,7 +1498,7 @@ $ hoa | xargs -I@ echo @</code></pre>
 
   <p>Le processus s'exécute dans un <strong>dossier</strong> particulier et un
   <strong>environnement</strong> particulier. Le dossier est appelé
-  <em lang="en">current working directory</em>, souvent abbrégé
+  <em lang="en">current working directory</em>, souvent abrégé
   <abbr lang="en">cwd</abbr>. Il définit le dossier où sera exécuté le
   processus. Nous pouvons le retrouver en PHP avec
   <a href="http://php.net/getcwd">la fonction <code>getcwd</code></a>.
