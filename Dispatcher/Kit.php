@@ -59,11 +59,6 @@ from('Hoa')
 -> import('Console.Readline.Password')
 
 /**
- * \Hoa\Console\Chrome\Style
- */
--> import('Console.Chrome.Style')
-
-/**
  * \Hoa\Console\Chrome\Text
  */
 -> import('Console.Chrome.Text')
@@ -254,7 +249,7 @@ class Kit extends \Hoa\Dispatcher\Kit {
     public function status ( $text, $status ) {
 
         $window = \Hoa\Console\Window::getSize();
-        $out = ' ' . $this->stylize('*', 'info') . ' ' .
+        $out = ' ' . \Hoa\Console\Chrome\Text::colorize('*', 'foreground(yellow)') . ' ' .
                $text . str_pad(
                    ' ',
                    $window['x']
@@ -262,25 +257,12 @@ class Kit extends \Hoa\Dispatcher\Kit {
                    - 8
                ) .
                ($status === true
-                   ? '[' . $this->stylize('ok', 'success') . ']'
-                   : '[' . $this->stylize('!!', 'nosuccess') . ']');
+                   ? '[' . \Hoa\Console\Chrome\Text::colorize('ok', 'foreground(green)') . ']'
+                   : '[' . \Hoa\Console\Chrome\Text::colorize('!!', 'foreground(white) background(red)') . ']');
 
         echo $out, "\n";
 
         return;
-    }
-
-    /**
-     * Alias to \Hoa\Console\Chrome\Style::stylize().
-     *
-     * @access  public
-     * @param   string  $text       Please, see original API.
-     * @param   mixed   $options    Please, see original API.
-     * @return  string
-     */
-    public function stylize ( $text, $options = array() ) {
-
-        return \Hoa\Console\Chrome\Style::stylize($text, $options);
     }
 
     /**
