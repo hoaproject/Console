@@ -500,6 +500,9 @@ class          Processus
             }
         }
 
+        if(empty($_read) && empty($_write) && empty($_except))
+            return;
+
         while(true) {
 
             $read   = $_read;
