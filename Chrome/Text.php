@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Console\Cursor
+ */
+-> import('Console.Cursor')
+
+/**
  * \Hoa\Console\Window
  */
 -> import('Console.Window');
@@ -81,6 +86,29 @@ class Text {
     const ALIGN_CENTER = 2;
 
 
+
+    /**
+     * Colorize a portion of a text.
+     * It is kind of a shortcut of \Hoa\Console\Color.
+     *
+     * @access  public
+     * @param   string  $text                Text.
+     * @param   string  $attributesBefore    Style to apply.
+     * @param   string  $attributesAfter     Reset style.
+     * @return  string
+     */
+    public static function colorize ( $text, $attributesBefore,
+                                      $attributesAfter = 'normal' ) {
+
+        ob_start();
+        \Hoa\Console\Cursor::colorize($attributesBefore);
+        echo $text;
+        \Hoa\Console\Cursor::colorize($attributesAfter);
+        $out = ob_get_contents();
+        ob_end_clean();
+
+        return $out;
+    }
 
     /**
      * Built column from an array.
