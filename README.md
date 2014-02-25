@@ -33,27 +33,35 @@ The API is very straightforward. For example, we can use `l`, `left` or `←` to
 move the cursor on the left column. Thus we move the cursor to the left 3-times
 and then to the top 2-times:
 
-    Hoa\Console\Cursor::move('← ← ← ↑ ↑');
+```php
+Hoa\Console\Cursor::move('← ← ← ↑ ↑');
+```
 
 This method moves the cursor relatively from its current position, but we are
 able to move the cursor with absolute coordinates:
 
-    Hoa\Console\Cursor::moveTo(13, 42);
+```php
+Hoa\Console\Cursor::moveTo(13, 42);
+```
 
 We are also able to save the current cursor position, to move, clear etc., and
 then to restore the saved position:
 
-    Hoa\Console\Cursor::save();     // save
-    Hoa\Console\Cursor::move('↓');  // move below
-    Hoa\Console\Cursor::clear('↔'); // clear the line
-    echo 'Something below…';        // write something
-    Hoa\Console\Cursor::restore();  // restore
+```php
+Hoa\Console\Cursor::save();     // save
+Hoa\Console\Cursor::move('↓');  // move below
+Hoa\Console\Cursor::clear('↔'); // clear the line
+echo 'Something below…';        // write something
+Hoa\Console\Cursor::restore();  // restore
+```
 
 Another example with color:
 
-    Hoa\Console\Cursor::colorize(
-        'underlined foreground(yellow) background(#932e2e)'
-    );
+```php
+Hoa\Console\Cursor::colorize(
+    'underlined foreground(yellow) background(#932e2e)'
+);
+```
 
 Please, read the API documentation for more informations, and note that Windows
 support is very weak.
@@ -64,37 +72,43 @@ The `Hoa\Console\Mouse` class allows to listen the mouse actions and provides
 the following listeners: `mouseup`, `mousedown`, `wheelup` and `wheeldown`.
 Example:
 
-    $mouse = Hoa\Console\Mouse::getInstance();
-    $mouse->on('mousedown', function ( $bucket ) {
+```php
+$mouse = Hoa\Console\Mouse::getInstance();
+$mouse->on('mousedown', function ( $bucket ) {
 
-        print_r($bucket->getData());
-    });
+    print_r($bucket->getData());
+});
 
-    $mouse::track();
+$mouse::track();
+```
 
 And then, when we left-click, we will see:
 
-    Array
-    (
-        [x] => 69
-        [y] => 30
-        [button] => left
-        [shift] =>
-        [meta] =>
-        [ctrl] =>
-    )
+```
+Array
+(
+    [x] => 69
+    [y] => 30
+    [button] => left
+    [shift] =>
+    [meta] =>
+    [ctrl] =>
+)
+```
 
 When we left-click while hiting the shift key, we will see:
 
-    Array
-    (
-        [x] => 71
-        [y] => 32
-        [button] => left
-        [shift] => 1
-        [meta] =>
-        [ctrl] =>
-    )
+```
+Array
+(
+    [x] => 71
+    [y] => 32
+    [button] => left
+    [shift] => 1
+    [meta] =>
+    [ctrl] =>
+)
+```
 
 This is an experimental API.
 
@@ -122,32 +136,40 @@ listen when the window has been resized.
 For example, we resize the window to 40 lines and 80 columns, and then we move
 the window to 400px horizontally and 100px vertically:
 
-    Hoa\Console\Window::setSize(40, 80);
-    Hoa\Console\Window::moveTo(400, 100);
+```php
+Hoa\Console\Window::setSize(40, 80);
+Hoa\Console\Window::moveTo(400, 100);
+```
 
 If we do not like our user, we are able to minimize its window:
 
-    Hoa\Console\Window::minimize();
-    sleep(2);
-    Hoa\Console\Window::restore();
+```php
+Hoa\Console\Window::minimize();
+sleep(2);
+Hoa\Console\Window::restore();
+```
 
 We are also able to set or get the title of the window:
 
-    Hoa\Console\Window::setTitle('My awesome application');
+```php
+Hoa\Console\Window::setTitle('My awesome application');
+```
 
 Finally, if we have a complex application layout, we can repaint it when the
 window is resized by listening the `hoa://Event/Console/Window:resize` event
 channel:
 
-    event('hoa://Event/Console/Window:resize')
-        ->attach(function ( Hoa\Core\Event\Bucket $bucket ) {
+```php
+event('hoa://Event/Console/Window:resize')
+    ->attach(function ( Hoa\Core\Event\Bucket $bucket ) {
 
-            $data = $bucket->getData();
-            $size = $data['size'];
+        $data = $bucket->getData();
+        $size = $data['size'];
 
-            echo 'New dimensions: ', $size['x'], ' lines x ',
-                 $size['y'], ' columns.', "\n";
-        });
+        echo 'New dimensions: ', $size['x'], ' lines x ',
+             $size['y'], ' columns.', "\n";
+    });
+```
 
 Please, read the API documentation for more informations, and note that Windows
 support is very weak.
@@ -176,25 +198,31 @@ It supports UTF-8. It is based on bindings, and here are some:
 
 Thus, to read one line:
 
-    $readline = new Hoa\Console\Readline\Readline();
-    $line     = $readline->readLine('> '); // “> ” is the prefix of the line.
+```php
+$readline = new Hoa\Console\Readline\Readline();
+$line     = $readline->readLine('> '); // “> ” is the prefix of the line.
+```
 
 The `Hoa\Console\Readline\Password` allows the same operations but without
 printing on STDOUT.
 
-    $password = new Hoa\Console\Readline\Password();
-    $line     = $password->readLine('password: ');
+```php
+$password = new Hoa\Console\Readline\Password();
+$line     = $password->readLine('password: ');
+```
 
 We are able to add a mapping with the help of the
 `Hoa\Console\Readline\Readline::addMapping` method. We use `\e[…` for `\033[`,
 `\C-…` for `Ctrl-…` and a character for the rest. We can associate a character
 or a callable:
 
-    $readline->addMapping('a', 'z'); // crazy, we replace “a” by “z”.
-    $readline->addMapping('\C-R', function ( $readline ) {
+```php
+$readline->addMapping('a', 'z'); // crazy, we replace “a” by “z”.
+$readline->addMapping('\C-R', function ( $readline ) {
 
-        // do something when pressing Ctrl-R.
-    });
+    // do something when pressing Ctrl-R.
+});
+```
 
 We are also able to manipulate the history, thanks to the `addHistory`,
 `clearHistory`, `getHistory`, `previousHistory` and `nextHistory` methods on the
@@ -215,26 +243,32 @@ which implements `Hoa\Stream\IStream\In`, `Hoa\Stream\IStream\Out` and
 
 Basically, we can read STDOUT like this:
 
-    $processus = new Hoa\Console\Processus('ls');
-    $processus->open();
-    echo $processus->readAll();
+```php
+$processus = new Hoa\Console\Processus('ls');
+$processus->open();
+echo $processus->readAll();
+```
 
 And we can write on STDIN like this:
 
-    $processus->writeAll('foobar');
+```php
+$processus->writeAll('foobar');
+```
 
 etc. This is very classical.
 
 `Hoa\Console\Processus` also proposes many events: `start`, `stop`, `input`,
 `output` and `timeout`. Thus:
 
-    $processus = new Hoa\Console\Processus('ls');
-    $processus->on('output', function ( Hoa\Core\Event\Bucket $bucket ) {
+```php
+$processus = new Hoa\Console\Processus('ls');
+$processus->on('output', function ( Hoa\Core\Event\Bucket $bucket ) {
 
-        $data = $bucket->getData();
-        echo '> ', $data['line'], "\n";
-    });
-    $processus->run();
+    $data = $bucket->getData();
+    echo '> ', $data['line'], "\n";
+});
+$processus->run();
+```
 
 We are also able to read and write on more pipes than 0 (STDOUT), 1 (STDIN) and
 2 (STDERR). In the same way, we can set the current working directory of the
@@ -250,49 +284,57 @@ command-line and get options and inputs values easily.
 
 First, we need to parse a command-line, such as:
 
-    $parser = new Hoa\Console\Parser();
-    $parser->parse('-s --long=value input');
+```php
+$parser = new Hoa\Console\Parser();
+$parser->parse('-s --long=value input');
+```
 
 Second, we need to define our options:
 
-    $options = new Hoa\Console\GetOption(
-        array(
-            //   long name                 type                  short name
-            //       ↓                      ↓                         ↓
-            array('short', Hoa\Console\GetOption::NO_ARGUMENT,       's'),
-            array('long',  Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l')
-        ),
-        $parser
-    );
+```php
+$options = new Hoa\Console\GetOption(
+    array(
+        //   long name                 type                  short name
+        //       ↓                      ↓                         ↓
+        array('short', Hoa\Console\GetOption::NO_ARGUMENT,       's'),
+        array('long',  Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l')
+    ),
+    $parser
+);
+```
 
 And finally, we iterate over options:
 
-    $short = false;
-    $long  = null;
+```php
+$short = false;
+$long  = null;
 
-    //          short name                  value
-    //               ↓                        ↓
-    while(false !== $c = $options->getOption($v)) switch($c) {
+//          short name                  value
+//               ↓                        ↓
+while(false !== $c = $options->getOption($v)) switch($c) {
 
-        case 's':
-            $short = true;
-          break;
+    case 's':
+        $short = true;
+      break;
 
-        case 'l':
-            $long = $v;
-          break;
-    }
+    case 'l':
+        $long = $v;
+      break;
+}
 
-    var_dump($short, $long); // bool(true) and string(5) "value".
+var_dump($short, $long); // bool(true) and string(5) "value".
+```
 
 Please, see API documentation of `Hoa\Console\Parser` to see all supported forms
 of options (flags or switches, long or short ones, inputs etc.).
 
 It also support typos in options. In this case, we have to add:
 
-        case '__ambiguous':
-            $options->resolveOptionAmbiguity($v);
-          break;
+```php
+    case '__ambiguous':
+        $options->resolveOptionAmbiguity($v);
+      break;
+```
 
 If one solution is found, it will select this one automatically, else it will
 raise an exception. This exception is caught by `Hoa\Console\Dispatcher\Kit`
