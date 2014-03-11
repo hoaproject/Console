@@ -935,25 +935,28 @@ class Readline {
         if(0 === $current)
             return $state;
 
-        $words = preg_split(
-            '#\b#u',
+        $matches = preg_match_all(
+            '#' . $autocompleter->getWordDefinition() . '#u',
             $line,
-            -1,
-            PREG_SPLIT_OFFSET_CAPTURE | PREG_SPLIT_NO_EMPTY
+            $words,
+            PREG_OFFSET_CAPTURE
         );
 
-        for($i = 0, $max = count($words);
-            $i < $max && $current > $words[$i][1];
+        if(0 === $matches)
+            return $state;
+
+        for($i = 0, $max = count($words[0]);
+            $i < $max && $current > $words[0][$i][1];
             ++$i);
 
-        $word = $words[$i - 1];
+        $word = $words[0][$i - 1];
 
         if('' === trim($word[0]))
             return $state;
 
         $prefix   = mb_substr($word[0], 0, $current - $word[1]);
-        $length   = mb_strlen($prefix);
         $solution = $autocompleter->complete($prefix);
+        $length   = mb_strlen($prefix);
 
         if(null === $solution)
             return $state;

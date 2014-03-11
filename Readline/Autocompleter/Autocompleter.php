@@ -50,13 +50,22 @@ interface Autocompleter {
 
     /**
      * Complete a word.
-     * Returns a full-word or an array of full-words.
+     * Returns null for no word, a full-word or an array of full-words.
      *
      * @access  public
-     * @param   string  $prefix    Prefix to autocomplete.
+     * @param   string  &$prefix    Prefix to autocomplete.
      * @return  mixed
      */
-    public function complete ( $prefix );
+    public function complete ( &$prefix );
+
+    /**
+     * Get definition of a word.
+     * Example: \b\w+\b. PCRE delimiters and options must not be provided.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getWordDefinition ( );
 }
 
 }

@@ -48,23 +48,23 @@ from('Hoa')
 namespace Hoa\Console\Readline\Autocompleter {
 
 /**
- * Class \Hoa\Console\Readline\Autocompleter\Word.
+ * Class \Hoa\Console\Readline\Autocompleter\Aggregate.
  *
- * The simplest auto-completer: complete a word.
+ * Aggregate several autocompleters.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2014 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class Word implements Autocompleter {
+class Aggregate implements Autocompleter {
 
     /**
-     * List of words.
+     * List of autocompleters.
      *
-     * @var \Hoa\Console\Readline\Autocompleter\Word array
+     * @var \Hoa\Console\Readline\Autocompleter\Aggregate array
      */
-    protected $_words = null;
+    protected $_autocompleters = null;
 
 
 
@@ -72,12 +72,12 @@ class Word implements Autocompleter {
      * Constructor.
      *
      * @access  public
-     * @param   array  $words    Words.
+     * @param   array  $autocompleters    Auto-completers.
      * @return  void
      */
-    public function __construct ( Array $words ) {
+    public function __construct ( Array $autocompleters ) {
 
-        $this->setWords($words);
+        $this->setAutocompleters($autocompleters);
 
         return;
     }
@@ -92,20 +92,54 @@ class Word implements Autocompleter {
      */
     public function complete ( &$prefix ) {
 
-        $out    = array();
-        $length = mb_strlen($prefix);
+        foreach($this->getAutocompleters() as $autocompleter) {
 
-        foreach($this->getWords() as $word)
-            if(mb_substr($word, 0, $length) === $prefix)
-                $out[] = $word;
+            $preg = preg_match(
+                '#(' . $autocompleter->getWordDefinition() . ')$#u',
+                $prefix,
+                $match
+            );
 
-        if(empty($out))
-            return null;
+            if(0 === $preg)
+                continue;
 
-        if(1 === count($out))
-            return $out[0];
+            $_prefix = $match[0];
 
-        return $out;
+            if(null === $out = $autocompleter->complete($_prefix))
+                continue;
+
+            $prefix = $_prefix;
+
+            return $out;
+        }
+
+        return null;
+    }
+
+    /**
+     * Set/initialize list of autocompleters.
+     *
+     * @access  protected
+     * @param   array  $autocompleters    Auto-completers.
+     * @return  \ArrayObject
+     */
+    protected function setAutocompleters ( Array $autocompleters ) {
+
+        $old                   = $this->_autocompleters;
+        $this->_autocompleters = new \ArrayObject($autocompleters);
+
+        return $old;
+    }
+
+    /**
+     * Get list of autocompleters.
+     *
+     * @access  public
+     * @return  \ArrayObject
+     */
+    public function getAutocompleters ( ) {
+
+        return $this->_autocompleters;
     }
 
     /**
@@ -116,33 +150,7 @@ class Word implements Autocompleter {
      */
     public function getWordDefinition ( ) {
 
-        return '\b\w+\b';
-    }
-
-    /**
-     * Set list of words.
-     *
-     * @access  public
-     * @param   array  $words    Words.
-     * @return  array
-     */
-    public function setWords ( Array $words ) {
-
-        $old          = $this->_words;
-        $this->_words = $words;
-
-        return $old;
-    }
-
-    /**
-     * Get list of words.
-     *
-     * @access  public
-     * @return  array
-     */
-    public function getWords ( ) {
-
-        return $this->_words;
+        return '.*';
     }
 }
 
