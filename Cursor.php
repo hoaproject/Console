@@ -597,7 +597,7 @@ class Cursor {
             }
         }
 
-        echo "\033[" . implode($handle, ';') . "m";
+        echo "\033[" . implode(';', $handle) . "m";
 
         return;
     }
