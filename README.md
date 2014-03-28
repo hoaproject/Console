@@ -239,7 +239,8 @@ On Windows, a readline is equivalent to a simple `fgets(STDIN)`.
 
 The `Hoa\Console\Processus` class allows to manipulate processus as a stream
 which implements `Hoa\Stream\IStream\In`, `Hoa\Stream\IStream\Out` and
-`Hoa\Stream\IStream\Pathable` interfaces.
+`Hoa\Stream\IStream\Pathable` interfaces (please, see the
+[`Hoa\Stream` library](http://central.hoa-project.net/Resource/Library/Stream)).
 
 Basically, we can read STDOUT like this:
 
@@ -340,10 +341,16 @@ If one solution is found, it will select this one automatically, else it will
 raise an exception. This exception is caught by `Hoa\Console\Dispatcher\Kit`
 when using the `hoa` script and a prompt is proposed.
 
-Thanks to `Hoa\Router` and `Hoa\Dispatcher` (with its dedicated kit
-`Hoa\Console\Dispatcher\Kit`), we are able to build commands easily. Please, see
-all `Bin/` directories in different libraries (for example
-`Hoa\Core\Bin\Resolve`) and `Hoa/Core/Bin/Hoa.php` to learn more.
+Thanks to the [`Hoa\Router`
+library)(http://central.hoa-project.net/Resource/Library/Router) and the
+[`Hoa\Dispatcher`
+library](http://central.hoa-project.net/Resource/Library/Dispatcher) (with its
+dedicated kit `Hoa\Console\Dispatcher\Kit`), we are able to build commands
+easily. Please, see all `Bin/` directories in different libraries (for example
+[`Hoa\Core\Bin\Resolve`](http://central.hoa-project.net/Resource/Library/Core/Bin/Resolve.php))
+and
+[`Hoa/Core/Bin/Hoa.php`](http://central.hoa-project.net/Resource/Library/Core/Bin/Hoa.php)
+to learn more.
 
 ## Awecode
 
