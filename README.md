@@ -342,7 +342,7 @@ raise an exception. This exception is caught by `Hoa\Console\Dispatcher\Kit`
 when using the `hoa` script and a prompt is proposed.
 
 Thanks to the [`Hoa\Router`
-library)(http://central.hoa-project.net/Resource/Library/Router) and the
+library](http://central.hoa-project.net/Resource/Library/Router) and the
 [`Hoa\Dispatcher`
 library](http://central.hoa-project.net/Resource/Library/Dispatcher) (with its
 dedicated kit `Hoa\Console\Dispatcher\Kit`), we are able to build commands
