@@ -485,16 +485,16 @@ class          Processus
 
         foreach($this->_pipes as $p => $pipe) {
 
-            stream_set_blocking($pipe, false);
-
             switch($this->_descriptors[$p][1]) {
 
                 case 'r':
+                    stream_set_blocking($pipe, false);
                     $_write[] = $pipe;
                   break;
 
                 case 'w':
                 case 'a':
+                    stream_set_blocking($pipe, true);
                     $_read[]  = $pipe;
                   break;
             }
