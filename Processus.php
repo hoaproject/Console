@@ -500,10 +500,22 @@ class          Processus
             }
         }
 
-        if(empty($_read) && empty($_write) && empty($_except))
-            return;
-
         while(true) {
+
+            foreach($_read as $i => $r)
+                if(false === is_resource($r))
+                    unset($_read[$i]);
+
+            foreach($_write as $i => $w)
+                if(false === is_resource($w))
+                    unset($_write[$i]);
+
+            foreach($_except as $i => $e)
+                if(false === is_resource($e))
+                    unset($_except[$i]);
+
+            if(empty($_read) && empty($_write) && empty($_except))
+                break;
 
             $read   = $_read;
             $write  = $_write;
