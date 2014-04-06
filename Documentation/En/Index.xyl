@@ -627,6 +627,76 @@ var_dump($rl->readLine('> '));</code></pre>
   <kbd title="Tabulation">⇥</kbd>, <kbd>↑</kbd>, <kbd>→</kbd>, <kbd>↓</kbd> and
   <kbd>←</kbd> keys, then <kbd title="Enter">↵</kbd> to <strong>select</strong>
   a word. This behavior is quite <strong>natural</strong>.</p>
+  <p>In addition to the auto-completer on words, we find the auto-completer on
+  <strong>paths</strong> with the
+  <code>Hoa\Console\Readline\Autocompleter\Path</code> class. Based on a root
+  and a file iterator, this auto-completer is able to auto-complete paths.
+  If the root is undefined, it will be set to the current working directory. At
+  each auto-completion, a new instance of the file iterator is created by a
+  factory. This latter receives the path to iterate as a unique argument. By
+  default, the factory is defined by the <code>getDefaultIteratorFactory</code>
+  static method on <code>Hoa\Console\Readline\Autocompleter\Path</code>. The
+  factory builds a file iterator of type
+  <a href="http://php.net/directoryiterator"><code>DirectoryIterator</code></a>.
+  Each value computed by the iterator must be an object of type
+  <a href="http://php.net/splfileinfo"><code>SplFileInfo</code></a>. Thus, to
+  auto-complete all the files and directories from the
+  <code>hoa://Library/Console/</code> root, we will write:</p>
+  <pre><code class="language-php">$rl->setAutocompleter(
+    new Hoa\Console\Readline\Autocompleter\Path(
+        resolve('hoa://Library/Console/')
+    )
+);</code></pre>
+  <p>Using a factory offers a lot of <strong>flexibility</strong> and allows us
+  to use any file iterator, such as <code>Hoa\File\Finder</code> (please, see
+  <a href="@lh:chapter=File">the <code>Hoa\File</code> library</a>). Thus, to
+  only auto-complete not hidden files and directories that have been modified
+  the last 6 months and sorted by their size, we will write:</p>
+  <pre><code class="language-php">$rl->setAutocompleter(
+    new Hoa\Console\Readline\Autocompleter\Path(
+        resolve('hoa://Library/Console/'),
+        function ( $path ) {
+
+            $finder = new Hoa\File\Finder();
+            $finder->in($path)
+                   ->files()
+                   ->directories()
+                   ->maxDepth(1)
+                   ->name('#^(?!\.).#')
+                   ->modified('since 6 months')
+                   ->sortBySize();
+
+            return $finder;
+        }
+    )
+);</code></pre>
+  <p>We can replace the local file iterator by another totally
+  <strong>different</strong> iterator: on files that are stored in another
+  machine, a third party service or even resources that are not files but have
+  path-like URI.</p>
+  <p>Finally, we can aggregate several auto-completers together thanks to the
+  <code>Hoa\Console\Readline\Autocompleter\Aggregate</code> class. The
+  declaration order of auto-completers is important: the first one that matches
+  a word to auto-complete will break the loop over all the auto-completers.
+  Thus, to auto-complete paths and words, we will write:</p>
+  <pre><code class="language-php">$rl->setAutocompleter(
+    new Hoa\Console\Readline\Autocompleter\Aggregate(array(
+        new Hoa\Console\Readline\Autocompleter\Path(),
+        new Hoa\Console\Readline\Autocompleter\Word($words)
+    ))
+);
+</code></pre>
+  <p>The <code>getAutocompleters</code> method from
+  <code>Hoa\Console\Readline\Autocompleter\Aggregate</code> returns an
+  <a href="http://php.net/arrayobject"><code>ArrayObject</code></a> object for
+  more flexibility. We can consequently add or delete auto-completers after
+  having declared them in the constructor.</p>
+  <figure>
+    <img src="http://central.hoa-project.net/Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw" />
+    <figcaption>Example of an aggregation of the
+    <code>Hoa\Console\Readline\Autocompleter\Path</code> auto-completer with
+    <code>Hoa\Console\Readline\Autocompleter\Word</code>.</figcaption>
+  </figure>
 
   <h2 id="Reading_options" for="main-toc">Reading options</h2>
 
