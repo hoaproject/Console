@@ -668,6 +668,78 @@ var_dump($rl->readLine('> '));</code></pre>
   <kbd>←</kbd>, puis <kbd title="Enter">↵</kbd> pour
   <strong>sélectionner</strong> un mot. Le comportement est assez
   <strong>naturel</strong>.</p>
+  <p>En plus de l'auto-compléteur sur les mots, nous trouvons un auto-compléteur
+  sur les <strong>chemins</strong> avec la classe
+  <code>Hoa\Console\Readline\Autocompleter\Path</code>. À partir d'une racine et
+  d'un itérateur de fichiers, il est capable d'auto-compléter des chemins. Si la
+  racine n'est pas précisée, le dossier courant sera utilisé. À chaque
+  auto-complétion, une nouvelle instance de l'itérateur de fichiers est créée
+  par une <em lang="en">factory</em>. Elle reçoit en seul argument le chemin à
+  itérer. La <em lang="en">factory</em> par défaut est définie par la méthode
+  statique <code>getDefaultIteratorFactory</code> sur
+  <code>Hoa\Console\Readline\Autocompleter\Path</code>. Elle construit un
+  itérateur de fichiers de type
+  <a href="http://php.net/directoryiterator"><code>DirectoryIterator</code></a>.
+  Chaque valeur calculée par l'itérateur doit être un objet de type
+  <a href="http://php.net/splfileinfo"><code>SplFileInfo</code></a>. Ainsi, pour
+  auto-compléter tous les fichiers et dossiers à partir de la racine
+  <code>hoa://Library/Console/</code>, nous écrirons :</p>
+  <pre><code class="language-php">$rl->setAutocompleter(
+    new Hoa\Console\Readline\Autocompleter\Path(
+        resolve('hoa://Library/Console/')
+    )
+);</code></pre>
+  <p>Utiliser une <em lang="en">factory</em> nous offre beaucoup de
+  <strong>souplesse</strong> et nous permet d'utiliser n'importe quel itérateur
+  de fichiers, comme par exemple <code>Hoa\File\Finder</code> (voir
+  <a href="@lh:chapter=File">la bibliothèque <code>Hoa\File</code></a>). Ainsi,
+  pour n'auto-compléter que les fichiers et dossiers non cachés qui ont été
+  modifiés les 6 derniers mois triés par leur taille, nous écrirons :</p>
+  <pre><code class="language-php">$rl->setAutocompleter(
+    new Hoa\Console\Readline\Autocompleter\Path(
+        resolve('hoa://Library/Console/'),
+        function ( $path ) {
+
+            $finder = new Hoa\File\Finder();
+            $finder->in($path)
+                   ->files()
+                   ->directories()
+                   ->maxDepth(1)
+                   ->name('#^(?!\.).#')
+                   ->modified('since 6 months')
+                   ->sortBySize();
+
+            return $finder;
+        }
+    )
+);</code></pre>
+  <p>Nous pouvons remplacer l'itérateur de fichiers locaux par un itérateur
+  totalement <strong>différent</strong> : sur des fichiers stockés sur une autre
+  machine, un service tiers ou même des ressources qui ne sont pas des fichiers
+  mais ont des URI de la forme d'un chemin.</p>
+  <p>Enfin, nous pouvons assembler plusieurs auto-compléteurs entre eux grâce à
+  la classe <code>Hoa\Console\Readline\Autocompleter\Aggregate</code>. L'ordre
+  de déclaration des auto-compléteurs est important : le premier qui reconnaît
+  un mot à auto-compléter prendra la main. Ainsi, pour auto-compléter des
+  chemins et des mots, nous écrirons :</p>
+  <pre><code class="language-php">$rl->setAutocompleter(
+    new Hoa\Console\Readline\Autocompleter\Aggregate(array(
+        new Hoa\Console\Readline\Autocompleter\Path(),
+        new Hoa\Console\Readline\Autocompleter\Word($words)
+    ))
+);
+</code></pre>
+  <p>La méthode <code>getAutocompleters</code> de
+  <code>Hoa\Console\Readline\Autocompleter\Aggregate</code> retourne un objet
+  <a href="http://php.net/arrayobject"><code>ArrayObject</code></a> pour plus de
+  souplesse. Nous pouvons ainsi toujours ajouter ou supprimer des
+  auto-compléteurs après les avoir déclarés dans le constructeur.</p>
+  <figure>
+    <img src="http://central.hoa-project.net/Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw" />
+    <figcaption>Exemple d'une agrégation de l'auto-compléteur
+    <code>Hoa\Console\Readline\Autocompleter\Path</code> avec
+    <code>Hoa\Console\Readline\Autocompleter\Word</code>.</figcaption>
+  </figure>
 
   <h2 id="Reading_options" for="main-toc">Lecture d'options</h2>
 
