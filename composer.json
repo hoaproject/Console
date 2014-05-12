@@ -4,7 +4,7 @@
     "type"       : "library",
     "keywords"   : ["library", "console", "processus", "getoption", "option",
                     "cli", "parser", "readline", "autocompletion", "chrome",
-                    "cursor", "window"],
+                    "cursor", "window", "tput", "terminfo"],
     "homepage"   : "http://hoa-project.net/",
     "license"    : "BSD-3-Clause",
     "authors"    : [
