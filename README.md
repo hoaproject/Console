@@ -11,34 +11,34 @@ window, processus, readline etc.
 ## Quick usage
 
 We propose a quick overview of some features: cursor, window, readline,
-processus and finally getOption.
+processus and finally getoption.
 
 ### Cursor
 
 The `Hoa\Console\Cursor` class allows to manipulate the cursor. Here is a list
 of some operations:
 
-  * `move`;
-  * `moveTo`;
-  * `save`;
-  * `restore`;
-  * `clear`;
-  * `hide`;
-  * `show`;
-  * `getPosition`;
-  * `colorize`;
+  * `move`,
+  * `moveTo`,
+  * `save`,
+  * `restore`,
+  * `clear`,
+  * `hide`,
+  * `show`,
+  * `getPosition`,
+  * `colorize`,
   * etc.
 
 The API is very straightforward. For example, we can use `l`, `left` or `←` to
-move the cursor on the left column. Thus we move the cursor to the left 3-times
-and then to the top 2-times:
+move the cursor on the left column. Thus we move the cursor to the left 3 times
+and then to the top 2 times:
 
 ```php
 Hoa\Console\Cursor::move('← ← ← ↑ ↑');
 ```
 
 This method moves the cursor relatively from its current position, but we are
-able to move the cursor with absolute coordinates:
+able to move the cursor to absolute coordinates:
 
 ```php
 Hoa\Console\Cursor::moveTo(13, 42);
@@ -55,7 +55,7 @@ echo 'Something below…';        // write something
 Hoa\Console\Cursor::restore();  // restore
 ```
 
-Another example with color:
+Another example with colors:
 
 ```php
 Hoa\Console\Cursor::colorize(
@@ -63,8 +63,7 @@ Hoa\Console\Cursor::colorize(
 );
 ```
 
-Please, read the API documentation for more informations, and note that Windows
-support is very weak.
+Please, read the API documentation for more informations.
 
 ### Mouse
 
@@ -117,23 +116,23 @@ This is an experimental API.
 The `Hoa\Console\Window` class allows to manipulate the window. Here is a list
 of some operations:
 
-  * `setSize`;
-  * `getSize`;
-  * `moveTo`;
-  * `getPosition`;
-  * `scroll`;
-  * `minimize`;
-  * `restore`;
-  * `raise`;
-  * `setTitle`;
-  * `getTitle`;
-  * `copy`;
+  * `setSize`,
+  * `getSize`,
+  * `moveTo`,
+  * `getPosition`,
+  * `scroll`,
+  * `minimize`,
+  * `restore`,
+  * `raise`,
+  * `setTitle`,
+  * `getTitle`,
+  * `copy`,
   * etc.
 
 Furthermore, we have the `hoa://Event/Console/Window:resize` event channel to
 listen when the window has been resized.
 
-For example, we resize the window to 40 lines and 80 columns, and then we move
+For example, we resize the window to 40 lines and 80 columns, and then we move
 the window to 400px horizontally and 100px vertically:
 
 ```php
@@ -171,29 +170,28 @@ event('hoa://Event/Console/Window:resize')
     });
 ```
 
-Please, read the API documentation for more informations, and note that Windows
-support is very weak.
+Please, read the API documentation for more informations
 
 ### Readline
 
-The `Hoa\Console\Readline\Readline` class proposes an advanced readline which
+The `Hoa\Console\Readline\Readline` class provides an advanced readline which
 allows the following operations:
 
-  * edition;
-  * history;
+  * edition,
+  * history,
   * autocompletion.
 
 It supports UTF-8. It is based on bindings, and here are some:
 
-  * `arrow up` and `arrow down`: move in the history;
-  * `arrow left` and `arrow right`: move the cursor left and right;
-  * `Ctrl-A`: move to the beginning of the line;
-  * `Ctrl-E`: move to the end of the line;
-  * `Ctrl-B`: move backward of one word;
-  * `Ctrl-F`: move forward of one word;
-  * `Ctrl-W`: delete first backard word;
-  * `Backspace`: delete first backward character;
-  * `Enter`: submit the line;
+  * `arrow up` and `arrow down`: move in the history,
+  * `arrow left` and `arrow right`: move the cursor left and right,
+  * `Ctrl-A`: move to the beginning of the line,
+  * `Ctrl-E`: move to the end of the line,
+  * `Ctrl-B`: move backward of one word,
+  * `Ctrl-F`: move forward of one word,
+  * `Ctrl-W`: delete first backard word,
+  * `Backspace`: delete first backward character,
+  * `Enter`: submit the line,
   * `Tab`: autocomplete.
 
 Thus, to read one line:
@@ -290,7 +288,7 @@ We are also able to read and write on more pipes than 0 (STDOUT), 1 (STDIN) and
 2 (STDERR). In the same way, we can set the current working directory of the
 processus and its environment.
 
-We can execute a processus quickly without using a stream with the help of the
+We can quickly execute a processus without using a stream with the help of the
 `Hoa\Console\Processus::execute` method.
 
 ### GetOption
