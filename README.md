@@ -34,6 +34,12 @@ move the cursor on the left column. Thus we move the cursor to the left 3 times
 and then to the top 2 times:
 
 ```php
+Hoa\Console\Cursor::move('left left left up up');
+```
+
+… or with Unicode symbols:
+
+```php
 Hoa\Console\Cursor::move('← ← ← ↑ ↑');
 ```
 
