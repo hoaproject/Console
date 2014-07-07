@@ -542,7 +542,7 @@ namespace {
 /**
  * Event.
  */
-if(ƒ('pcntl_signal')) {
+if(function_exists('pcntl_signal')) {
 
     \Hoa\Console\Window::getInstance();
     pcntl_signal(SIGWINCH, function ( ) {
