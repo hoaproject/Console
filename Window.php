@@ -153,7 +153,14 @@ class Window implements \Hoa\Core\Event\Source {
             );
         }
 
-        $tput = Processus::execute('tput cols && tput lines', false);
+        // Fix "tput: No value for $TERM and no -T specified"
+        if(isset($_SERVER['TERM']))
+            $prefix = "TERM={$_SERVER['TERM']}";
+        else
+            $prefix = '';
+
+        $cmd  = "$prefix tput cols && $prefix tput lines";
+        $tput = Processus::execute($cmd, false);
 
         if(!empty($tput)) {
 
