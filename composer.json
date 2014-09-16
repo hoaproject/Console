@@ -23,14 +23,13 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"  : "dev-master",
-        "hoa/stream": "dev-master",
-        "hoa/string": "dev-master"
+        "hoa/core"  : "~1.0",
+        "hoa/stream": "~0.0",
+        "hoa/string": "~1.0"
     },
-    "minimum-stability": "dev",
-    "target-dir"       : "Hoa/Console",
-    "autoload"         : { "psr-0": { "Hoa\\Console": "." } },
-    "suggest": {
+    "target-dir": "Hoa/Console",
+    "autoload"  : { "psr-0": { "Hoa\\Console": "." } },
+    "suggest"   : {
         "hoa/dispatcher": "To use the console kit.",
         "hoa/router"    : "To use the console kit.",
         "ext-pcntl"     : "To enable hoa://Event/Console/Window:resize."
