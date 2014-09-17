@@ -23,9 +23,9 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"  : "~1.0",
+        "hoa/core"  : "~2.0",
         "hoa/stream": "~0.0",
-        "hoa/string": "~1.0"
+        "hoa/string": "~2.0"
     },
     "target-dir": "Hoa/Console",
     "autoload"  : { "psr-0": { "Hoa\\Console": "." } },
