@@ -33,5 +33,10 @@
         "hoa/dispatcher": "To use the console kit.",
         "hoa/router"    : "To use the console kit.",
         "ext-pcntl"     : "To enable hoa://Event/Console/Window:resize."
+    },
+    "extra"     : {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
     }
 }
