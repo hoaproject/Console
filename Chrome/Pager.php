@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console\Chrome;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Processus
- */
--> import('Console.Processus');
-
-}
-
-namespace Hoa\Console\Chrome {
+use Hoa\Console;
 
 /**
  * Class \Hoa\Console\Chrome\Pager.
@@ -121,16 +112,16 @@ class Pager {
         if($mode & PHP_OUTPUT_HANDLER_START) {
 
             $pager = null !== $type
-                         ? \Hoa\Console\Processus::locate($type)
+                         ? Console\Processus::locate($type)
                          : (isset($_ENV['PAGER']) ? $_ENV['PAGER'] : null);
 
             if(null === $pager)
                 return $output;
 
-            $process = new \Hoa\Console\Processus(
+            $process = new Console\Processus(
                 $pager,
                 null,
-                array(0 => array('pipe', 'r'))
+                [['pipe', 'r']]
             );
             $process->open();
         }
@@ -142,16 +133,4 @@ class Pager {
 
         return null;
     }
-}
-
-}
-
-namespace {
-
-/**
- * Define PHP_OUTPUT_HANDLER_FINAL if PHP < 5.4.
- */
-PHP_VERSION_ID < 50400 &&
-    _define('PHP_OUTPUT_HANDLER_FINAL', PHP_OUTPUT_HANDLER_END);
-
 }

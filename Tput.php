@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Console\Exception
- */
--> import('Console.Exception');
-
-}
-
-namespace Hoa\Console {
+namespace Hoa\Console;
 
 /**
  * Class \Hoa\Console\Tput.
@@ -67,7 +56,7 @@ class Tput {
      *
      * @var \Hoa\Console\Tput array
      */
-    protected static $_booleans = array(
+    protected static $_booleans = [
         'auto_left_margin',
         'auto_right_margin',
         'no_esc_ctlc',
@@ -113,14 +102,14 @@ class Tput {
         'linefeed_is_newline',
         'hardware_tabs', // originally has_hardware_tabs
         'return_does_clr_eol'
-    );
+    ];
 
     /**
      * Numbers.
      *
      * @var \Hoa\Console\Tput array
      */
-    protected static $_numbers = array(
+    protected static $_numbers = [
         'columns',
         'init_tabs',
         'lines',
@@ -161,14 +150,14 @@ class Tput {
         'backspace_delay',
         'horizontal_tab_delay',
         'number_of_function_keys'
-    );
+    ];
 
     /**
      * Strings.
      *
      * @var \Hoa\Console\Tput array
      */
-    protected static $_strings = array(
+    protected static $_strings = [
         'back_tab',
         'bell',
         'carriage_return',
@@ -584,14 +573,14 @@ class Tput {
         'memory_lock',
         'memory_unlock',
         'box_chars_1'
-    );
+    ];
 
     /**
      * Computed informations.
      *
      * @var \Hoa\Console\Tput array
      */
-    protected $_informations = array();
+    protected $_informations = [];
 
 
 
@@ -628,9 +617,9 @@ class Tput {
 
         $data    = file_get_contents($terminfo);
         $length  = strlen($data);
-        $out     = array('file' => $terminfo);
+        $out     = ['file' => $terminfo];
 
-        $headers = array(
+        $headers = [
             'data_size'         => $length,
             'header_size'       => 12,
             'magic_number'      => (ord($data[ 1]) << 8) | ord($data[ 0]),
@@ -639,7 +628,7 @@ class Tput {
             'number_count'      => (ord($data[ 7]) << 8) | ord($data[ 6]),
             'string_count'      => (ord($data[ 9]) << 8) | ord($data[ 8]),
             'string_table_size' => (ord($data[11]) << 8) | ord($data[10]),
-        );
+        ];
         $out['headers'] = $headers;
 
 
@@ -650,7 +639,7 @@ class Tput {
 
         // Booleans.
         $i            += $headers['names_size'];
-        $booleans      = array();
+        $booleans      = [];
         $booleanNames  = &static::$_booleans;
 
         for($e = 0, $max = $i + $headers['bool_count'];
@@ -664,7 +653,7 @@ class Tput {
         if(1 === ($i % 2))
             ++$i;
 
-        $numbers     = array();
+        $numbers     = [];
         $numberNames = &static::$_numbers;
 
         for($e = 0, $max = $i + $headers['number_count'] * 2;
@@ -684,7 +673,7 @@ class Tput {
         $out['numbers'] = $numbers;
 
         // Strings.
-        $strings     = array();
+        $strings     = [];
         $stringNames = &static::$_strings;
         $ii          = $i + $headers['string_count'] * 2;
 
@@ -796,7 +785,7 @@ class Tput {
      */
     public static function getTerminfo ( ) {
 
-        $paths = array();
+        $paths = [];
 
         if(isset($_SERVER['TERMINFO']))
             $paths[] = $_SERVER['TERMINFO'];
@@ -833,6 +822,4 @@ class Tput {
 
         return $pathname;
     }
-}
-
 }

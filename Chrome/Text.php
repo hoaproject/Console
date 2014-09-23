@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console\Chrome;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Cursor
- */
--> import('Console.Cursor')
-
-/**
- * \Hoa\Console\Window
- */
--> import('Console.Window');
-
-}
-
-namespace Hoa\Console\Chrome {
+use Hoa\Console;
 
 /**
  * Class \Hoa\Console\Chrome\Text.
@@ -101,9 +87,9 @@ class Text {
                                       $attributesAfter = 'normal' ) {
 
         ob_start();
-        \Hoa\Console\Cursor::colorize($attributesBefore);
+        Console\Cursor::colorize($attributesBefore);
         echo $text;
-        \Hoa\Console\Cursor::colorize($attributesAfter);
+        Console\Cursor::colorize($attributesAfter);
         $out = ob_get_contents();
         ob_end_clean();
 
@@ -113,12 +99,12 @@ class Text {
     /**
      * Built column from an array.
      * The array has this structure :
-     *   array(
-     *       array('Firstname', 'Lastname',   'Love', 'Made'   ),
-     *       array('Ivan',      'Enderlin',   'Hoa'            ),
-     *       array('Rasmus',    'Lerdorf'                      ),
-     *       array(null,        'Berners-Lee', null,  'The Web')
-     *   )
+     *   [
+     *       ['Firstname', 'Lastname',   'Love', 'Made'   ],
+     *       ['Ivan',      'Enderlin',   'Hoa'            ],
+     *       ['Rasmus',    'Lerdorf'                      ],
+     *       [null,        'Berners-Lee', null,  'The Web']
+     *   ]
      * The cell can have a new-line character (\n).
      * The column can have a global alignement, a horizontal and a vertical
      * padding (this horizontal padding is actually the right padding), and a
@@ -157,7 +143,7 @@ class Text {
         foreach($line as $key => &$column) {
 
             if(!is_array($column))
-                $column = array(0 => $column);
+                $column = [$column];
 
             $handle = count($column);
             $handle > $nbColumn and $nbColumn = $handle;
@@ -182,7 +168,7 @@ class Text {
 
         // If the sum of each column is greater than the window width, we reduce
         // all greaters columns.
-        $window    = \Hoa\Console\Window::getSize();
+        $window    = Console\Window::getSize();
         $envWindow = $window['x'];
 
         while($envWindow <= ($cWidthSum = $xtraWidth + array_sum($columnWidth))) {
@@ -209,7 +195,7 @@ class Text {
 
         // Prepare the new table, i.e. a new line (\n) must be a new line in the
         // array (structurally meaning).
-        $newLine = array();
+        $newLine = [];
         foreach($line as $key => $plpl) {
 
             $i = self::getMaxLineNumber($plpl);
@@ -305,7 +291,7 @@ class Text {
 
         if(null === $width) {
 
-            $window = \Hoa\Console\Window::getSize();
+            $window = Console\Window::getSize();
             $width  = $window['x'];
         }
 
@@ -322,7 +308,7 @@ class Text {
                     $out .= str_repeat(' ', ceil(($width - strlen($value)) / 2)) .
                             $value .  "\n";
               break;
-            
+
             case self::ALIGN_RIGHT:
             default:
                 foreach(explode("\n", self::wordwrap($text, $width)) as $key => $value)
@@ -343,7 +329,7 @@ class Text {
     protected static function getMaxLineWidth ( $lines ) {
 
         if(!is_array($lines))
-            $lines = array(0 => $lines);
+            $lines = [$lines];
 
         $width = 0;
 
@@ -367,7 +353,7 @@ class Text {
     protected static function getMaxLineNumber ( $lines ) {
 
         if(!is_array($lines))
-            $lines = array(0 => $lines);
+            $lines = [$lines];
 
         $number = 0;
 
@@ -391,7 +377,7 @@ class Text {
 
         if(null === $width) {
 
-            $window = \Hoa\Console\Window::getSize();
+            $window = Console\Window::getSize();
             $width  = $window['x'];
         }
 
@@ -426,6 +412,4 @@ class Text {
 
         return implode("\n", $text);
     }
-}
-
 }

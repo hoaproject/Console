@@ -34,43 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console\Dispatcher;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Parser
- */
--> import('Console.Parser')
-
-/**
- * \Hoa\Console\GetOption
- */
--> import('Console.GetOption')
-
-/**
- * \Hoa\Console\Readline
- */
--> import('Console.Readline.~')
-
-/**
- * \Hoa\Console\Readline\Password
- */
--> import('Console.Readline.Password')
-
-/**
- * \Hoa\Console\Chrome\Text
- */
--> import('Console.Chrome.Text')
-
-/**
- * \Hoa\Dispatcher\Kit
- */
--> import('Dispatcher.Kit');
-
-}
-
-namespace Hoa\Console\Dispatcher {
+use Hoa\Console;
+use Hoa\Dispatcher;
+use Hoa\Router;
+use Hoa\View;
 
 /**
  * Class \Hoa\Console\Dispatcher\Kit.
@@ -82,7 +51,7 @@ namespace Hoa\Console\Dispatcher {
  * @license    New BSD License
  */
 
-class Kit extends \Hoa\Dispatcher\Kit {
+class Kit extends Dispatcher\Kit {
 
     /**
      * CLI parser.
@@ -116,13 +85,13 @@ class Kit extends \Hoa\Dispatcher\Kit {
      * @param   \Hoa\View\Viewable    $view          The view.
      * @return  void
      */
-     public function __construct ( \Hoa\Router        $router,
-                                   \Hoa\Dispatcher    $dispatcher,
-                                   \Hoa\View\Viewable $view = null ) {
+     public function __construct ( Router        $router,
+                                   Dispatcher    $dispatcher,
+                                   View\Viewable $view = null ) {
 
         parent::__construct($router, $dispatcher, $view);
 
-        $this->parser = new \Hoa\Console\Parser();
+        $this->parser = new Console\Parser();
 
         return;
     }
@@ -132,7 +101,7 @@ class Kit extends \Hoa\Dispatcher\Kit {
      *
      * @access  public
      * @param   string  &$optionValue    Please, see original API.
-     * @param   string  $short   &       Please, see original API.
+     * @param   string  $short           Please, see original API.
      * @return  mixed
      */
     public function getOption ( &$optionValue, $short = null ) {
@@ -159,12 +128,12 @@ class Kit extends \Hoa\Dispatcher\Kit {
         $old           = $this->options;
         $this->options = $options;
         $rule          = $this->router->getTheRule();
-        $variables     = $rule[\Hoa\Router::RULE_VARIABLES];
+        $variables     = $rule[Router::RULE_VARIABLES];
 
         if(isset($variables['_tail'])) {
 
             $this->parser->parse($variables['_tail']);
-            $this->_options = new \Hoa\Console\GetOption(
+            $this->_options = new Console\GetOption(
                 $this->options,
                 $this->parser
             );
@@ -181,33 +150,33 @@ class Kit extends \Hoa\Dispatcher\Kit {
      *                                 associated to the definition.
      * @return  string
      */
-    public function makeUsageOptionsList ( Array $definition = array() ) {
+    public function makeUsageOptionsList ( Array $definition = [] ) {
 
-        $out = array();
+        $out = [];
 
         foreach($this->options as $i => $options)
-            $out[] = array(
-                '  -' . $options[\Hoa\Console\GetOption::OPTION_VAL] . ', --' .
-                $options[\Hoa\Console\GetOption::OPTION_NAME] .
-                ($options[\Hoa\Console\GetOption::OPTION_HAS_ARG] ===
-                    \Hoa\Console\GetOption::REQUIRED_ARGUMENT
+            $out[] = [
+                '  -' . $options[Console\GetOption::OPTION_VAL] . ', --' .
+                $options[Console\GetOption::OPTION_NAME] .
+                ($options[Console\GetOption::OPTION_HAS_ARG] ===
+                    Console\GetOption::REQUIRED_ARGUMENT
                     ? '='
-                    : ($options[\Hoa\Console\GetOption::OPTION_HAS_ARG] ===
-                           \Hoa\Console\GetOption::OPTIONAL_ARGUMENT
+                    : ($options[Console\GetOption::OPTION_HAS_ARG] ===
+                           Console\GetOption::OPTIONAL_ARGUMENT
                         ? '[=]'
                         : '')),
-                (isset($definition[$options[\Hoa\Console\GetOption::OPTION_VAL]])
-                    ? $definition[$options[\Hoa\Console\GetOption::OPTION_VAL]]
+                (isset($definition[$options[Console\GetOption::OPTION_VAL]])
+                    ? $definition[$options[Console\GetOption::OPTION_VAL]]
                     : (isset($definition[$options[0]])
-                        ? $definition[$options[\Hoa\Console\GetOption::OPTION_NAME]]
+                        ? $definition[$options[Console\GetOption::OPTION_NAME]]
                         : null
                     )
                 )
-            );
+            ];
 
-        return \Hoa\Console\Chrome\Text::columnize(
+        return Console\Chrome\Text::columnize(
             $out,
-            \Hoa\Console\Chrome\Text::ALIGN_LEFT,
+            Console\Chrome\Text::ALIGN_LEFT,
             .5,
             0,
             '|: '
@@ -233,7 +202,7 @@ class Kit extends \Hoa\Dispatcher\Kit {
         if(empty($new))
             $new = $solutions['solutions'][0];
 
-        $solutions['solutions'] = array(0 => $new);
+        $solutions['solutions'] = [$new];
 
         return $this->_options->resolveOptionAmbiguity($solutions);
     }
@@ -248,8 +217,8 @@ class Kit extends \Hoa\Dispatcher\Kit {
      */
     public function status ( $text, $status ) {
 
-        $window = \Hoa\Console\Window::getSize();
-        $out = ' ' . \Hoa\Console\Chrome\Text::colorize('*', 'foreground(yellow)') . ' ' .
+        $window = Console\Window::getSize();
+        $out = ' ' . Console\Chrome\Text::colorize('*', 'foreground(yellow)') . ' ' .
                $text . str_pad(
                    ' ',
                    $window['x']
@@ -257,8 +226,8 @@ class Kit extends \Hoa\Dispatcher\Kit {
                    - 8
                ) .
                ($status === true
-                   ? '[' . \Hoa\Console\Chrome\Text::colorize('ok', 'foreground(green)') . ']'
-                   : '[' . \Hoa\Console\Chrome\Text::colorize('!!', 'foreground(white) background(red)') . ']');
+                   ? '[' . Console\Chrome\Text::colorize('ok', 'foreground(green)') . ']'
+                   : '[' . Console\Chrome\Text::colorize('!!', 'foreground(white) background(red)') . ']');
 
         echo $out, "\n";
 
@@ -277,7 +246,7 @@ class Kit extends \Hoa\Dispatcher\Kit {
         static $_rl = null;
 
         if(null === $_rl)
-            $_rl = new \Hoa\Console\Readline();
+            $_rl = new Console\Readline();
 
         return $_rl->readLine($prefix);
     }
@@ -294,10 +263,8 @@ class Kit extends \Hoa\Dispatcher\Kit {
         static $_rl = null;
 
         if(null === $_rl)
-            $_rl = new \Hoa\Console\Readline\Password();
+            $_rl = new Console\Readline\Password();
 
         return $_rl->readLine($prefix);
     }
-}
-
 }

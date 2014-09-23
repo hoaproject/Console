@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console\Chrome;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Processus
- */
--> import('Console.Processus');
-
-}
-
-namespace Hoa\Console\Chrome {
+use Hoa\Console;
 
 /**
  * Class \Hoa\Console\Chrome\Editor.
@@ -79,11 +70,9 @@ class Editor {
         if(!empty($file))
             $file = escapeshellarg($file);
 
-        return \Hoa\Console\Processus::execute(
+        return Console\Processus::execute(
             $editor . ' ' . $file . ' > `tty` < `tty`',
             false
         );
     }
-}
-
 }

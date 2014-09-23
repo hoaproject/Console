@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Console\Readline
- */
--> import('Console.Readline.~');
-
-}
-
-namespace Hoa\Console\Readline {
+namespace Hoa\Console\Readline;
 
 /**
  * Class \Hoa\Console\Readline\Password.
@@ -65,6 +54,4 @@ class Password extends Readline {
      * @const int
      */
     const STATE_CONTINUE = 5; // parent::STATE_CONTINUE | parent::STATE_NO_ECHO
-}
-
 }

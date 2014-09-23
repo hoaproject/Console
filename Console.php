@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Processus
- */
--> import('Console.Processus')
-
-/**
- * \Hoa\Console\Tput
- */
--> import('Console.Tput');
-
-}
-
-namespace Hoa\Console {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Console.
@@ -139,7 +125,7 @@ class Console {
      *
      * @var \Hoa\Console array
      */
-    protected static $_mode   = array();
+    protected static $_mode   = [];
 
     /**
      * Tput.
@@ -316,18 +302,12 @@ class Console {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Restore interaction.
  */
-Hoa\Core::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
+Core::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Console\Console');
-
-}
+Core\Consistency::flexEntity('Hoa\Console\Console');

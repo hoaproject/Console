@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console;
 
-from('Hoa')
-
-/**
- * \Hoa\Console
- */
--> import('Console.~');
-
-}
-
-namespace Hoa\Console {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Console\Mouse.
@@ -57,7 +48,7 @@ namespace Hoa\Console {
  * @license    New BSD License
  */
 
-class Mouse implements \Hoa\Core\Event\Listenable {
+class Mouse implements Core\Event\Listenable {
 
     /**
      * Singleton.
@@ -90,12 +81,12 @@ class Mouse implements \Hoa\Core\Event\Listenable {
      */
     private function __construct ( ) {
 
-        $this->_on = new \Hoa\Core\Event\Listener($this, array(
+        $this->_on = new Core\Event\Listener($this, [
             'mouseup',
             'mousedown',
             'wheelup',
             'wheeldown',
-        ));
+        ]);
 
         return;
     }
@@ -132,15 +123,15 @@ class Mouse implements \Hoa\Core\Event\Listenable {
         echo "\033[?1003h";
 
         $instance = static::getInstance();
-        $bucket   = array(
+        $bucket   = [
             'x'      => 0,
             'y'      => 0,
             'button' => null,
             'shift'  => false,
             'meta'   => false,
             'ctrl'   => false
-        );
-        $read = array(STDIN);
+        ];
+        $read = [STDIN];
 
         while(true) {
 
@@ -180,21 +171,21 @@ class Mouse implements \Hoa\Core\Event\Listenable {
                 case 64:
                     $instance->_on->fire(
                         'wheelup',
-                        new \Hoa\Core\Event\Bucket($bucket)
+                        new Core\Event\Bucket($bucket)
                     );
                   break;
 
                 case 65:
                     $instance->_on->fire(
                         'wheeldown',
-                        new \Hoa\Core\Event\Bucket($bucket)
+                        new Core\Event\Bucket($bucket)
                     );
                   break;
 
                 case 3:
                     $instance->_on->fire(
                         'mouseup',
-                        new \Hoa\Core\Event\Bucket($bucket)
+                        new Core\Event\Bucket($bucket)
                     );
                     $bucket['button'] = null;
                   break;
@@ -214,7 +205,7 @@ class Mouse implements \Hoa\Core\Event\Listenable {
 
                     $instance->_on->fire(
                         'mousedown',
-                        new \Hoa\Core\Event\Bucket($bucket)
+                        new Core\Event\Bucket($bucket)
                     );
             }
         }
@@ -258,18 +249,12 @@ class Mouse implements \Hoa\Core\Event\Listenable {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Advanced interaction.
  */
-Hoa\Console::advancedInteraction();
+Console::advancedInteraction();
 
 /**
  * Untrack mouse.
  */
-Hoa\Core::registerShutdownFunction('\Hoa\Console\Mouse', 'untrack');
-
-}
+Core::registerShutdownFunction('\Hoa\Console\Mouse', 'untrack');

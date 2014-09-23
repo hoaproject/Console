@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Console
- */
--> import('Console.~');
-
-}
-
-namespace Hoa\Console {
+namespace Hoa\Console;
 
 /**
  * Class \Hoa\Console\Cursor.
@@ -86,7 +75,7 @@ class Cursor {
         else
             $handle = explode(' ', $steps, 1);
 
-        $tput = \Hoa\Console::getTput();
+        $tput = Console::getTput();
 
         foreach($handle as $step)
             switch($step) {
@@ -178,9 +167,9 @@ class Cursor {
         }
 
         echo str_replace(
-            array('%i%p1%d', '%p2%d'),
-            array($y, $x),
-            \Hoa\Console::getTput()->get('cursor_address')
+            ['%i%p1%d', '%p2%d'],
+            [$y, $x],
+            Console::getTput()->get('cursor_address')
         );
 
         return;
@@ -194,14 +183,14 @@ class Cursor {
      */
     public static function getPosition ( ) {
 
-        $tput  = \Hoa\Console::getTput();
+        $tput  = Console::getTput();
         $user7 = $tput->get('user7');
 
         if(null === $user7)
-            return array(
+            return [
                 'x' => 0,
                 'y' => 0
-            );
+            ];
 
         echo $user7;
 
@@ -231,10 +220,10 @@ class Cursor {
 
         } while(true);
 
-        return array(
+        return [
             'x' => (int) $x,
             'y' => (int) $y
-        );
+        ];
     }
 
     /**
@@ -245,7 +234,7 @@ class Cursor {
      */
     public static function save ( ) {
 
-        echo \Hoa\Console::getTput()->get('save_cursor');
+        echo Console::getTput()->get('save_cursor');
 
         return;
     }
@@ -258,7 +247,7 @@ class Cursor {
      */
     public static function restore ( ) {
 
-        echo \Hoa\Console::getTput()->get('restore_cursor');
+        echo Console::getTput()->get('restore_cursor');
 
         return;
     }
@@ -280,7 +269,7 @@ class Cursor {
      */
     public static function clear ( $parts = 'all' ) {
 
-        $tput = \Hoa\Console::getTput();
+        $tput = Console::getTput();
 
         foreach(explode(' ', $parts) as $part)
             switch($part) {
@@ -333,7 +322,7 @@ class Cursor {
      */
     public static function hide ( ) {
 
-        echo \Hoa\Console::getTput()->get('cursor_invisible');
+        echo Console::getTput()->get('cursor_invisible');
 
         return;
     }
@@ -346,7 +335,7 @@ class Cursor {
      */
     public static function show ( ) {
 
-        echo \Hoa\Console::getTput()->get('cursor_visible');
+        echo Console::getTput()->get('cursor_visible');
 
         return;
     }
@@ -434,12 +423,12 @@ class Cursor {
                 'd0d0d0', 'dadada', 'e4e4e4', 'eeeeee'
             );
 
-        $tput = \Hoa\Console::getTput();
+        $tput = Console::getTput();
 
         if(1 >= $tput->count('max_colors'))
             return;
 
-        $handle = array();
+        $handle = [];
 
         foreach(explode(' ', $attributes) as $attribute) {
 
@@ -612,7 +601,7 @@ class Cursor {
      */
     public static function changeColor ( $fromCode, $toColor ) {
 
-        $tput = \Hoa\Console::getTput();
+        $tput = Console::getTput();
 
         if(true !== $tput->has('can_change'))
             return;
@@ -622,20 +611,20 @@ class Cursor {
         $b =  $toColor        & 255;
 
         echo str_replace(
-            array(
+            [
                 '%p1%d',
                 'rgb:',
                 '%p2%{255}%*%{1000}%/%2.2X/',
                 '%p3%{255}%*%{1000}%/%2.2X/',
                 '%p4%{255}%*%{1000}%/%2.2X'
-            ),
-            array(
+            ],
+            [
                 $fromCode,
                 '',
                 sprintf('%02x', $r),
                 sprintf('%02x', $g),
                 sprintf('%02x', $b)
-            ),
+            ],
             $tput->get('initialize_color')
         );
 
@@ -697,19 +686,13 @@ class Cursor {
      */
     public static function bip ( ) {
 
-        echo \Hoa\Console::getTput()->get('bell');
+        echo Console::getTput()->get('bell');
 
         return;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Advanced interaction.
  */
-\Hoa\Console::advancedInteraction();
-
-}
+Console::advancedInteraction();

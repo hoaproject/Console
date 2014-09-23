@@ -34,33 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console\Readline;
 
-from('Hoa')
-
-/**
- * \Hoa\Console
- */
--> import('Console.~')
-
-/**
- * \Hoa\Console\Processus
- */
--> import('Console.Processus')
-
-/**
- * \Hoa\Console\Cursor
- */
--> import('Console.Cursor')
-
-/**
- * \Hoa\Console\Window
- */
--> import('Console.Window');
-
-}
-
-namespace Hoa\Console\Readline {
+use Hoa\Core;
+use Hoa\Console;
 
 /**
  * Class \Hoa\Console\Readline.
@@ -128,14 +105,14 @@ class Readline {
      *
      * @var \Hoa\Console\Readline array
      */
-    protected $_mapping        = array();
+    protected $_mapping        = [];
 
     /**
      * History.
      *
      * @var \Hoa\Console\Readline array
      */
-    protected $_history        = array();
+    protected $_history        = [];
 
     /**
      * History current position.
@@ -207,7 +184,7 @@ class Readline {
         if(feof(STDIN))
             return false;
 
-        $direct = \Hoa\Console::isDirect(STDIN);
+        $direct = Console::isDirect(STDIN);
 
         if(false === $direct || OS_WIN) {
 
@@ -228,7 +205,7 @@ class Readline {
 
         $this->resetLine();
         $this->setPrefix($prefix);
-        $read = array(STDIN);
+        $read = [STDIN];
         echo $prefix;
 
         while(true) {
@@ -237,7 +214,7 @@ class Readline {
 
             if(empty($read)) {
 
-                $read = array(STDIN);
+                $read = [STDIN];
                 continue;
             }
 
@@ -370,7 +347,7 @@ class Readline {
     public function clearHistory ( ) {
 
         unset($this->_history);
-        $this->_history        = array();
+        $this->_history        = [];
         $this->_historyCurrent = 0;
         $this->_historySize    = 1;
 
@@ -652,7 +629,7 @@ class Readline {
 
         if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
 
-            \Hoa\Console\Cursor::clear('↔');
+            Console\Cursor::clear('↔');
             echo $self->getPrefix();
         }
         $self->setBuffer($buffer = $self->previousHistory());
@@ -673,7 +650,7 @@ class Readline {
 
         if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
 
-            \Hoa\Console\Cursor::clear('↔');
+            Console\Cursor::clear('↔');
             echo $self->getPrefix();
         }
 
@@ -696,7 +673,7 @@ class Readline {
         if($self->getLineLength() > $self->getLineCurrent()) {
 
             if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO))
-                \Hoa\Console\Cursor::move('→');
+                Console\Cursor::move('→');
 
             $self->setLineCurrent($self->getLineCurrent() + 1);
         }
@@ -719,7 +696,7 @@ class Readline {
         if(0 < $self->getLineCurrent()) {
 
             if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO))
-                \Hoa\Console\Cursor::move('←');
+                Console\Cursor::move('←');
 
             $self->setLineCurrent($self->getLineCurrent() - 1);
         }
@@ -745,8 +722,8 @@ class Readline {
 
             if(0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
 
-                \Hoa\Console\Cursor::move('←');
-                \Hoa\Console\Cursor::clear('→');
+                Console\Cursor::move('←');
+                Console\Cursor::clear('→');
             }
 
             if($self->getLineLength() == $current = $self->getLineCurrent())
@@ -860,7 +837,7 @@ class Readline {
             ++$i);
 
         if(!isset($words[$i + 1]))
-            $words[$i + 1] = array(1 => $self->getLineLength());
+            $words[$i + 1] = [1 => $self->getLineLength()];
 
         for($j = $words[$i + 1][1]; $j > $current; --$j)
             $self->_bindArrowRight($self);
@@ -966,9 +943,9 @@ class Readline {
             $_solution = $solution;
             $count     = count($_solution) - 1;
             $cWidth    = 0;
-            $window    = \Hoa\Console\Window::getSize();
+            $window    = Console\Window::getSize();
             $wWidth    = $window['x'];
-            $cursor    = \Hoa\Console\Cursor::getPosition();
+            $cursor    = Console\Cursor::getPosition();
 
             array_walk($_solution, function ( &$value ) use ( &$cWidth ) {
 
@@ -998,14 +975,14 @@ class Readline {
 
             if(0 > $window['y'] - $cursor['y'] - $mLines) {
 
-                \Hoa\Console\Window::scroll('↑', $mLines);
-                \Hoa\Console\Cursor::move('↑', $mLines);
+                Console\Window::scroll('↑', $mLines);
+                Console\Cursor::move('↑', $mLines);
             }
 
-            \Hoa\Console\Cursor::save();
-            \Hoa\Console\Cursor::hide();
-            \Hoa\Console\Cursor::move('↓ LEFT');
-            \Hoa\Console\Cursor::clear('↓');
+            Console\Cursor::save();
+            Console\Cursor::hide();
+            Console\Cursor::move('↓ LEFT');
+            Console\Cursor::clear('↓');
 
             foreach($_solution as $j => $s) {
 
@@ -1022,39 +999,39 @@ class Readline {
                 }
             }
 
-            \Hoa\Console\Cursor::restore();
-            \Hoa\Console\Cursor::show();
+            Console\Cursor::restore();
+            Console\Cursor::show();
 
             ++$mColumns;
-            $read     = array(STDIN);
+            $read     = [STDIN];
             $mColumn  = -1;
             $mLine    = -1;
             $coord    = -1;
             $unselect = function ( ) use ( &$mColumn, &$mLine, &$coord,
                                            &$_solution, &$cWidth ) {
 
-                \Hoa\Console\Cursor::save();
-                \Hoa\Console\Cursor::hide();
-                \Hoa\Console\Cursor::move('↓ LEFT');
-                \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
-                \Hoa\Console\Cursor::move('↓', $mLine);
+                Console\Cursor::save();
+                Console\Cursor::hide();
+                Console\Cursor::move('↓ LEFT');
+                Console\Cursor::move('→', $mColumn * ($cWidth + 2));
+                Console\Cursor::move('↓', $mLine);
                 echo "\033[0m" . $_solution[$coord] . "\033[0m";
-                \Hoa\Console\Cursor::restore();
-                \Hoa\Console\Cursor::show();
+                Console\Cursor::restore();
+                Console\Cursor::show();
 
                 return;
             };
             $select = function ( ) use ( &$mColumn, &$mLine, &$coord,
                                          &$_solution, &$cWidth ) {
 
-                \Hoa\Console\Cursor::save();
-                \Hoa\Console\Cursor::hide();
-                \Hoa\Console\Cursor::move('↓ LEFT');
-                \Hoa\Console\Cursor::move('→', $mColumn * ($cWidth + 2));
-                \Hoa\Console\Cursor::move('↓', $mLine);
+                Console\Cursor::save();
+                Console\Cursor::hide();
+                Console\Cursor::move('↓ LEFT');
+                Console\Cursor::move('→', $mColumn * ($cWidth + 2));
+                Console\Cursor::move('↓', $mLine);
                 echo "\033[7m" . $_solution[$coord] . "\033[0m";
-                \Hoa\Console\Cursor::restore();
-                \Hoa\Console\Cursor::show();
+                Console\Cursor::restore();
+                Console\Cursor::show();
 
                 return;
             };
@@ -1075,7 +1052,7 @@ class Readline {
 
                 if(empty($read)) {
 
-                    $read = array(STDIN);
+                    $read = [STDIN];
                     continue;
                 }
 
@@ -1152,21 +1129,21 @@ class Readline {
                                 $current + mb_strlen($solution[$coord])
                             );
 
-                            \Hoa\Console\Cursor::move('←', $length);
+                            Console\Cursor::move('←', $length);
                             echo $solution[$coord];
-                            \Hoa\Console\Cursor::clear('→');
+                            Console\Cursor::clear('→');
                             echo $tail;
-                            \Hoa\Console\Cursor::move('←', mb_strlen($tail));
+                            Console\Cursor::move('←', mb_strlen($tail));
                         }
 
                     default:
                         $mColumn = -1;
                         $mLine   = -1;
                         $coord   = -1;
-                        \Hoa\Console\Cursor::save();
-                        \Hoa\Console\Cursor::move('↓ LEFT');
-                        \Hoa\Console\Cursor::clear('↓');
-                        \Hoa\Console\Cursor::restore();
+                        Console\Cursor::save();
+                        Console\Cursor::move('↓ LEFT');
+                        Console\Cursor::clear('↓');
+                        Console\Cursor::restore();
 
                         if("\033" !== $char && "\n" !== $char) {
 
@@ -1193,28 +1170,22 @@ class Readline {
             $current + mb_strlen($solution)
         );
 
-        \Hoa\Console\Cursor::move('←', $length);
+        Console\Cursor::move('←', $length);
         echo $solution;
-        \Hoa\Console\Cursor::clear('→');
+        Console\Cursor::clear('→');
         echo $tail;
-        \Hoa\Console\Cursor::move('←', mb_strlen($tail));
+        Console\Cursor::move('←', mb_strlen($tail));
 
         return $state;
     }
 }
 
-}
-
-namespace {
-
 /**
  * Advanced interaction.
  */
-Hoa\Console::advancedInteraction();
+Console::advancedInteraction();
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\Console\Readline\Readline');
-
-}
+Core\Consistency::flexEntity('Hoa\Console\Readline\Readline');

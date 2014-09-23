@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console\Chrome;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Exception
- */
--> import('Console.Exception');
-
-}
-
-namespace Hoa\Console\Chrome {
+use Hoa\Console;
 
 /**
  * Class \Hoa\Console\Chrome\Exception.
@@ -57,6 +48,4 @@ namespace Hoa\Console\Chrome {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Console\Exception { }
-
-}
+class Exception extends Console\Exception { }

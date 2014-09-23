@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Console\Readline\Autocompleter
- */
--> import('Console.Readline.Autocompleter.~');
-
-}
-
-namespace Hoa\Console\Readline\Autocompleter {
+namespace Hoa\Console\Readline\Autocompleter;
 
 /**
  * Class \Hoa\Console\Readline\Autocompleter\Aggregate.
@@ -152,6 +141,4 @@ class Aggregate implements Autocompleter {
 
         return '.*';
     }
-}
-
 }

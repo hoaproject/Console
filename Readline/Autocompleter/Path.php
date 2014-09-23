@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Console\Readline\Autocompleter
- */
--> import('Console.Readline.Autocompleter.~');
-
-}
-
-namespace Hoa\Console\Readline\Autocompleter {
+namespace Hoa\Console\Readline\Autocompleter;
 
 /**
  * Class \Hoa\Console\Readline\Autocompleter\Path.
@@ -137,7 +126,7 @@ class Path implements Autocompleter {
         try {
 
             $iterator = $iteratorFactory($path);
-            $out      = array();
+            $out      = [];
             $length   = mb_strlen($prefix);
 
             foreach($iterator as $fileinfo) {
@@ -247,6 +236,4 @@ class Path implements Autocompleter {
             return new \DirectoryIterator($path);
         };
     }
-}
-
 }

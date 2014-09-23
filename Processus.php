@@ -34,38 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Exception
- */
--> import('Console.Exception')
-
-/**
- * \Hoa\Stream
- */
--> import('Stream.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out')
-
-/**
- * \Hoa\Stream\IStream\Pathable
- */
--> import('Stream.I~.Pathable');
-
-}
-
-namespace Hoa\Console {
+use Hoa\Core;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Console\System.
@@ -78,10 +50,10 @@ namespace Hoa\Console {
  */
 
 class          Processus
-    extends    \Hoa\Stream
-    implements \Hoa\Stream\IStream\In,
-               \Hoa\Stream\IStream\Out,
-               \Hoa\Stream\IStream\Pathable {
+    extends    Stream
+    implements Stream\IStream\In,
+               Stream\IStream\Out,
+               Stream\IStream\Pathable {
 
     /**
      * Signal: terminal line hangup (terminate process).
@@ -312,7 +284,7 @@ class          Processus
      *
      * @var \Hoa\Console\Processus array
      */
-    protected $_options     = array();
+    protected $_options     = [];
 
     /**
      * Current working directory.
@@ -340,11 +312,11 @@ class          Processus
      *
      * @var \Hoa\Console\Processus array
      */
-    protected $_descriptors = array(
-        0 => array('pipe', 'r'),
-        1 => array('pipe', 'w'),
-        2 => array('pipe', 'w')
-    );
+    protected $_descriptors = [
+        0 => ['pipe', 'r'],
+        1 => ['pipe', 'w'],
+        2 => ['pipe', 'w']
+    ];
 
     /**
      * Pipe descriptors of the processus.
@@ -358,7 +330,7 @@ class          Processus
      *
      * @var \Hoa\Console\Processus array
      */
-    protected $_seekable    = array();
+    protected $_seekable    = [];
 
 
 
@@ -389,7 +361,7 @@ class          Processus
 
         if(null !== $descriptors) {
 
-            $this->_descriptors = array();
+            $this->_descriptors = [];
 
             foreach($descriptors as $descriptor => $nature) {
 
@@ -410,7 +382,7 @@ class          Processus
 
         $this->setTimeout($timeout);
         parent::__construct($this->getCommandLine(), null, true);
-        $this->_on->addIds(array('input', 'output', 'timeout', 'start', 'stop'));
+        $this->_on->addIds(['input', 'output', 'timeout', 'start', 'stop']);
 
         return;
     }
@@ -423,7 +395,7 @@ class          Processus
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         $out = @proc_open(
             $streamName,
@@ -477,11 +449,11 @@ class          Processus
             ));
         }
 
-        $this->_on->fire('start', new \Hoa\Core\Event\Bucket());
+        $this->_on->fire('start', new Core\Event\Bucket());
 
-        $_read   = array();
-        $_write  = array();
-        $_except = array();
+        $_read   = [];
+        $_write  = [];
+        $_except = [];
 
         foreach($this->_pipes as $p => $pipe) {
 
@@ -524,7 +496,7 @@ class          Processus
 
             if(0 === $select) {
 
-                $this->_on->fire('timeout', new \Hoa\Core\Event\Bucket());
+                $this->_on->fire('timeout', new Core\Event\Bucket());
 
                 break;
             }
@@ -535,14 +507,14 @@ class          Processus
                 $line = $this->readLine($pipe);
 
                 if(false === $line)
-                    $result = array(false);
+                    $result = [false];
                 else
                     $result = $this->_on->fire(
                         'output',
-                        new \Hoa\Core\Event\Bucket(array(
+                        new Core\Event\Bucket([
                             'pipe' => $pipe,
                             'line' => $line
-                        ))
+                        ])
                     );
 
                 if(true === feof($_r) || in_array(false, $result, true)) {
@@ -558,9 +530,9 @@ class          Processus
 
                 $result = $this->_on->fire(
                     'input',
-                    new \Hoa\Core\Event\Bucket(array(
+                    new Core\Event\Bucket([
                         'pipe' => array_search($_w, $this->_pipes)
-                    ))
+                    ])
                 );
 
                 if(true === feof($_w) || in_array(false, $result, true)) {
@@ -574,7 +546,7 @@ class          Processus
                 break;
         }
 
-        $this->_on->fire('stop', new \Hoa\Core\Event\Bucket());
+        $this->_on->fire('stop', new Core\Event\Bucket());
 
         return;
     }
@@ -1221,6 +1193,4 @@ class          Processus
 
         return rtrim(shell_exec($commandLine));
     }
-}
-
 }
