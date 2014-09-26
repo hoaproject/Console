@@ -683,7 +683,8 @@ var_dump($rl->readLine('> '));</code></pre>
   Chaque valeur calculée par l'itérateur doit être un objet de type
   <a href="http://php.net/splfileinfo"><code>SplFileInfo</code></a>. Ainsi, pour
   auto-compléter tous les fichiers et dossiers à partir de la racine
-  <code>hoa://Library/Console/</code>, nous écrirons :</p>
+  <a href="@central_resource:path=Library/Console/"><code>hoa://Library/Console/</code></a>,
+  nous écrirons :</p>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
         resolve('hoa://Library/Console/')
@@ -1092,8 +1093,9 @@ NULL</code></pre>
   <strong>dispatcheur</strong> : écrire des commandes dans plusieurs fonctions
   ou classes et les appeler en fonction des options et entrées données à notre
   programme. Nous vous conseillons de regarder le code source de
-  <code>hoa://Library/Core/Bin/Hoa.php</code> pour vous aider, ainsi que les
-  chapitres de <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> et
+  <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>
+  pour vous aider, ainsi que les chapitres de
+  <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> et
   <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>. Nous
   proposons un exemple rapide sans donner trop de détails sur les bibliothèques
   précédement citées.</p>

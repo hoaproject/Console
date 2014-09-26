@@ -641,7 +641,8 @@ var_dump($rl->readLine('> '));</code></pre>
   Each value computed by the iterator must be an object of type
   <a href="http://php.net/splfileinfo"><code>SplFileInfo</code></a>. Thus, to
   auto-complete all the files and directories from the
-  <code>hoa://Library/Console/</code> root, we will write:</p>
+  <a href="@central_resource:path=Library/Console/"><code>hoa://Library/Console/</code></a>
+  root, we will write:</p>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
         resolve('hoa://Library/Console/')
@@ -1037,7 +1038,8 @@ NULL</code></pre>
   possible to go further by using a <strong>dispatcher</strong>: writing
   commands in several functions or classes and call them regarding the given
   options and inputs to our program. We recommend to read the source code of
-  <code>hoa://Library/Core/Bin/Hoa.php</code> to help yourself, along with the
+  <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>
+  to help yourself, along with the
   <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> and
   <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a> chapters. We
   propose a quick example without giving too much details about those
