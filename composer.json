@@ -38,5 +38,8 @@
         "branch-alias": {
             "dev-master": "2.x-dev"
         }
+    },
+    "require-dev": {
+        "hoa/test": "~1.0"
     }
 }
