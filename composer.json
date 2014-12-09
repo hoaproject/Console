@@ -30,9 +30,12 @@
     "require-dev": {
         "hoa/test": "~1.0"
     },
-    "target-dir": "Hoa/Console",
-    "autoload"  : { "psr-0": { "Hoa\\Console": "." } },
-    "suggest"   : {
+    "autoload": {
+        "psr-4": {
+            "Hoa\\Console\\": "."
+        }
+    },
+    "suggest": {
         "hoa/dispatcher": "To use the console kit.",
         "hoa/router"    : "To use the console kit.",
         "ext-pcntl"     : "To enable hoa://Event/Console/Window:resize."
