@@ -693,9 +693,9 @@ var_dump($rl->readLine('> '));</code></pre>
   <p>Utiliser une <em lang="en">factory</em> nous offre beaucoup de
   <strong>souplesse</strong> et nous permet d'utiliser n'importe quel itérateur
   de fichiers, comme par exemple <code>Hoa\File\Finder</code> (voir
-  <a href="@lh:chapter=File">la bibliothèque <code>Hoa\File</code></a>). Ainsi,
-  pour n'auto-compléter que les fichiers et dossiers non cachés qui ont été
-  modifiés les 6 derniers mois triés par leur taille, nous écrirons :</p>
+  <a href="@hack:chapter=File">la bibliothèque <code>Hoa\File</code></a>).
+  Ainsi, pour n'auto-compléter que les fichiers et dossiers non cachés qui ont
+  été modifiés les 6 derniers mois triés par leur taille, nous écrirons :</p>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
         resolve('hoa://Library/Console/'),
@@ -1095,8 +1095,8 @@ NULL</code></pre>
   programme. Nous vous conseillons de regarder le code source de
   <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>
   pour vous aider, ainsi que les chapitres de
-  <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> et
-  <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>. Nous
+  <a href="@hack:chapter=Router"><code>Hoa\Router</code></a> et
+  <a href="@hack:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>. Nous
   proposons un exemple rapide sans donner trop de détails sur les bibliothèques
   précédement citées.</p>
   <p>L'idée est la suivante. Grâce à <code>Hoa\Router\Cli</code>, nous allons
@@ -1375,8 +1375,8 @@ while(false !== $line = fgets(STDIN))
   Prenons l'exemple de <code>STDOUT</code> : l'écran va lire ce que le processus
   lui a écrit.</p>
   <p>La classe <code>Hoa\Console\Processus</code> étend la classe
-  <a href="@lh:chapter=Stream"><code>Hoa\Stream</code></a>, et de ce fait, nous
-  avons tous les outils nécessaires pour lire et écrire sur les
+  <a href="@hack:chapter=Stream"><code>Hoa\Stream</code></a>, et de ce fait,
+  nous avons tous les outils nécessaires pour lire et écrire sur les
   <em lang="en">pipes</em> de notre choix. Cette classe propose aussi plusieurs
   <strong>écouteurs</strong> :</p>
   <ul>
