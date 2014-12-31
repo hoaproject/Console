@@ -792,9 +792,10 @@ class Tput {
      * Get pathname to the current terminfo.
      *
      * @access  public
+     * @param   string  $term    Term.
      * @return  string
      */
-    public static function getTerminfo ( ) {
+    public static function getTerminfo ( $term = null ) {
 
         $paths = array();
 
@@ -818,7 +819,7 @@ class Tput {
         $paths[] = '/usr/local/ncurses/lib/terminfo';
         $paths[] = 'hoa://Library/Console/Terminfo';
 
-        $term      = static::getTerm();
+        $term      = $term ?: static::getTerm();
         $fileHexa  = dechex(ord($term[0])) . DS . $term;
         $fileAlpha = $term[0] . DS . $term;
         $pathname  = null;
