@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Console\Exception
- */
--> import('Console.Exception');
-
-}
-
-namespace Hoa\Console {
+namespace Hoa\Console;
 
 /**
  * Class \Hoa\Console\Parser.
@@ -145,9 +134,9 @@ class Parser {
      * 7. Input :
      *   The regular expression sets a value as much as possible to each
      *   switch (option). If a switch does not take a value (see the
-     *   \Hoa\Console\Core\GetOption::NO_ARGUMENT constant), the value will be
+     *   \Hoa\Console\GetOption::NO_ARGUMENT constant), the value will be
      *   transfered to the input stack. But this action is not made in this
-     *   class, only in the \Hoa\Console\Core\GetOption class, because this class
+     *   class, only in the \Hoa\Console\GetOption class, because this class
      *   does not have the options profile. We got the transferSwitchToInput()
      *   method, that is called in the GetOption class.
      *   So :
@@ -173,10 +162,10 @@ class Parser {
     public function parse ( $command ) {
 
         unset($this->_parsed);
-        $this->_parsed = array(
-            'input'  => array(),
-            'switch' => array()
-        );
+        $this->_parsed = [
+            'input'  => [],
+            'switch' => []
+        ];
 
         /**
          * Here we go …
@@ -350,10 +339,10 @@ class Parser {
             if(is_bool($this->_parsed['switch'][$name]))
                 $value = !$this->_parsed['switch'][$name];
             else
-                $value = array($this->_parsed['switch'][$name], $value);
+                $value = [$this->_parsed['switch'][$name], $value];
 
         if(empty($name))
-            return $this->addInput(array(6 => null, 'i' => $value));
+            return $this->addInput([6 => null, 'i' => $value]);
 
         $this->_parsed['switch'][$name] = $value;
 
@@ -443,9 +432,9 @@ class Parser {
      * @todo    Could be ameliorate with a ":" explode, and some eval.
      *          Check if operands are integer.
      */
-    public function parseSpecialValue ( $value, Array $keywords = array() ) {
+    public function parseSpecialValue ( $value, Array $keywords = [] ) {
 
-        $out = array();
+        $out = [];
 
         foreach(explode(',', $value) as $key => $subvalue) {
 
@@ -510,6 +499,4 @@ class Parser {
 
         return $this->_longonly;
     }
-}
-
 }

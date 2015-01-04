@@ -137,7 +137,7 @@ event('hoa://Event/Console/Window:resize')
 // Passive loop.
 while(true) {
 
-    $r = array(STDIN);
+    $r = [STDIN];
     @stream_select($r, $w, $e, 3600);
 }</code></pre>
   <p>When we modify the size of the window, we will see for example:
@@ -602,7 +602,7 @@ var_dump($rl->readLine('> '));</code></pre>
   will auto-complete the input based on a <strong>list of words</strong>. For
   example:</p>
   <pre><code class="language-php">$rl = new Hoa\Console\Readline\Readline();
-$rl->setAutocompleter(new Hoa\Console\Readline\Autocompleter\Word(array(
+$rl->setAutocompleter(new Hoa\Console\Readline\Autocompleter\Word([
     'hoa',
     'console',
     'readline',
@@ -610,7 +610,7 @@ $rl->setAutocompleter(new Hoa\Console\Readline\Autocompleter\Word(array(
     'autocompletion',
     'password',
     'awesome'
-)));
+]));
 var_dump($rl->readLine('> '));</code></pre>
   <p>Let's try to write something, then where we would like, we hit
   <kbd title="Tabulation">⇥</kbd>. If the text at the left of the cursor starts
@@ -681,10 +681,10 @@ var_dump($rl->readLine('> '));</code></pre>
   a word to auto-complete will break the loop over all the auto-completers.
   Thus, to auto-complete paths and words, we will write:</p>
   <pre><code class="language-php">$rl->setAutocompleter(
-    new Hoa\Console\Readline\Autocompleter\Aggregate(array(
+    new Hoa\Console\Readline\Autocompleter\Aggregate([
         new Hoa\Console\Readline\Autocompleter\Path(),
         new Hoa\Console\Readline\Autocompleter\Word($words)
-    ))
+    ])
 );
 </code></pre>
   <p>The <code>getAutocompleters</code> method from
@@ -852,12 +852,12 @@ print_r($parser->getSwitches());
 $parser->parse('-x --directory=value inputA inputB inputC');
 
 $options = new Hoa\Console\GetOption(
-    array(
-        //    long name                    type                  short name
-        //        ↓                         ↓                         ↓
-        array('extract',   Hoa\Console\GetOption::NO_ARGUMENT,       'x'),
-        array('directory', Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd')
-    ),
+    [
+        // long name                  type                  short name
+        //   ↓                         ↓                         ↓
+        ['extract',   Hoa\Console\GetOption::NO_ARGUMENT,       'x'],
+        ['directory', Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd']
+    ],
     $parser
 );</code></pre>
   <p>We are now ready to read our options! The options reader behaves like an
@@ -937,7 +937,7 @@ var_dump($inputA, $inputB, $inputC);
       break;
 
     case 'd':
-        $directory = $parser->parseSpecialValue($v, array('HOME' => '/tmp'));
+        $directory = $parser->parseSpecialValue($v, ['HOME' => '/tmp']);
       break;
 }
 
@@ -966,7 +966,7 @@ print_r($directory);</code></pre>
       break;
 
     case 'd':
-        $directory = $parser->parseSpecialValue($v, array('HOME' => '/tmp'));
+        $directory = $parser->parseSpecialValue($v, ['HOME' => '/tmp']);
       break;
 
     case '__ambiguous':
@@ -1065,9 +1065,9 @@ NULL</code></pre>
   action. If an error occurred, we will print it and force an exit code greater
   than zero. Thus:</p>
   <pre><code class="language-php">// Where is our Application/ directory?
-Hoa\Core\Core::getInstance()->initialize(array(
+Hoa\Core\Core::getInstance()->initialize([
     'root.application' => '(:cwd:)/Application'
-));
+]);
 
 try {
 
@@ -1101,11 +1101,11 @@ namespace Application\Controller {
 
 class Foo extends \Hoa\Console\Dispatcher\Kit {
 
-    protected $options = array(
-        array('extract',   \Hoa\Console\GetOption::NO_ARGUMENT,       'x'),
-        array('directory', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'),
-        array('help',      \Hoa\Console\GetOption::NO_ARGUMENT,       'h')
-    );
+    protected $options = [
+        ['extract',   \Hoa\Console\GetOption::NO_ARGUMENT,       'x'],
+        ['directory', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'],
+        ['help',      \Hoa\Console\GetOption::NO_ARGUMENT,       'h']
+    ];
 
     public function MainAction ( ) {
 
@@ -1119,7 +1119,7 @@ class Foo extends \Hoa\Console\Dispatcher\Kit {
               break;
 
             case 'd':
-                $directory = $this->parser->parseSpecialValue($v, array('HOME' => '/tmp'));
+                $directory = $this->parser->parseSpecialValue($v, ['HOME' => '/tmp']);
               break;
 
             case 'h':
@@ -1138,11 +1138,11 @@ class Foo extends \Hoa\Console\Dispatcher\Kit {
 
         echo 'Usage   : foo &amp;lt;options>', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  'x' => 'Whether we need to extract.',
                  'd' => 'Directory to extract.',
                  'h' => 'This help.'
-             ));
+             ]);
     }
 }
 
@@ -1278,28 +1278,28 @@ while(false !== $line = fgets(STDIN))
   <code>a</code>). Let's illustrate with an example:</p>
   <pre><code class="language-php">$processus = new Hoa\Console\Processus(
     'php',
-    array('LittleProcessus.php'),
-    array(
+    ['LittleProcessus.php'],
+    [
         // STDIN.
-        0 => array('pipe', 'r'),
+        0 => ['pipe', 'r'],
         // STDOUT.
-        1 => array('file', '/tmp/output', 'a')
-    )
+        1 => ['file', '/tmp/output', 'a']
+    ]
 );</code></pre>
   <p>In this case, <code>STDIN</code> is a pipe and <code>STDOUT</code> is the
   <code>/tmp/output</code> file. If we do not set a descriptor, it will be
   equivalent to write:</p>
   <pre><code class="language-php">$processus = new Hoa\Console\Processus(
     'php',
-    array('LittleProcessus.php'),
-    array(
+    ['LittleProcessus.php'],
+    [
         // STDIN.
-        0 => array('pipe', 'r'),
+        0 => ['pipe', 'r'],
         // STDOUT.
-        1 => array('pipe', 'w'),
+        1 => ['pipe', 'w'],
         // STDERR.
-        2 => array('pipe', 'w')
-    )
+        2 => ['pipe', 'w']
+    ]
 );</code></pre>
   <p>Each pipe is identified as a stream and can be manipulated as such. When a
   pipe is in <strong>reading</strong> (with the <code>r</code> mode), it means
@@ -1509,11 +1509,11 @@ $ hoa | xargs -I@ echo @</code></pre>
     null, /* no option         */
     null, /* use default pipes */
     '/tmp',
-    array(
+    [
         'FOO'  => 'bar',
         'BAZ'  => 'qux',
         'PATH' => '/usr/bin:/bin'
-    )
+    ]
 );
 $processus->on('input', function ( Hoa\Core\Event\Bucket $bucket ) {
 

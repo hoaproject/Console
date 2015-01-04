@@ -34,23 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console;
 
-from('Hoa')
-
-/**
- * \Hoa\Console
- */
--> import('Console.~')
-
-/**
- * \Hoa\Console\Processus
- */
--> import('Console.Processus');
-
-}
-
-namespace Hoa\Console {
+use Hoa\Core;
 
 /**
  * Class \Hoa\Console\Window.
@@ -66,7 +52,7 @@ namespace Hoa\Console {
  * @license    New BSD License
  */
 
-class Window implements \Hoa\Core\Event\Source {
+class Window implements Core\Event\Source {
 
     /**
      * Singleton (only for events).
@@ -87,7 +73,7 @@ class Window implements \Hoa\Core\Event\Source {
      */
     public function __construct ( ) {
 
-        \Hoa\Core\Event::register(
+        Core\Event::register(
             'hoa://Event/Console/Window:resize',
             $this
         );
@@ -147,10 +133,10 @@ class Window implements \Hoa\Core\Event\Source {
             preg_match('#[^:]+:\s*([0-9]+)#', $_x, $matches);
             $x       = (int) $matches[1];
 
-            return array(
+            return [
                 'x' => $x,
                 'y' => $y
-            );
+            ];
         }
 
         $term = '';
@@ -165,10 +151,10 @@ class Window implements \Hoa\Core\Event\Source {
 
             list($x, $y) = explode("\n", $tput);
 
-            return array(
+            return [
                 'x' => intval($x),
                 'y' => intval($y)
-            );
+            ];
         }
 
         // DECSLPP.
@@ -204,15 +190,15 @@ class Window implements \Hoa\Core\Event\Source {
         } while(true);
 
         if(null === $x || null === $y)
-            return array(
+            return [
                 'x' => 0,
                 'y' => 0
-            );
+            ];
 
-        return array(
+        return [
             'x' => (int) $x,
             'y' => (int) $y
-        );
+        ];
     }
 
     /**
@@ -274,10 +260,10 @@ class Window implements \Hoa\Core\Event\Source {
 
         } while(true);
 
-        return array(
+        return [
             'x' => (int) $x,
             'y' => (int) $y
-        );
+        ];
     }
 
     /**
@@ -304,8 +290,8 @@ class Window implements \Hoa\Core\Event\Source {
         else
             $handle = explode(' ', $directions, 1);
 
-        $tput  = \Hoa\Console::getTput();
-        $count = array('up' => 0, 'down' => 0);
+        $tput  = Console::getTput();
+        $count = ['up' => 0, 'down' => 0];
 
         foreach($handle as $direction)
             switch($direction) {
@@ -536,36 +522,30 @@ class Window implements \Hoa\Core\Event\Source {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Advanced interaction.
  */
-\Hoa\Console::advancedInteraction();
+Console::advancedInteraction();
 
 /**
  * Event.
  */
 if(function_exists('pcntl_signal')) {
 
-    \Hoa\Console\Window::getInstance();
+    Window::getInstance();
     pcntl_signal(SIGWINCH, function ( ) {
 
         static $_window = null;
 
         if(null === $_window)
-            $_window = \Hoa\Console\Window::getInstance();
+            $_window = Window::getInstance();
 
-        \Hoa\Core\Event::notify(
+        Core\Event::notify(
             'hoa://Event/Console/Window:resize',
             $_window,
-            new \Hoa\Core\Event\Bucket(array(
-                'size' => \Hoa\Console\Window::getSize()
-            ))
+            new Core\Event\Bucket([
+                'size' => \Window::getSize()
+            ])
         );
     });
-}
-
 }

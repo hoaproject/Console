@@ -258,10 +258,10 @@ following example combine the `Word` and `Path` autocompleters:
 ```php
 $functions = get_defined_functions();
 $readline->setAutocompleter(
-    new Hoa\Console\Readline\Autocompleter\Aggregate(array(
+    new Hoa\Console\Readline\Autocompleter\Aggregate([
         new Hoa\Console\Readline\Autocompleter\Path(),
         new Hoa\Console\Readline\Autocompleter\Word($functions['internal'])
-    ))
+    ])
 );
 ```
 
@@ -330,12 +330,12 @@ Second, we need to define our options:
 
 ```php
 $options = new Hoa\Console\GetOption(
-    array(
-        //   long name                 type                  short name
-        //       ↓                      ↓                         ↓
-        array('short', Hoa\Console\GetOption::NO_ARGUMENT,       's'),
-        array('long',  Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l')
-    ),
+    [
+        // long name              type                  short name
+        //  ↓                      ↓                         ↓
+        ['short', Hoa\Console\GetOption::NO_ARGUMENT,       's'],
+        ['long',  Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'l']
+    ],
     $parser
 );
 ```

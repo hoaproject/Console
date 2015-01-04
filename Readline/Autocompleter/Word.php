@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\Console\Readline\Autocompleter
- */
--> import('Console.Readline.Autocompleter.~');
-
-}
-
-namespace Hoa\Console\Readline\Autocompleter {
+namespace Hoa\Console\Readline\Autocompleter;
 
 /**
  * Class \Hoa\Console\Readline\Autocompleter\Word.
@@ -92,7 +81,7 @@ class Word implements Autocompleter {
      */
     public function complete ( &$prefix ) {
 
-        $out    = array();
+        $out    = [];
         $length = mb_strlen($prefix);
 
         foreach($this->getWords() as $word)
@@ -144,6 +133,4 @@ class Word implements Autocompleter {
 
         return $this->_words;
     }
-}
-
 }

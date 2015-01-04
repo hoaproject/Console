@@ -34,28 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console;
 
-from('Hoa')
-
-/**
- * \Hoa\Console\Exception
- */
--> import('Console.Exception')
-
-/**
- * \Hoa\Console\Parser
- */
--> import('Console.Parser')
-
-/**
- * \Hoa\String\Search
- */
--> import('String.Search');
-
-}
-
-namespace Hoa\Console {
+use Hoa\String;
 
 /**
  * Class \Hoa\Console\GetOption.
@@ -128,7 +109,7 @@ class GetOption {
      *
      * @var \Hoa\Console\GetOption array
      */
-    protected $_options       = array();
+    protected $_options       = [];
 
     /**
      * Parser.
@@ -142,7 +123,7 @@ class GetOption {
      *
      * @var \Hoa\Console\GetOption char
      */
-    protected $_pipette       = array();
+    protected $_pipette       = [];
 
 
 
@@ -167,8 +148,8 @@ class GetOption {
             return;
         }
 
-        $names  = array();
-        $_names = array();
+        $names  = [];
+        $_names = [];
 
         foreach($options as $i => $option) {
 
@@ -188,23 +169,23 @@ class GetOption {
 
                 if(1 === strlen($name)) {
 
-                    $this->_pipette[] = array('__ambiguous', array(
-                        'solutions' => array(),
+                    $this->_pipette[] = ['__ambiguous', [
+                        'solutions' => [],
                         'value'     => $value,
                         'option'    => $name
-                    ));
+                    ]];
 
                     continue;
                 }
 
                 $haystack    = implode(';', $_names);
                 $differences = (int) ceil(strlen($name) / 3);
-                $searched    = \Hoa\String\Search::approximated(
+                $searched    = String\Search::approximated(
                     $haystack,
                     $name,
                     $differences
                 );
-                $solutions   = array();
+                $solutions   = [];
 
                 foreach($searched as $s) {
 
@@ -221,11 +202,11 @@ class GetOption {
                 if(empty($solutions))
                     continue;
 
-                $this->_pipette[] = array('__ambiguous', array(
+                $this->_pipette[] = ['__ambiguous', [
                     'solutions' => $solutions,
                     'value'     => $value,
                     'option'    => $name
-                ));
+                ]];
 
                 continue;
             }
@@ -244,7 +225,7 @@ class GetOption {
                     'The argument %s requires a value (it is not a switch).',
                     0, $name);
 
-            $this->_pipette[] = array($option[self::OPTION_VAL], $value);
+            $this->_pipette[] = [$option[self::OPTION_VAL], $value];
         }
 
         $this->_pipette[null] = null;
@@ -289,7 +270,7 @@ class GetOption {
             return false;
         }
 
-        $allow = array();
+        $allow = [];
 
         if(null === $short)
             foreach($this->_options as $option)
@@ -366,7 +347,7 @@ class GetOption {
                         3, $theSolution);
 
                 unset($this->_pipette[null]);
-                $this->_pipette[]     = array($option[self::OPTION_VAL], $value);
+                $this->_pipette[]     = [$option[self::OPTION_VAL], $value];
                 $this->_pipette[null] = null;
 
                 return;
@@ -374,6 +355,4 @@ class GetOption {
 
         return;
     }
-}
-
 }

@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\Console {
+namespace Hoa\Console;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\Console\Exception.
@@ -46,6 +48,4 @@ namespace Hoa\Console {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
+class Exception extends Core\Exception { }

@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\Console\Bin;
 
-from('Hoa')
-
-/**
- * \Hoa\Console
- */
--> import('Console.~');
-
-}
-
-namespace Hoa\Console\Bin {
+use Hoa\Console;
 
 /**
  * Class Hoa\Console\Bin\Termcap.
@@ -57,25 +48,25 @@ namespace Hoa\Console\Bin {
  * @license    New BSD License
  */
 
-class Termcap extends \Hoa\Console\Dispatcher\Kit {
+class Termcap extends Console\Dispatcher\Kit {
 
     /**
      * Options description.
      *
      * @var \Hoa\Console\Bin\Termcap array
      */
-    protected $options = array(
-        array('terminal', \Hoa\Console\GetOption::NO_ARGUMENT,       't'),
-        array('file',     \Hoa\Console\GetOption::NO_ARGUMENT,       'f'),
-        array('has',      \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'H'),
-        array('count',    \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'c'),
-        array('get',      \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'g'),
-        array('booleans', \Hoa\Console\GetOption::NO_ARGUMENT,       'b'),
-        array('numbers',  \Hoa\Console\GetOption::NO_ARGUMENT,       'n'),
-        array('strings',  \Hoa\Console\GetOption::NO_ARGUMENT,       's'),
-        array('help',     \Hoa\Console\GetOption::NO_ARGUMENT,       'h'),
-        array('help',     \Hoa\Console\GetOption::NO_ARGUMENT,       '?')
-    );
+    protected $options = [
+        ['terminal', Console\GetOption::NO_ARGUMENT,       't'],
+        ['file',     Console\GetOption::NO_ARGUMENT,       'f'],
+        ['has',      Console\GetOption::REQUIRED_ARGUMENT, 'H'],
+        ['count',    Console\GetOption::REQUIRED_ARGUMENT, 'c'],
+        ['get',      Console\GetOption::REQUIRED_ARGUMENT, 'g'],
+        ['booleans', Console\GetOption::NO_ARGUMENT,       'b'],
+        ['numbers',  Console\GetOption::NO_ARGUMENT,       'n'],
+        ['strings',  Console\GetOption::NO_ARGUMENT,       's'],
+        ['help',     Console\GetOption::NO_ARGUMENT,       'h'],
+        ['help',     Console\GetOption::NO_ARGUMENT,       '?']
+    ];
 
 
 
@@ -87,7 +78,7 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
      */
     public function main ( ) {
 
-        $tput = \Hoa\Console::getTput();
+        $tput = Console::getTput();
 
         while(false !== $c = $this->getOption($v)) switch($c) {
 
@@ -150,7 +141,7 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
 
         echo 'Usage   : console:termcap', "\n",
              'Options :', "\n",
-             $this->makeUsageOptionsList(array(
+             $this->makeUsageOptionsList([
                  't'    => 'Get terminal name.',
                  'f'    => 'Get path to the terminfo file.',
                  'H'    => 'Get value of a boolean capability.',
@@ -160,7 +151,7 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
                  'n'    => 'Get all number capabilites.',
                  's'    => 'Get all string capabilites.',
                  'help' => 'This help.'
-             )), "\n",
+             ]), "\n",
              'Examples:', "\n",
              '    $ hoa console:termcap --count max_colors', "\n",
              '    $ TERM=vt200 hoa console:termcap --has back_color_erase', "\n";
@@ -193,7 +184,7 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
                     ? ($value ? 'true' : 'false')
                     : (is_string($value)
                          ? str_replace(
-                               array(
+                               [
                                    "\033",
                                    "\n",
                                    ord(0xa),
@@ -201,8 +192,8 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
                                    "\b",
                                    "\f",
                                    "\0"
-                               ),
-                               array(
+                               ],
+                               [
                                    '\e',
                                    '\n',
                                    '\l',
@@ -210,7 +201,7 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
                                    '\b',
                                    '\f',
                                    '\0'
-                               ),
+                               ],
                                $value
                            )
                          : $value)
@@ -218,8 +209,6 @@ class Termcap extends \Hoa\Console\Dispatcher\Kit {
 
         return;
     }
-}
-
 }
 
 __halt_compiler();
