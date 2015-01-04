@@ -229,7 +229,7 @@ class Window implements \Hoa\Core\Event\Source {
             return;
 
         // DECSLPP.
-        echo "\033[3;" . $y . ";" . $x . "t";
+        echo "\033[3;" . $x . ";" . $y . "t";
 
         return;
     }
