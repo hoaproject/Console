@@ -650,7 +650,7 @@ var_dump($rl->readLine('> '));</code></pre>
 );</code></pre>
   <p>Using a factory offers a lot of <strong>flexibility</strong> and allows us
   to use any file iterator, such as <code>Hoa\File\Finder</code> (please, see
-  <a href="@lh:chapter=File">the <code>Hoa\File</code> library</a>). Thus, to
+  <a href="@hack:chapter=File">the <code>Hoa\File</code> library</a>). Thus, to
   only auto-complete not hidden files and directories that have been modified
   the last 6 months and sorted by their size, we will write:</p>
   <pre><code class="language-php">$rl->setAutocompleter(
@@ -1040,9 +1040,9 @@ NULL</code></pre>
   options and inputs to our program. We recommend to read the source code of
   <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>
   to help yourself, along with the
-  <a href="@lh:chapter=Router"><code>Hoa\Router</code></a> and
-  <a href="@lh:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a> chapters. We
-  propose a quick example without giving too much details about those
+  <a href="@hack:chapter=Router"><code>Hoa\Router</code></a> and
+  <a href="@hack:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a> chapters.
+  We propose a quick example without giving too much details about those
   libraries.</p>
   <p>The idea is as follows. Thanks to <code>Hoa\Router\Cli</code> we are going
   to extract data of the following form: <code>$ php script.php
@@ -1311,7 +1311,7 @@ while(false !== $line = fgets(STDIN))
   <strong>read</strong> from it. Let's take the example of <code>STDOUT</code>:
   the screen will read what the processus has written to it.</p>
   <p>The <code>Hoa\Console\Processus</code> class extends the
-  <a href="@lh:chapter=Stream"><code>Hoa\Stream</code></a> class, and
+  <a href="@hack:chapter=Stream"><code>Hoa\Stream</code></a> class, and
   consequently, we have all the necessary tools to read and write on the pipe of
   our choice. This class also provides several <strong>listeners</strong>:</p>
   <ul>
