@@ -773,7 +773,7 @@ class Tput {
     public static function getTerm ( ) {
 
         return isset($_SERVER['TERM']) ?
-                   $_SERVER['TERM'] :
+                   (($_SERVER['TERM'] === 'cygwin') ? 'windows-ansi' : $_SERVER['TERM']) :
                    (OS_WIN ? 'windows-ansi' : 'xterm');
     }
 
