@@ -59,7 +59,7 @@ class Editor {
      *                             default).
      * @return  string
      */
-    public static function open ( $file ='', $editor = null ) {
+    public static function open ( $file = '', $editor = null ) {
 
         if(null === $editor)
             if(isset($_SERVER['EDITOR']))
