@@ -1049,7 +1049,7 @@ NULL</code></pre>
   <em>controller</em> <em>tail</em></code>, where
   <code><em>controller</em></code> will be the name of the controller (of a
   class) on which we will call the <code>main</code> action (it means the
-  <code>MainAction</code> method with its default parameters) and where
+  <code>main</code> method with its default parameters) and where
   <code><em>tail</em></code> represents the options and the inputs. The name of
   the controller is identified by the special <code>_call</code> variable (from
   <code>Hoa\Router\Cli</code>) and the options along with the inputs are
@@ -1075,13 +1075,14 @@ try {
     $router = new Hoa\Router\Cli();
     $router->get(
         'g',
-        '(?&amp;lt;_call>\w+)(?:\s+(?&amp;lt;_tail>.+))?',
-        null,
-        'main'
+        '(?&amp;lt;_call>\w+)(?:\s+(?&amp;lt;_tail>.+))?'
     );
 
     // Prepare the dispatcher.
-    $dispatcher = new Hoa\Dispatcher\Basic();
+    $dispatcher = new Hoa\Dispatcher\ClassMethod([
+        'synchronous.call' => 'Application\Controller\(:call:U:)',
+        'synchronous.able' => 'main'
+    ]);
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
 
     // Dispatch!
@@ -1097,7 +1098,7 @@ catch ( Hoa\Core\Exception $e ) {
   file inside, which will contain the following code:</p>
   <pre><code class="language-php">&amp;lt;?php
 
-namespace Application\Controller {
+namespace Application\Controller;
 
 class Foo extends \Hoa\Console\Dispatcher\Kit {
 
@@ -1144,8 +1145,6 @@ class Foo extends \Hoa\Console\Dispatcher\Kit {
                  'h' => 'This help.'
              ]);
     }
-}
-
 }</code></pre>
   <p>Our class extends our kit to benefit from the provided methods. Among other
   things, its own <code>getOption</code> method that will exploit the

@@ -1103,7 +1103,7 @@ NULL</code></pre>
   extraire des données de la forme suivante : <code>$ php script.php
   <em>controller</em> <em>tail</em></code>, où <code><em>controller</em></code>
   sera le nom du contrôleur (d'une classe) sur laquelle nous appellerons
-  l'action <code>main</code> (soit la méthode <code>MainAction</code> avec les
+  l'action <code>main</code> (soit la méthode <code>main</code> avec les
   paramètres par défaut), et où <code><em>tail</em></code> correspond aux
   options et aux entrées. Le nom du contrôleur est identifié par la variable
   spéciale <code>_call</code> (au niveau de <code>Hoa\Router\Cli</code>) et les
@@ -1130,13 +1130,14 @@ try {
     $router = new Hoa\Router\Cli();
     $router->get(
         'g',
-        '(?&amp;lt;_call>\w+)(?:\s+(?&amp;lt;_tail>.+))?',
-        null,
-        'main'
+        '(?&amp;lt;_call>\w+)(?:\s+(?&amp;lt;_tail>.+))?'
     );
 
     // Prepare the dispatcher.
-    $dispatcher = new Hoa\Dispatcher\Basic();
+    $dispatcher = new Hoa\Dispatcher\ClassMethod([
+        'synchronous.call' => 'Application\Controller\(:call:U:)',
+        'synchronous.able' => 'main'
+    ]);
     $dispatcher->setKitName('Hoa\Console\Dispatcher\Kit');
 
     // Dispatch!
@@ -1152,7 +1153,7 @@ catch ( Hoa\Core\Exception $e ) {
   l'intérieur, qui contiendra le code suivant :</p>
   <pre><code class="language-php">&amp;lt;?php
 
-namespace Application\Controller {
+namespace Application\Controller;
 
 class Foo extends \Hoa\Console\Dispatcher\Kit {
 
@@ -1199,8 +1200,6 @@ class Foo extends \Hoa\Console\Dispatcher\Kit {
                  'h' => 'This help.'
              ]);
     }
-}
-
 }</code></pre>
   <p>Notre classe étend bien notre kit pour bénéficier des méthodes qu'il
   propose. Entre autre, sa propre méthode <code>getOption</code>, qui va
