@@ -1,3 +1,11 @@
+# 2.15.02.18
+
+  * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-18T08:59:24+01:00)
+  * Use `Hoa\Dispatcher\ClassMethod` dispatcher in the documentation. (Ivan Enderlin, 2015-02-11T10:49:19+01:00)
+  * Fix a CS. (Ivan Enderlin, 2015-02-10T17:03:09+01:00)
+  * Fix links in the documentation. (Ivan Enderlin, 2015-01-23T19:23:57+01:00)
+  * Happy new year! (Ivan Enderlin, 2015-01-05T14:21:41+01:00)
+
 # 2.15.01.04
 
   * Inverse `$x` and `$y` in `Cursor::moveTo`. (Ivan Enderlin, 2015-01-04T15:10:08+01:00)
