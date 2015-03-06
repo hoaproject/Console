@@ -321,7 +321,7 @@ class GetOption {
 
         $choices = $solution['solutions'];
 
-        if(1 < count($choices))
+        if(1 > count($choices))
             throw new Exception(
                 'Cannot resolve ambiguity, fix your typo in the option %s :-).',
                 2, $solution['option']);
