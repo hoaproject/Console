@@ -1,3 +1,7 @@
+# 2.15.03.06
+
+  * Fix a bug in the ambiguity resolver. (Ivan Enderlin, 2015-03-06T10:48:55+01:00)
+
 # 2.15.02.18
 
   * Add the CHANGELOG.md file. (Ivan Enderlin, 2015-02-18T08:59:24+01:00)
