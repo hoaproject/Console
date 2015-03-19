@@ -423,9 +423,16 @@ class Window implements Core\Event\Source {
         // DECSLPP.
         echo "\033[21t";
 
+        $read   = [STDIN];
+        $write  = [];
+        $except = [];
+        $out    = null;
+
+        if(0 === stream_select($read, $write, $except, 0, 50000))
+            return $out;
+
         // Read \033]l<title>\033\
         fread(STDIN, 3); // skip \033, ] and l.
-        $out = null;
 
         do {
 
@@ -462,9 +469,16 @@ class Window implements Core\Event\Source {
         // DECSLPP.
         echo "\033[20t";
 
+        $read   = [STDIN];
+        $write  = [];
+        $except = [];
+        $out    = null;
+
+        if(0 === stream_select($read, $write, $except, 0, 50000))
+            return $out;
+
         // Read \033]L<label>\033\
         fread(STDIN, 3); // skip \033, ] and L.
-        $out = null;
 
         do {
 
