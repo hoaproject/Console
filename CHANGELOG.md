@@ -1,3 +1,7 @@
+# 2.15.03.19
+
+  * Add timeouts on `Window::getTitle` and `Window::getLabel` for tmux. (Ivan Enderlin, 2015-03-19T09:46:00+01:00)
+
 # 2.15.03.06
 
   * Fix a bug in the ambiguity resolver. (Ivan Enderlin, 2015-03-06T10:48:55+01:00)
