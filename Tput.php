@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ namespace Hoa\Console;
  *     • http://man.cx/terminfo(5),
  *     • http://pubs.opengroup.org/onlinepubs/7908799/xcurses/terminfo.html,
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Tput {
-
+class Tput
+{
     /**
      * Booleans.
      *
-     * @var \Hoa\Console\Tput array
+     * @var array
      */
     protected static $_booleans = [
         'auto_left_margin',
@@ -107,7 +105,7 @@ class Tput {
     /**
      * Numbers.
      *
-     * @var \Hoa\Console\Tput array
+     * @var array
      */
     protected static $_numbers = [
         'columns',
@@ -155,7 +153,7 @@ class Tput {
     /**
      * Strings.
      *
-     * @var \Hoa\Console\Tput array
+     * @var array
      */
     protected static $_strings = [
         'back_tab',
@@ -578,7 +576,7 @@ class Tput {
     /**
      * Computed informations.
      *
-     * @var \Hoa\Console\Tput array
+     * @var array
      */
     protected $_informations = [];
 
@@ -587,14 +585,14 @@ class Tput {
     /**
      * Set stream and parse.
      *
-     * @access  public
      * @param   string  $terminfo    Terminfo file.
      * @return  void
      */
-    public function __construct ( $terminfo = null ) {
-
-        if(null === $terminfo)
+    public function __construct($terminfo = null)
+    {
+        if (null === $terminfo) {
             $terminfo = static::getTerminfo();
+        }
 
         $this->parse($terminfo);
 
@@ -604,16 +602,19 @@ class Tput {
     /**
      * Parse.
      *
-     * @access  protected
      * @param   string  $terminfo    Terminfo file.
      * @return  array
-     * @throw   \Hoa\Console\Exception
+     * @throws  \Hoa\Console\Exception
      */
-    protected function parse ( $terminfo ) {
-
-        if(!file_exists($terminfo))
+    protected function parse($terminfo)
+    {
+        if (!file_exists($terminfo)) {
             throw new Exception(
-                'Terminfo file %s does not exist.', 0, $terminfo);
+                'Terminfo file %s does not exist.',
+                0,
+                $terminfo
+            );
+        }
 
         $data    = file_get_contents($terminfo);
         $length  = strlen($data);
@@ -634,6 +635,7 @@ class Tput {
 
         // Names.
         $i = $headers['header_size'];
+
         list($out['name'], $out['description']) =
             explode('|', substr($data, $i, $headers['names_size'] - 1));
 
@@ -642,32 +644,38 @@ class Tput {
         $booleans      = [];
         $booleanNames  = &static::$_booleans;
 
-        for($e = 0, $max = $i + $headers['bool_count'];
+        for (
+            $e = 0, $max = $i + $headers['bool_count'];
             $i < $max;
-            ++$e, ++$i)
+            ++$e, ++$i
+        ) {
             $booleans[$booleanNames[$e]] = 1 === ord($data[$i]);
+        }
 
         $out['booleans'] = $booleans;
 
         // Numbers.
-        if(1 === ($i % 2))
+        if (1 === ($i % 2)) {
             ++$i;
+        }
 
         $numbers     = [];
         $numberNames = &static::$_numbers;
 
-        for($e = 0, $max = $i + $headers['number_count'] * 2;
+        for (
+            $e = 0, $max = $i + $headers['number_count'] * 2;
             $i < $max;
-            ++$e, $i += 2) {
-
+            ++$e, $i += 2
+        ) {
             $name    = $numberNames[$e];
             $data_i0 = ord($data[$i    ]);
             $data_i1 = ord($data[$i + 1]);
 
-            if($data_i1 === 255 && $data_i0 === 255)
+            if ($data_i1 === 255 && $data_i0 === 255) {
                 $numbers[$name] = -1;
-            else
+            } else {
                 $numbers[$name] = ($data_i1 << 8) | $data_i0;
+            }
         }
 
         $out['numbers'] = $numbers;
@@ -677,27 +685,32 @@ class Tput {
         $stringNames = &static::$_strings;
         $ii          = $i + $headers['string_count'] * 2;
 
-        for($e = 0, $max = $ii;
+        for (
+            $e = 0, $max = $ii;
             $i < $max;
-            ++$e, $i += 2) {
-
+            ++$e, $i += 2
+        ) {
             $name    = $stringNames[$e];
             $data_i0 = ord($data[$i    ]);
             $data_i1 = ord($data[$i + 1]);
 
-            if($data_i1 === 255 && $data_i0 === 255)
+            if ($data_i1 === 255 && $data_i0 === 255) {
                 continue;
+            }
 
             $a              = ($data_i1 << 8) | $data_i0;
             $strings[$name] = $a;
 
-            if(65534 === $a)
+            if (65534 === $a) {
                 continue;
+            }
 
             $b = $ii + $a;
             $c = $b;
 
-            while($c < $length && ord($data[$c])) $c++;
+            while ($c < $length && ord($data[$c])) {
+                $c++;
+            }
 
             $value          = substr($data, $b, $c - $b);
             $strings[$name] = false !== $value ? $value : null;
@@ -711,25 +724,24 @@ class Tput {
     /**
      * Get all informations.
      *
-     * @access  public
      * @return  array
      */
-    public function getInformations ( ) {
-
+    public function getInformations()
+    {
         return $this->_informations;
     }
 
     /**
      * Get a boolean value.
      *
-     * @access  public
      * @param   bool  $boolean    Boolean.
      * @return  bool
      */
-    public function has ( $boolean ) {
-
-        if(!isset($this->_informations['booleans'][$boolean]))
+    public function has($boolean)
+    {
+        if (!isset($this->_informations['booleans'][$boolean])) {
             return false;
+        }
 
         return $this->_informations['booleans'][$boolean];
     }
@@ -737,14 +749,14 @@ class Tput {
     /**
      * Get a number value.
      *
-     * @access  public
      * @param   int  $number    Number.
      * @return  int
      */
-    public function count ( $number ) {
-
-        if(!isset($this->_informations['numbers'][$number]))
+    public function count($number)
+    {
+        if (!isset($this->_informations['numbers'][$number])) {
             return 0;
+        }
 
         return $this->_informations['numbers'][$number];
     }
@@ -752,14 +764,14 @@ class Tput {
     /**
      * Get a string value.
      *
-     * @access  public
      * @param   string  $string    String.
      * @return  int
      */
-    public function get ( $string ) {
-
-        if(!isset($this->_informations['strings'][$string]))
+    public function get($string)
+    {
+        if (!isset($this->_informations['strings'][$string])) {
             return null;
+        }
 
         return $this->_informations['strings'][$string];
     }
@@ -767,36 +779,39 @@ class Tput {
     /**
      * Get current term profile.
      *
-     * @access  public
      * @return  string
      */
-    public static function getTerm ( ) {
-
-        return isset($_SERVER['TERM']) ?
-                   $_SERVER['TERM'] :
-                   (OS_WIN ? 'windows-ansi' : 'xterm');
+    public static function getTerm()
+    {
+        return
+            isset($_SERVER['TERM'])
+                ? $_SERVER['TERM']
+                : (OS_WIN ? 'windows-ansi' : 'xterm');
     }
 
     /**
      * Get pathname to the current terminfo.
      *
-     * @access  public
      * @param   string  $term    Term.
      * @return  string
      */
-    public static function getTerminfo ( $term = null ) {
-
+    public static function getTerminfo($term = null)
+    {
         $paths = [];
 
-        if(isset($_SERVER['TERMINFO']))
+        if (isset($_SERVER['TERMINFO'])) {
             $paths[] = $_SERVER['TERMINFO'];
+        }
 
-        if(isset($_SERVER['HOME']))
+        if (isset($_SERVER['HOME'])) {
             $paths[] = $_SERVER['HOME'] . DS . '.terminfo';
+        }
 
-        if(isset($_SERVER['TERMINFO_DIRS']))
-            foreach(explode(':', $_SERVER['TERMINFO_DIRS']) as $path)
+        if (isset($_SERVER['TERMINFO_DIRS'])) {
+            foreach (explode(':', $_SERVER['TERMINFO_DIRS']) as $path) {
                 $paths[] = $path;
+            }
+        }
 
         $paths[] = '/usr/share/terminfo';
         $paths[] = '/usr/share/lib/terminfo';
@@ -813,13 +828,14 @@ class Tput {
         $fileAlpha = $term[0] . DS . $term;
         $pathname  = null;
 
-        foreach($paths as $path)
-            if(   file_exists($_ = $path . DS . $fileHexa)
-               || file_exists($_ = $path . DS . $fileAlpha)) {
-
+        foreach ($paths as $path) {
+            if (file_exists($_ = $path . DS . $fileHexa) ||
+                file_exists($_ = $path . DS . $fileAlpha)) {
                 $pathname = $_;
+
                 break;
             }
+        }
 
         return $pathname;
     }

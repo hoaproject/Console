@@ -138,8 +138,7 @@ print_r(Hoa\Console\Window::getPosition());
 declare(ticks = 1);
 
 event('hoa://Event/Console/Window:resize')
-    ->attach(function ( Hoa\Core\Event\Bucket $bucket ) {
-
+    ->attach(function (Hoa\Core\Event\Bucket $bucket) {
         $data = $bucket->getData();
         $size = $data['size'];
 
@@ -147,8 +146,7 @@ event('hoa://Event/Console/Window:resize')
     });
 
 // Passive loop.
-while(true) {
-
+while (true) {
     $r = [STDIN];
     @stream_select($r, $w, $e, 3600);
 }</code></pre>
@@ -264,10 +262,11 @@ var_dump(Hoa\Console\Window::getLabel());
   </ul>
   <p>Ces directions peuvent être concaténées par des espaces, ou alors nous
   pouvons préciser le nombre de fois où une direction sera répétée.</p>
-  <pre><code class="language-php">echo 'abcdef', "\n",
-     'ghijkl', "\n",
-     'mnopqr', "\n",
-     'stuvwx';
+  <pre><code class="language-php">echo
+    'abcdef', "\n",
+    'ghijkl', "\n",
+    'mnopqr', "\n",
+    'stuvwx';
 
 sleep(1);
 Hoa\Console\Cursor::move('↑');
@@ -508,11 +507,9 @@ sleep(3);
   <pre><code class="language-php">$rl = new Hoa\Console\Readline\Readline();
 
 do {
-
     $line = $rl->readLine('> ');
     echo '&amp;lt; ', $line, "\n\n";
-
-} while(false !== $line &amp;amp;&amp;amp; 'quit' !== $line);</code></pre>
+} while (false !== $line &amp;amp;&amp;amp; 'quit' !== $line);</code></pre>
   <p>Maintenant, détaillons les services que nous offre
   <code>Hoa\Console\Readline\Readline</code>.</p>
   <p>Nous sommes capables de nous <strong>déplacer</strong> (comprendre,
@@ -592,8 +589,7 @@ echo 'Your password is: ', $pwd, "\n";</code></pre>
   <pre><code class="language-php">$rl = new Hoa\Console\Readline\Readline();
 
 // Add mapping.
-$rl->addMapping('\C-R', function ( Hoa\Console\Readline\Readline $self ) {
-
+$rl->addMapping('\C-R', function (Hoa\Console\Readline\Readline $self) {
     // Clear the line.
     Hoa\Console\Cursor::clear('↔');
     echo $self->getPrefix();
@@ -605,14 +601,14 @@ $rl->addMapping('\C-R', function ( Hoa\Console\Readline\Readline $self ) {
     $new  = null;
 
     // Loop over all characters.
-    for($i = 0, $max = $self->getLineLength(); $i &amp;lt; $max; ++$i) {
-
+    for ($i = 0, $max = $self->getLineLength(); $i &amp;lt; $max; ++$i) {
         $char = mb_substr($line, $i, 1);
 
-        if($char === $lower = mb_strtolower($char))
+        if ($char === $lower = mb_strtolower($char)) {
             $new .= mb_strtoupper($char);
-        else
+        } else {
             $new .= $lower;
+        }
     }
 
     // Set the new line.
@@ -699,8 +695,7 @@ var_dump($rl->readLine('> '));</code></pre>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
         resolve('hoa://Library/Console/'),
-        function ( $path ) {
-
+        function ($path) {
             $finder = new Hoa\File\Finder();
             $finder->in($path)
                    ->files()
@@ -933,15 +928,18 @@ $directory = '.';
 
 //          short name                  value
 //               ↓                        ↓
-while(false !== $c = $options->getOption($v)) switch($c) {
+while (false !== $c = $options->getOption($v)) {
+    switch($c) {
+        case 'x':
+            $extract = $v;
 
-    case 'x':
-        $extract = $v;
-      break;
+            break;
 
-    case 'd':
-        $directory = $v;
-      break;
+        case 'd':
+            $directory = $v;
+
+            break;
+    }
 }
 
 var_dump($extract, $directory);
@@ -984,15 +982,18 @@ var_dump($inputA, $inputB, $inputC);
   Elle prend deux arguments : une valeur et un tableau de mots-clés. Voyons
   plutôt. Nous reprenons notre exemple et modifions le cas pour l'option
   <code>d</code> :</p>
-  <pre data-line="7-9"><code class="language-php">while(false !== $c = $options->getOption($v)) switch($c) {
+  <pre data-line="8-11"><code class="language-php">while (false !== $c = $options->getOption($v)) {
+    switch($c) {
+        case 'x':
+            $extract = $v;
 
-    case 'x':
-        $extract = $v;
-      break;
+            break;
 
-    case 'd':
-        $directory = $parser->parseSpecialValue($v, ['HOME' => '/tmp']);
-      break;
+        case 'd':
+            $directory = $parser->parseSpecialValue($v, ['HOME' => '/tmp']);
+
+            break;
+    }
 }
 
 print_r($directory);</code></pre>
@@ -1013,19 +1014,23 @@ print_r($directory);</code></pre>
   <strong>fautes</strong> près (par exemple <code>--dirzctory</code> au lieu de
   <code>--directory</code>), nous pouvons utiliser le cas
   <code>__ambiguous</code> pour la capturer et la traiter :</p>
-  <pre data-line="11-13"><code class="language-php">while(false !== $c = $options->getOption($v)) switch($c) {
+  <pre data-line="13-16"><code class="language-php">while (false !== $c = $options->getOption($v)) {
+    switch($c) {
+        case 'x':
+            $extract = $v;
 
-    case 'x':
-        $extract = $v;
-      break;
+            break;
 
-    case 'd':
-        $directory = $parser->parseSpecialValue($v, ['HOME' => '/tmp']);
-      break;
+        case 'd':
+            $directory = $parser->parseSpecialValue($v, ['HOME' => '/tmp']);
 
-    case '__ambiguous':
-        print_r($v);
-      break;
+            break;
+
+        case '__ambiguous':
+            print_r($v);
+
+            break;
+    }
 }</code></pre>
   <p>La valeur (dans <code>$v</code>) est un tableau avec trois entrées. Par
   exemple avec <code>--dirzctory</code>, nous obtenons :</p>
@@ -1049,7 +1054,8 @@ print_r($directory);</code></pre>
   en lui donnant ce tableau, et elle choisira la meilleure option si elle existe :</p>
   <pre><code class="language-php">    case '__ambiguous':
         $options->resolveOptionAmbiguity($v);
-      break;
+
+        break;
 </code></pre>
   <p>Il est quand même préférable d'<strong>avertir</strong> l'utilisateur qu'il
   y a une ambiguïté et de lui demander son avis. Il peut parfois être
@@ -1125,7 +1131,6 @@ Hoa\Core\Core::getInstance()->initialize([
 ]);
 
 try {
-
     // Prepare the router.
     $router = new Hoa\Router\Cli();
     $router->get(
@@ -1142,9 +1147,7 @@ try {
 
     // Dispatch!
     exit($dispatcher->dispatch($router));
-}
-catch ( Hoa\Core\Exception $e ) {
-
+} catch (Hoa\Core\Exception $e) {
     echo $e->raise(true);
     exit($e->getCode() + 1);
 }</code></pre>
@@ -1155,31 +1158,34 @@ catch ( Hoa\Core\Exception $e ) {
 
 namespace Application\Controller;
 
-class Foo extends \Hoa\Console\Dispatcher\Kit {
-
+class Foo extends \Hoa\Console\Dispatcher\Kit
+{
     protected $options = [
         ['extract',   \Hoa\Console\GetOption::NO_ARGUMENT,       'x'],
         ['directory', \Hoa\Console\GetOption::REQUIRED_ARGUMENT, 'd'],
         ['help',      \Hoa\Console\GetOption::NO_ARGUMENT,       'h']
     ];
 
-    public function MainAction ( ) {
-
+    public function MainAction()
+    {
         $extract   = false;
         $directory = '.';
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch($c) {
+                case 'x':
+                    $extract = $v;
 
-            case 'x':
-                $extract = $v;
-              break;
+                    break;
 
-            case 'd':
-                $directory = $this->parser->parseSpecialValue($v, ['HOME' => '/tmp']);
-              break;
+                case 'd':
+                    $directory = $this->parser->parseSpecialValue($v, ['HOME' => '/tmp']);
 
-            case 'h':
-                return $this->usage();
+                    break;
+
+                case 'h':
+                    return $this->usage();
+            }
         }
 
         echo 'extract:   ';
@@ -1190,15 +1196,16 @@ class Foo extends \Hoa\Console\Dispatcher\Kit {
         return;
     }
 
-    public function usage ( ) {
-
-        echo 'Usage   : foo &amp;lt;options>', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 'x' => 'Whether we need to extract.',
-                 'd' => 'Directory to extract.',
-                 'h' => 'This help.'
-             ]);
+    public function usage()
+    {
+        echo
+            'Usage   : foo &amp;lt;options>', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                'x' => 'Whether we need to extract.',
+                'd' => 'Directory to extract.',
+                'h' => 'This help.'
+            ]);
     }
 }</code></pre>
   <p>Notre classe étend bien notre kit pour bénéficier des méthodes qu'il
@@ -1299,8 +1306,9 @@ directory: Array
 
 $range = range('a', 'z');
 
-while(false !== $line = fgets(STDIN))
-    echo '> ', $range[intval($line)], "\n";</code></pre>
+while (false !== $line = fgets(STDIN)) {
+    echo '> ', $range[intval($line)], "\n";
+}</code></pre>
   <p>Pour tester et comprendre son fonctionnement, écrivons la ligne de commande
   suivante et entrons au clavier <code>3</code>, puis <code>4</code> :</p>
   <pre><code class="language-shell">$ php LittleProcessus.php
@@ -1391,8 +1399,7 @@ while(false !== $line = fgets(STDIN))
   suivants : <code>input</code> pour écrire une série de chiffres et
   <code>output</code> pour lire le résultat.</p>
   <pre><code class="language-php">$processus = new Hoa\Console\Processus('php LittleProcessus.php');
-$processus->on('input', function ( $bucket ) {
-
+$processus->on('input', function ($bucket) {
     $source = $bucket->getSource();
     $data   = $bucket->getData();
 
@@ -1404,8 +1411,7 @@ $processus->on('input', function ( $bucket ) {
 
     return false;
 });
-$processus->on('output', function ( $bucket ) {
-
+$processus->on('output', function ($bucket) {
     $data = $bucket->getData();
 
     echo 'OUTPUT (', $data['pipe'], ') ', $data['line'], "\n";
@@ -1454,13 +1460,13 @@ $processus->run();
   performant car le processus n'attend pas un gros paquet de données : il peut
   les traiter au fur et à mesure. Modifions notre exemple pour écrire une donnée
   à chaque fois que <code>STDIN</code> est prêt :</p>
-  <pre><code class="language-php">$processus->on('input', function ( $bucket ) {
-
+  <pre><code class="language-php">$processus->on('input', function ($bucket) {
     static $i = null;
     static $j = 5;
 
-    if(null === $i)
+    if (null === $i) {
         $i = mt_rand(0, 20);
+    }
 
     $data = $bucket->getData();
 
@@ -1470,8 +1476,9 @@ $processus->run();
     $source->writeLine($i++);
     usleep(50000);
 
-    if(0 >= $j--)
+    if (0 >= $j--) {
         return false;
+    }
 
     return;
 });</code></pre>
@@ -1591,8 +1598,7 @@ $ hoa | xargs -I@ echo @</code></pre>
         'PATH' => '/usr/bin:/bin'
     ]
 );
-$processus->on('input', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$processus->on('input', function (Hoa\Core\Event\Bucket $bucket) {
     $bucket->getSource()->writeAll(
         '&amp;lt;?php' . "\n" .
         'var_dump(getcwd());' . "\n" .
@@ -1601,8 +1607,7 @@ $processus->on('input', function ( Hoa\Core\Event\Bucket $bucket ) {
 
     return false;
 });
-$processus->on('output', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$processus->on('output', function (Hoa\Core\Event\Bucket $bucket) {
     $data = $bucket->getData();
     echo '> ', $data['line'], "\n";
 
@@ -1622,8 +1627,7 @@ $processus->run();
  *     >     [_] => /usr/bin/php
  *     >
  *     > )
- */
-</code></pre>
+ */</code></pre>
   <p>Si le <em lang="en">current working directory</em> n'est pas précisé, nous
   utiliserons le même que le programme. Si aucun environnement n'est précisé, le
   processus utilisera celui de son parent.</p>
@@ -1641,16 +1645,14 @@ $processus->run();
 $processus->setTimeout(3);
 
 // Sleep 10 seconds.
-$processus->on('input', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$processus->on('input', function (Hoa\Core\Event\Bucket $bucket) {
     $bucket->getSource()->writeAll('&amp;lt;?php sleep(10);');
 
     return false;
 });
 
 // Terminate the processus on timeout.
-$processus->on('timeout', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$processus->on('timeout', function (Hoa\Core\Event\Bucket $bucket) {
     echo 'TIMEOUT, terminate', "\n";
     $bucket->getSource()->terminate();
 
@@ -1719,16 +1721,14 @@ $processus->run();
 
 echo 'Login: ';
 
-if(false === $login = fgets(STDIN)) {
-
+if (false === $login = fgets(STDIN)) {
     fwrite(STDERR, 'Hmm, no login.' . "\n");
     exit(1);
 }
 
 echo 'Password: ';
 
-if(false === $password = fgets(STDIN)) {
-
+if (false === $password = fgets(STDIN)) {
     fwrite(STDERR, 'Hmm, no password.' . "\n");
     exit(2);
 }
@@ -1751,7 +1751,7 @@ Login: Password: Result:
   <code>Hoa\Console\Processus</code> sans problème. Maintenant, si notre
   processus veut s'assurer que <code>STDIN</code> est vide entre deux entrées,
   il peut ajouter :</p>
-  <pre data-line-offset="8" data-line="11"><code class="language-php">}
+  <pre data-line-offset="7" data-line="10"><code class="language-php">}
 
 fseek(STDIN, 0, SEEK_END);
 

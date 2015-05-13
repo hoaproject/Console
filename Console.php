@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,94 +43,92 @@ use Hoa\Core;
  *
  * Util.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Console {
-
+class Console
+{
     /**
      * Pipe mode: FIFO.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_FIFO      = 0;
 
     /**
      * Pipe mode: character.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_CHARACTER = 1;
 
     /**
      * Pipe mode: directory.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_DIRECTORY = 2;
 
     /**
      * Pipe mode: block.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_BLOCK     = 3;
 
     /**
      * Pipe mode: regular.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_REGULAR   = 4;
 
     /**
      * Pipe mode: link.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_LINK      = 5;
 
     /**
      * Pipe mode: socket.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_SOCKET    = 6;
 
     /**
      * Pipe mode: whiteout.
      *
-     * @var \Hoa\Console int
+     * @var int
      */
     const IS_WHITEOUT  = 7;
 
     /**
      * Advanced interaction is on.
      *
-     * @var \Hoa\Console bool
+     * @var bool
      */
     private static $_advanced = null;
 
     /**
      * Previous STTY configuration.
      *
-     * @var \Hoa\Console string
+     * @var string
      */
     private static $_old      = null;
 
     /**
      * Mode.
      *
-     * @var \Hoa\Console array
+     * @var array
      */
     protected static $_mode   = [];
 
     /**
      * Tput.
      *
-     * @var \Hoa\Console\Tput object
+     * @var \Hoa\Console\Tput
      */
     protected static $_tput   = null;
 
@@ -139,19 +137,21 @@ class Console {
     /**
      * Prepare the environment for advanced interactions.
      *
-     * @access  public
      * @return  void
      */
-    public static function advancedInteraction ( ) {
-
-        if(null !== self::$_advanced)
+    public static function advancedInteraction()
+    {
+        if (null !== self::$_advanced) {
             return self::$_advanced;
+        }
 
-        if(OS_WIN)
+        if (OS_WIN) {
             return self::$_advanced = false;
+        }
 
-        if(false === self::isDirect(STDIN))
+        if (false === self::isDirect(STDIN)) {
             return self::$_advanced = false;
+        }
 
         self::$_old = Processus::execute('stty -g');
         Processus::execute('stty -echo -icanon min 1 time 0');
@@ -162,13 +162,13 @@ class Console {
     /**
      * Restore previous interaction options.
      *
-     * @access  public
      * @return  void
      */
-    public static function restoreInteraction ( ) {
-
-        if(null === self::$_old)
+    public static function restoreInteraction()
+    {
+        if (null === self::$_old) {
             return;
+        }
 
         Processus::execute('stty ' . self::$_old);
 
@@ -179,60 +179,67 @@ class Console {
      * Get mode of a certain pipe.
      * Inspired by sys/stat.h.
      *
-     * @access  public
      * @param   resource  $pipe    Pipe.
      * @return  int
      */
-    public static function getMode ( $pipe = STDIN ) {
-
+    public static function getMode($pipe = STDIN)
+    {
         $_pipe = (int) $pipe;
 
-        if(isset(self::$_mode[$_pipe]))
+        if (isset(self::$_mode[$_pipe])) {
             return self::$_mode[$_pipe];
+        }
 
         $stat = fstat($pipe);
 
-        switch($stat['mode'] & 0170000) {
-
+        switch ($stat['mode'] & 0170000) {
             // named pipe (fifo).
             case 0010000:
                 $mode = self::IS_FIFO;
-              break;
+
+                break;
 
             // character special.
             case 0020000:
                 $mode = self::IS_CHARACTER;
-              break;
+
+                break;
 
             // directory.
             case 0040000:
                 $mode = self::IS_DIRECTORY;
-              break;
+
+                break;
 
             // block special.
             case 0060000:
                 $mode = self::IS_BLOCK;
-              break;
+
+                break;
 
             // regular.
             case 0100000:
                 $mode = self::IS_REGULAR;
-              break;
+
+                break;
 
             // symbolic link.
             case 0120000:
                 $mode = self::IS_LINK;
-               break;
+
+                 break;
 
             // socket.
             case 0140000:
                 $mode = self::IS_SOCKET;
-              break;
+
+                break;
 
             // whiteout.
             case 0160000:
                 $mode = self::IS_WHITEOUT;
-              break;
+
+                break;
 
             default:
                 $mode = -1;
@@ -248,12 +255,11 @@ class Console {
      *     $ php Mode.php
      * In this case, self::isDirect(STDOUT) will return true.
      *
-     * @access  public
      * @param   resource  $pipe    Pipe.
      * @return  bool
      */
-    public static function isDirect ( $pipe ) {
-
+    public static function isDirect($pipe)
+    {
         return self::IS_CHARACTER === self::getMode($pipe);
     }
 
@@ -263,12 +269,11 @@ class Console {
      *     $ php Mode.php | foobar
      * In this case, self::isPipe(STDOUT) will return true.
      *
-     * @access  public
      * @param   resource  $pipe    Pipe.
      * @return  bool
      */
-    public static function isPipe ( $pipe ) {
-
+    public static function isPipe($pipe)
+    {
         return self::IS_FIFO === self::getMode($pipe);
     }
 
@@ -278,25 +283,26 @@ class Console {
      *     $ php Mode.php < foobar
      * In this case, self::isRedirection(STDIN) will return true.
      *
-     * @access  public
      * @param   resource  $pipe    Pipe.
      * @return  bool
      */
-    public static function isRedirection ( $pipe ) {
-
+    public static function isRedirection($pipe)
+    {
         $mode = self::getMode($pipe);
 
-        return    self::IS_REGULAR   === $mode
-               || self::IS_DIRECTORY === $mode
-               || self::IS_LINK      === $mode
-               || self::IS_SOCKET    === $mode
-               || self::IS_BLOCK     === $mode;
+        return
+            self::IS_REGULAR   === $mode ||
+            self::IS_DIRECTORY === $mode ||
+            self::IS_LINK      === $mode ||
+            self::IS_SOCKET    === $mode ||
+            self::IS_BLOCK     === $mode;
     }
 
-    public static function getTput ( ) {
-
-        if(null === static::$_tput)
+    public static function getTput()
+    {
+        if (null === static::$_tput) {
             static::$_tput = new Tput();
+        }
 
         return static::$_tput;
     }

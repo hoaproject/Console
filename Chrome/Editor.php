@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,32 +43,32 @@ use Hoa\Console;
  *
  * Start an editor.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Editor {
-
+class Editor
+{
     /**
      * Open an editor.
      *
-     * @access  public
      * @param   string  $file      File to open.
      * @param   string  $editor    Editor to use ($_SERVER['EDITOR'] by
      *                             default).
      * @return  string
      */
-    public static function open ( $file = '', $editor = null ) {
-
-        if(null === $editor)
-            if(isset($_SERVER['EDITOR']))
+    public static function open($file = '', $editor = null)
+    {
+        if (null === $editor) {
+            if (isset($_SERVER['EDITOR'])) {
                 $editor = $_SERVER['EDITOR'];
-            else
+            } else {
                 $editor = 'vi';
+            }
+        }
 
-        if(!empty($file))
+        if (!empty($file)) {
             $file = escapeshellarg($file);
+        }
 
         return Console\Processus::execute(
             $editor . ' ' . $file . ' > `tty` < `tty`',

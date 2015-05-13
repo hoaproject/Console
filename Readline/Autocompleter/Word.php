@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,17 +41,15 @@ namespace Hoa\Console\Readline\Autocompleter;
  *
  * The simplest auto-completer: complete a word.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Word implements Autocompleter {
-
+class Word implements Autocompleter
+{
     /**
      * List of words.
      *
-     * @var \Hoa\Console\Readline\Autocompleter\Word array
+     * @var array
      */
     protected $_words = null;
 
@@ -60,12 +58,11 @@ class Word implements Autocompleter {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   array  $words    Words.
      * @return  void
      */
-    public function __construct ( Array $words ) {
-
+    public function __construct(Array $words)
+    {
         $this->setWords($words);
 
         return;
@@ -75,24 +72,27 @@ class Word implements Autocompleter {
      * Complete a word.
      * Returns null for no word, a full-word or an array of full-words.
      *
-     * @access  public
      * @param   string  &$prefix    Prefix to autocomplete.
      * @return  mixed
      */
-    public function complete ( &$prefix ) {
-
+    public function complete(&$prefix)
+    {
         $out    = [];
         $length = mb_strlen($prefix);
 
-        foreach($this->getWords() as $word)
-            if(mb_substr($word, 0, $length) === $prefix)
+        foreach ($this->getWords() as $word) {
+            if (mb_substr($word, 0, $length) === $prefix) {
                 $out[] = $word;
+            }
+        }
 
-        if(empty($out))
+        if (empty($out)) {
             return null;
+        }
 
-        if(1 === count($out))
+        if (1 === count($out)) {
             return $out[0];
+        }
 
         return $out;
     }
@@ -100,23 +100,21 @@ class Word implements Autocompleter {
     /**
      * Get definition of a word.
      *
-     * @access  public
      * @return  string
      */
-    public function getWordDefinition ( ) {
-
+    public function getWordDefinition()
+    {
         return '\b\w+\b';
     }
 
     /**
      * Set list of words.
      *
-     * @access  public
      * @param   array  $words    Words.
      * @return  array
      */
-    public function setWords ( Array $words ) {
-
+    public function setWords(Array $words)
+    {
         $old          = $this->_words;
         $this->_words = $words;
 
@@ -126,11 +124,10 @@ class Word implements Autocompleter {
     /**
      * Get list of words.
      *
-     * @access  public
      * @return  array
      */
-    public function getWords ( ) {
-
+    public function getWords()
+    {
         return $this->_words;
     }
 }

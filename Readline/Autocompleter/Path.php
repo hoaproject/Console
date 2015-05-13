@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,13 +41,11 @@ namespace Hoa\Console\Readline\Autocompleter;
  *
  * Path autocompleter.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Path implements Autocompleter {
-
+class Path implements Autocompleter
+{
     /**
      * Root is the current working directory.
      *
@@ -58,14 +56,14 @@ class Path implements Autocompleter {
     /**
      * Root.
      *
-     * @var \Hoa\Console\Readline\Autocompleter\Path string
+     * @var string
      */
     protected $_root            = null;
 
     /**
      * Iterator factory. Please, see the self::setIteratorFactory method.
      *
-     * @var \Closure object
+     * @var \Closure
      */
     protected $_iteratorFactory = null;
 
@@ -74,23 +72,25 @@ class Path implements Autocompleter {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   string      $root               Root.
      * @param   \Closure    $iteratorFactory    Iterator factory (please, see
      *                                          the self::setIteratorFactory
      *                                          method).
      * @return  void
      */
-    public function __construct ( $root                     = null,
-                                  \Closure $iteratorFactory = null ) {
-
-        if(null === $root)
+    public function __construct(
+        $root                     = null,
+        \Closure $iteratorFactory = null
+    ) {
+        if (null === $root) {
             $root = static::PWD;
+        }
 
         $this->setRoot($root);
 
-        if(null !== $iteratorFactory)
+        if (null !== $iteratorFactory) {
             $this->setIteratorFactory($iteratorFactory);
+        }
 
         return;
     }
@@ -99,62 +99,59 @@ class Path implements Autocompleter {
      * Complete a word.
      * Returns null for no word, a full-word or an array of full-words.
      *
-     * @access  public
      * @param   string  &$prefix    Prefix to autocomplete.
      * @return  mixed
      */
-    public function complete ( &$prefix ) {
-
+    public function complete(&$prefix)
+    {
         $root = $this->getRoot();
 
-        if(static::PWD === $root)
+        if (static::PWD === $root) {
             $root = getcwd();
+        }
 
         $path = $root . DS . $prefix;
 
-        if(!is_dir($path)) {
-
+        if (!is_dir($path)) {
             $path   = dirname($path) . DS;
             $prefix = basename($prefix);
-        }
-        else
+        } else {
             $prefix = null;
+        }
 
         $iteratorFactory = $this->getIteratorFactory() ?:
                                static::getDefaultIteratorFactory();
 
         try {
-
             $iterator = $iteratorFactory($path);
             $out      = [];
             $length   = mb_strlen($prefix);
 
-            foreach($iterator as $fileinfo) {
-
+            foreach ($iterator as $fileinfo) {
                 $filename = $fileinfo->getFilename();
 
-                if(   null === $prefix
-                   || (mb_substr($filename, 0, $length) === $prefix)) {
-
-                    if($fileinfo->isDir())
+                if (null === $prefix ||
+                    (mb_substr($filename, 0, $length) === $prefix)) {
+                    if ($fileinfo->isDir()) {
                         $out[] = $filename . '/';
-                    else
+                    } else {
                         $out[] = $filename;
+                    }
                 }
             }
-        }
-        catch ( \Exception $e ) {
-
+        } catch (\Exception $e) {
             return null;
         }
 
         $count = count($out);
 
-        if(1 === $count)
+        if (1 === $count) {
             return $out[0];
+        }
 
-        if(0 === $count)
+        if (0 === $count) {
             return null;
+        }
 
         return $out;
     }
@@ -162,23 +159,21 @@ class Path implements Autocompleter {
     /**
      * Get definition of a word.
      *
-     * @access  public
      * @return  string
      */
-    public function getWordDefinition ( ) {
-
+    public function getWordDefinition()
+    {
         return '/?[\w\d\\_\-\.]+(/[\w\d\\_\-\.]*)*';
     }
 
     /**
      * Set root.
      *
-     * @access  public
      * @param   string  $root    Root.
      * @return  string
      */
-    public function setRoot ( $root ) {
-
+    public function setRoot($root)
+    {
         $old         = $this->_root;
         $this->_root = $root;
 
@@ -188,24 +183,22 @@ class Path implements Autocompleter {
     /**
      * Get root.
      *
-     * @access  public
      * @return  string
      */
-    public function getRoot ( ) {
-
+    public function getRoot()
+    {
         return $this->_root;
     }
 
     /**
      * Set iterator factory (a finder).
      *
-     * @access  public
      * @param   \Closure  $iteratorFactory    Closore with a single argument:
      *                                        $path of the iterator.
      * @return  string
      */
-    public function setIteratorFactory ( \Closure $iteratorFactory ) {
-
+    public function setIteratorFactory(\Closure $iteratorFactory)
+    {
         $old                    = $this->_iteratorFactory;
         $this->_iteratorFactory = $iteratorFactory;
 
@@ -215,24 +208,21 @@ class Path implements Autocompleter {
     /**
      * Get iterator factory.
      *
-     * @access  public
      * @return  \Closure
      */
-    public function getIteratorFactory ( ) {
-
+    public function getIteratorFactory()
+    {
         return $this->_iteratorFactory;
     }
 
     /**
      * Get default iterator factory (based on \DirectoryIterator).
      *
-     * @access  public
      * @return  \Closure
      */
-    public static function getDefaultIteratorFactory ( ) {
-
-        return function ( $path ) {
-
+    public static function getDefaultIteratorFactory()
+    {
+        return function ($path) {
             return new \DirectoryIterator($path);
         };
     }

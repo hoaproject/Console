@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,17 +41,15 @@ namespace Hoa\Console\Readline\Autocompleter;
  *
  * Aggregate several autocompleters.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Aggregate implements Autocompleter {
-
+class Aggregate implements Autocompleter
+{
     /**
      * List of autocompleters.
      *
-     * @var \Hoa\Console\Readline\Autocompleter\Aggregate array
+     * @var array
      */
     protected $_autocompleters = null;
 
@@ -60,12 +58,11 @@ class Aggregate implements Autocompleter {
     /**
      * Constructor.
      *
-     * @access  public
      * @param   array  $autocompleters    Auto-completers.
      * @return  void
      */
-    public function __construct ( Array $autocompleters ) {
-
+    public function __construct(Array $autocompleters)
+    {
         $this->setAutocompleters($autocompleters);
 
         return;
@@ -75,27 +72,27 @@ class Aggregate implements Autocompleter {
      * Complete a word.
      * Returns null for no word, a full-word or an array of full-words.
      *
-     * @access  public
      * @param   string  &$prefix    Prefix to autocomplete.
      * @return  mixed
      */
-    public function complete ( &$prefix ) {
-
-        foreach($this->getAutocompleters() as $autocompleter) {
-
+    public function complete(&$prefix)
+    {
+        foreach ($this->getAutocompleters() as $autocompleter) {
             $preg = preg_match(
                 '#(' . $autocompleter->getWordDefinition() . ')$#u',
                 $prefix,
                 $match
             );
 
-            if(0 === $preg)
+            if (0 === $preg) {
                 continue;
+            }
 
             $_prefix = $match[0];
 
-            if(null === $out = $autocompleter->complete($_prefix))
+            if (null === $out = $autocompleter->complete($_prefix)) {
                 continue;
+            }
 
             $prefix = $_prefix;
 
@@ -108,12 +105,11 @@ class Aggregate implements Autocompleter {
     /**
      * Set/initialize list of autocompleters.
      *
-     * @access  protected
      * @param   array  $autocompleters    Auto-completers.
      * @return  \ArrayObject
      */
-    protected function setAutocompleters ( Array $autocompleters ) {
-
+    protected function setAutocompleters(Array $autocompleters)
+    {
         $old                   = $this->_autocompleters;
         $this->_autocompleters = new \ArrayObject($autocompleters);
 
@@ -123,22 +119,20 @@ class Aggregate implements Autocompleter {
     /**
      * Get list of autocompleters.
      *
-     * @access  public
      * @return  \ArrayObject
      */
-    public function getAutocompleters ( ) {
-
+    public function getAutocompleters()
+    {
         return $this->_autocompleters;
     }
 
     /**
      * Get definition of a word.
      *
-     * @access  public
      * @return  string
      */
-    public function getWordDefinition ( ) {
-
+    public function getWordDefinition()
+    {
         return '.*';
     }
 }

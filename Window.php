@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,17 +47,15 @@ use Hoa\Core;
  * if the window has been resized. Please, see the constructor documentation to
  * get more informations.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Window implements Core\Event\Source {
-
+class Window implements Core\Event\Source
+{
     /**
      * Singleton (only for events).
      *
-     * @var \Hoa\Console\Window object
+     * @var \Hoa\Console\Window
      */
     private static $_instance = null;
 
@@ -68,11 +66,10 @@ class Window implements Core\Event\Source {
      * We need to declare(ticks = 1) in the main script to ensure that the event
      * is fired. Also, we need the pcntl_signal() function enabled.
      *
-     * @access  public
      * @return  void
      */
-    public function __construct ( ) {
-
+    public function __construct()
+    {
         Core\Event::register(
             'hoa://Event/Console/Window:resize',
             $this
@@ -84,13 +81,13 @@ class Window implements Core\Event\Source {
     /**
      * Singleton.
      *
-     * @access  public
      * @return  \Hoa\Console\Window
      */
-    public static function getInstance ( ) {
-
-        if(null === static::$_instance)
+    public static function getInstance()
+    {
+        if (null === static::$_instance) {
             static::$_instance = new static();
+        }
 
         return static::$_instance;
     }
@@ -98,15 +95,15 @@ class Window implements Core\Event\Source {
     /**
      * Set size to X lines and Y columns.
      *
-     * @access  public
      * @param   int  $x    X coordinate.
      * @param   int  $y    Y coordinate.
      * @return  void
      */
-    public static function setSize ( $x, $y ) {
-
-        if(OS_WIN)
+    public static function setSize($x, $y)
+    {
+        if (OS_WIN) {
             return;
+        }
 
         echo "\033[8;" . $y . ";" . $x . "t";
 
@@ -116,13 +113,11 @@ class Window implements Core\Event\Source {
     /**
      * Get current size (x and y) of the window.
      *
-     * @access  public
      * @return  array
      */
-    public static function getSize ( ) {
-
-        if(OS_WIN) {
-
+    public static function getSize()
+    {
+        if (OS_WIN) {
             $modecon = explode("\n", ltrim(Processus::execute('mode con')));
 
             $_y      = trim($modecon[2]);
@@ -141,14 +136,14 @@ class Window implements Core\Event\Source {
 
         $term = '';
 
-        if(isset($_SERVER['TERM']))
+        if (isset($_SERVER['TERM'])) {
             $term = 'TERM="' . $_SERVER['TERM'] . '" ';
+        }
 
         $command = $term . 'tput cols && ' . $term . 'tput lines';
         $tput    = Processus::execute($command, false);
 
-        if(!empty($tput)) {
-
+        if (!empty($tput)) {
             list($x, $y) = explode("\n", $tput);
 
             return [
@@ -168,32 +163,32 @@ class Window implements Core\Event\Source {
         $handle = &$y;
 
         do {
-
             $char = fread(STDIN, 1);
 
-            switch($char) {
-
+            switch ($char) {
                 case ';':
                     $handle = &$x;
-                  break;
+
+                    break;
 
                 case 't':
                     break 2;
 
                 default:
-                    if(false === ctype_digit($char))
+                    if (false === ctype_digit($char)) {
                         break 2;
+                    }
 
                     $handle .= $char;
             }
+        } while (true);
 
-        } while(true);
-
-        if(null === $x || null === $y)
+        if (null === $x || null === $y) {
             return [
                 'x' => 0,
                 'y' => 0
             ];
+        }
 
         return [
             'x' => (int) $x,
@@ -204,15 +199,15 @@ class Window implements Core\Event\Source {
     /**
      * Move to X and Y (in pixels).
      *
-     * @access  public
      * @param   int  $x    X coordinate.
      * @param   int  $y    Y coordinate.
      * @return  void
      */
-    public static function moveTo ( $x, $y ) {
-
-        if(OS_WIN)
+    public static function moveTo($x, $y)
+    {
+        if (OS_WIN) {
             return;
+        }
 
         // DECSLPP.
         echo "\033[3;" . $x . ";" . $y . "t";
@@ -223,13 +218,13 @@ class Window implements Core\Event\Source {
     /**
      * Get current position (x and y) of the window (in pixels).
      *
-     * @access  public
      * @return  array
      */
-    public static function getPosition ( ) {
-
-        if(OS_WIN)
+    public static function getPosition()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         // DECSLPP.
         echo "\033[13t";
@@ -242,14 +237,13 @@ class Window implements Core\Event\Source {
         $handle = &$x;
 
         do {
-
             $char = fread(STDIN, 1);
 
-            switch($char) {
-
+            switch ($char) {
                 case ';':
                     $handle = &$y;
-                  break;
+
+                    break;
 
                 case 't':
                     break 2;
@@ -257,8 +251,7 @@ class Window implements Core\Event\Source {
                 default:
                     $handle .= $char;
             }
-
-        } while(true);
+        } while (true);
 
         return [
             'x' => (int) $x,
@@ -273,55 +266,60 @@ class Window implements Core\Event\Source {
      *     • d, down,  ↓ : scroll whole page down.
      * Directions can be concatenated by a single space.
      *
-     * @access  public
      * @param   string  $directions    Directions.
      * @param   int     $repeat        How many times do we scroll?
      * @reutrn  void
      */
-    public static function scroll ( $directions, $repeat = 1 ) {
-
-        if(OS_WIN)
+    public static function scroll($directions, $repeat = 1)
+    {
+        if (OS_WIN) {
             return;
+        }
 
-        if(1 > $repeat)
+        if (1 > $repeat) {
             return;
-        elseif(1 === $repeat)
+        } elseif (1 === $repeat) {
             $handle = explode(' ', $directions);
-        else
+        } else {
             $handle = explode(' ', $directions, 1);
+        }
 
         $tput  = Console::getTput();
         $count = ['up' => 0, 'down' => 0];
 
-        foreach($handle as $direction)
-            switch($direction) {
-
+        foreach ($handle as $direction) {
+            switch ($direction) {
                 case 'u':
                 case 'up':
                 case '↑':
                     ++$count['up'];
-                  break;
+
+                    break;
 
                 case 'd':
                 case 'down':
                 case '↓':
                     ++$count['down'];
-                  break;
-            }
 
-        if(0 < $count['up'])
+                    break;
+            }
+        }
+
+        if (0 < $count['up']) {
             echo str_replace(
                 '%p1%d',
                 $count['up'] * $repeat,
                 $tput->get('parm_index')
             );
+        }
 
-        if(0 < $count['down'])
+        if (0 < $count['down']) {
             echo str_replace(
                 '%p1%d',
                 $count['down'] * $repeat,
                 $tput->get('parm_rindex')
             );
+        }
 
         return;
     }
@@ -329,13 +327,13 @@ class Window implements Core\Event\Source {
     /**
      * Minimize the window.
      *
-     * @access  public
      * @return  void
      */
-    public static function minimize ( ) {
-
-        if(OS_WIN)
+    public static function minimize()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         // DECSLPP.
         echo "\033[2t";
@@ -346,13 +344,13 @@ class Window implements Core\Event\Source {
     /**
      * Restore the window (de-minimize).
      *
-     * @access  public
      * @return  void
      */
-    public static function restore ( ) {
-
-        if(OS_WIN)
+    public static function restore()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         echo "\033[1t";
 
@@ -362,13 +360,13 @@ class Window implements Core\Event\Source {
     /**
      * Raise the window to the front of the stacking order.
      *
-     * @access  public
      * @return  void
      */
-    public static function raise ( ) {
-
-        if(OS_WIN)
+    public static function raise()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         echo "\033[5t";
 
@@ -378,13 +376,13 @@ class Window implements Core\Event\Source {
     /**
      * Lower the window to the bottom of the stacking order.
      *
-     * @access  public
      * @return  void
      */
-    public static function lower ( ) {
-
-        if(OS_WIN)
+    public static function lower()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         echo "\033[6t";
 
@@ -394,14 +392,14 @@ class Window implements Core\Event\Source {
     /**
      * Set title.
      *
-     * @access  public
      * @param   string  $title    Title.
      * @return  void
      */
-    public static function setTitle ( $title ) {
-
-        if(OS_WIN)
+    public static function setTitle($title)
+    {
+        if (OS_WIN) {
             return;
+        }
 
         // DECSLPP.
         echo "\033]0;" . $title . "\033\\";
@@ -412,13 +410,13 @@ class Window implements Core\Event\Source {
     /**
      * Get title.
      *
-     * @access  public
      * @return  string
      */
-    public static function getTitle ( ) {
-
-        if(OS_WIN)
+    public static function getTitle()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         // DECSLPP.
         echo "\033[21t";
@@ -428,29 +426,28 @@ class Window implements Core\Event\Source {
         $except = [];
         $out    = null;
 
-        if(0 === stream_select($read, $write, $except, 0, 50000))
+        if (0 === stream_select($read, $write, $except, 0, 50000)) {
             return $out;
+        }
 
         // Read \033]l<title>\033\
         fread(STDIN, 3); // skip \033, ] and l.
 
         do {
-
             $char = fread(STDIN, 1);
 
-            if("\033" === $char) {
-
+            if ("\033" === $char) {
                 $chaar = fread(STDIN, 1);
 
-                if('\\' === $chaar)
+                if ('\\' === $chaar) {
                     break;
+                }
 
                 $char .= $chaar;
             }
 
             $out .= $char;
-
-        } while(true);
+        } while (true);
 
         return $out;
     }
@@ -458,13 +455,13 @@ class Window implements Core\Event\Source {
     /**
      * Get label.
      *
-     * @access  public
      * @return  string
      */
-    public static function getLabel ( ) {
-
-        if(OS_WIN)
+    public static function getLabel()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         // DECSLPP.
         echo "\033[20t";
@@ -474,29 +471,28 @@ class Window implements Core\Event\Source {
         $except = [];
         $out    = null;
 
-        if(0 === stream_select($read, $write, $except, 0, 50000))
+        if (0 === stream_select($read, $write, $except, 0, 50000)) {
             return $out;
+        }
 
         // Read \033]L<label>\033\
         fread(STDIN, 3); // skip \033, ] and L.
 
         do {
-
             $char = fread(STDIN, 1);
 
-            if("\033" === $char) {
-
+            if ("\033" === $char) {
                 $chaar = fread(STDIN, 1);
 
-                if('\\' === $chaar)
+                if ('\\' === $chaar) {
                     break;
+                }
 
                 $char .= $chaar;
             }
 
             $out .= $char;
-
-        } while(true);
+        } while (true);
 
         return $out;
     }
@@ -504,13 +500,13 @@ class Window implements Core\Event\Source {
     /**
      * Refresh the window.
      *
-     * @access  public
      * @return  void
      */
-    public static function refresh ( ) {
-
-        if(OS_WIN)
+    public static function refresh()
+    {
+        if (OS_WIN) {
             return;
+        }
 
         // DECSLPP.
         echo "\033[7t";
@@ -521,14 +517,14 @@ class Window implements Core\Event\Source {
     /**
      * Set clipboard value.
      *
-     * @access  public
      * @param   string  $data    Data to copy.
      * @return  void
      */
-    public static function copy ( $data ) {
-
-        if(OS_WIN)
+    public static function copy($data)
+    {
+        if (OS_WIN) {
             return;
+        }
 
         echo "\033]52;;" . base64_encode($data) . "\033\\";
 
@@ -544,22 +540,24 @@ Console::advancedInteraction();
 /**
  * Event.
  */
-if(function_exists('pcntl_signal')) {
-
+if (function_exists('pcntl_signal')) {
     Window::getInstance();
-    pcntl_signal(SIGWINCH, function ( ) {
+    pcntl_signal(
+        SIGWINCH,
+        function () {
+            static $_window = null;
 
-        static $_window = null;
+            if (null === $_window) {
+                $_window = Window::getInstance();
+            }
 
-        if(null === $_window)
-            $_window = Window::getInstance();
-
-        Core\Event::notify(
-            'hoa://Event/Console/Window:resize',
-            $_window,
-            new Core\Event\Bucket([
-                'size' => \Window::getSize()
-            ])
-        );
-    });
+            Core\Event::notify(
+                'hoa://Event/Console/Window:resize',
+                $_window,
+                new Core\Event\Bucket([
+                    'size' => \Window::getSize()
+                ])
+            );
+        }
+    );
 }

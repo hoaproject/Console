@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,31 +46,29 @@ use Hoa\View;
  *
  * A structure, given to action, that holds some important data.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Kit extends Dispatcher\Kit {
-
+class Kit extends Dispatcher\Kit
+{
     /**
      * CLI parser.
      *
-     * @var \Hoa\Console\Parser object
+     * @var \Hoa\Console\Parser
      */
     public $parser      = null;
 
     /**
      * Options (as described in \Hoa\Console\GetOption).
      *
-     * @var \Hoa\Console\Dispatcher\Kit array
+     * @var array
      */
     protected $options  = null;
 
     /**
      * Options analyzer.
      *
-     * @var \Hoa\Console\GetOption object
+     * @var \Hoa\Console\GetOption
      */
     protected $_options = null;
 
@@ -79,16 +77,16 @@ class Kit extends Dispatcher\Kit {
     /**
      * Build a dispatcher kit.
      *
-     * @access  public
      * @param   \Hoa\Router           $router        The router.
      * @param   \Hoa\Dispatcher       $dispatcher    The dispatcher.
      * @param   \Hoa\View\Viewable    $view          The view.
      * @return  void
      */
-     public function __construct ( Router        $router,
-                                   Dispatcher    $dispatcher,
-                                   View\Viewable $view = null ) {
-
+    public function __construct(
+        Router        $router,
+        Dispatcher    $dispatcher,
+        View\Viewable $view = null
+    ) {
         parent::__construct($router, $dispatcher, $view);
 
         $this->parser = new Console\Parser();
@@ -99,18 +97,19 @@ class Kit extends Dispatcher\Kit {
     /**
      * Alias of \Hoa\Console\GetOption::getOptions().
      *
-     * @access  public
      * @param   string  &$optionValue    Please, see original API.
      * @param   string  $short           Please, see original API.
      * @return  mixed
      */
-    public function getOption ( &$optionValue, $short = null ) {
-
-        if(null === $this->_options && !empty($this->options))
+    public function getOption(&$optionValue, $short = null)
+    {
+        if (null === $this->_options && !empty($this->options)) {
             $this->setOptions($this->options);
+        }
 
-        if(null === $this->_options)
+        if (null === $this->_options) {
             return false;
+        }
 
         return $this->_options->getOption($optionValue, $short);
     }
@@ -118,20 +117,18 @@ class Kit extends Dispatcher\Kit {
     /**
      * Initialize options.
      *
-     * @access  public
      * @param   array  $options    Options, as described in
      *                             \Hoa\Console\GetOption.
      * @return  array
      */
-    public function setOptions ( Array $options ) {
-
+    public function setOptions(Array $options)
+    {
         $old           = $this->options;
         $this->options = $options;
         $rule          = $this->router->getTheRule();
         $variables     = $rule[Router::RULE_VARIABLES];
 
-        if(isset($variables['_tail'])) {
-
+        if (isset($variables['_tail'])) {
             $this->parser->parse($variables['_tail']);
             $this->_options = new Console\GetOption(
                 $this->options,
@@ -145,16 +142,15 @@ class Kit extends Dispatcher\Kit {
     /**
      * It is a helper to make the usage options list.
      *
-     * @access  public
      * @param   array  $definitions    An associative arry: short or long option
      *                                 associated to the definition.
      * @return  string
      */
-    public function makeUsageOptionsList ( Array $definition = [] ) {
-
+    public function makeUsageOptionsList(Array $definition = [])
+    {
         $out = [];
 
-        foreach($this->options as $i => $options)
+        foreach ($this->options as $i => $options) {
             $out[] = [
                 '  -' . $options[Console\GetOption::OPTION_VAL] . ', --' .
                 $options[Console\GetOption::OPTION_NAME] .
@@ -173,6 +169,7 @@ class Kit extends Dispatcher\Kit {
                     )
                 )
             ];
+        }
 
         return Console\Chrome\Text::columnize(
             $out,
@@ -187,20 +184,21 @@ class Kit extends Dispatcher\Kit {
      * Resolve option ambiguity by asking the user to choose amongst some
      * appropriated solutions.
      *
-     * @access  public
      * @param   array  $solutions    Solutions.
      * @return  void
      */
-    public function resolveOptionAmbiguity ( Array $solutions ) {
-
-        echo 'You have made a typo in the option ',
-             $solutions['option'], '; it can match the following options: ', "\n",
-             '    • ',  implode(";\n    • ", $solutions['solutions']), '.', "\n",
-             'Please, type the right option (empty to choose the first one):', "\n";
+    public function resolveOptionAmbiguity(Array $solutions)
+    {
+        echo
+            'You have made a typo in the option ',
+            $solutions['option'], '; it can match the following options: ', "\n",
+            '    • ',  implode(";\n    • ", $solutions['solutions']), '.', "\n",
+            'Please, type the right option (empty to choose the first one):', "\n";
         $new = $this->readLine('> ');
 
-        if(empty($new))
+        if (empty($new)) {
             $new = $solutions['solutions'][0];
+        }
 
         $solutions['solutions'] = [$new];
 
@@ -215,19 +213,20 @@ class Kit extends Dispatcher\Kit {
      * @param bool    $status    The operation status.
      * @return void
      */
-    public function status ( $text, $status ) {
-
+    public function status($text, $status)
+    {
         $window = Console\Window::getSize();
-        $out = ' ' . Console\Chrome\Text::colorize('*', 'foreground(yellow)') . ' ' .
-               $text . str_pad(
-                   ' ',
-                   $window['x']
-                   - strlen(preg_replace('#' . "\033". '\[[0-9]+m#', '', $text))
-                   - 8
-               ) .
-               ($status === true
-                   ? '[' . Console\Chrome\Text::colorize('ok', 'foreground(green)') . ']'
-                   : '[' . Console\Chrome\Text::colorize('!!', 'foreground(white) background(red)') . ']');
+        $out    =
+            ' ' . Console\Chrome\Text::colorize('*', 'foreground(yellow)') . ' ' .
+            $text . str_pad(
+                ' ',
+                $window['x']
+                - strlen(preg_replace('#' . "\033" . '\[[0-9]+m#', '', $text))
+                - 8
+            ) .
+            ($status === true
+                ? '[' . Console\Chrome\Text::colorize('ok', 'foreground(green)') . ']'
+                : '[' . Console\Chrome\Text::colorize('!!', 'foreground(white) background(red)') . ']');
 
         echo $out, "\n";
 
@@ -237,16 +236,16 @@ class Kit extends Dispatcher\Kit {
     /**
      * Read, edit, bind… a line from STDIN.
      *
-     * @access  public
      * @param   string  $prefix    Prefix.
      * @return  string
      */
-    public function readLine ( $prefix = null ) {
-
+    public function readLine($prefix = null)
+    {
         static $_rl = null;
 
-        if(null === $_rl)
+        if (null === $_rl) {
             $_rl = new Console\Readline();
+        }
 
         return $_rl->readLine($prefix);
     }
@@ -254,16 +253,16 @@ class Kit extends Dispatcher\Kit {
     /**
      * Read, edit, bind… a password from STDIN.
      *
-     * @access  public
      * @param   string  $prefix    Prefix.
      * @return  string
      */
-    public function readPassword ( $prefix = null ) {
-
+    public function readPassword($prefix = null)
+    {
         static $_rl = null;
 
-        if(null === $_rl)
+        if (null === $_rl) {
             $_rl = new Console\Readline\Password();
+        }
 
         return $_rl->readLine($prefix);
     }

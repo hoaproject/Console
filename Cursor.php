@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,13 +41,11 @@ namespace Hoa\Console;
  *
  * Allow to manipulate the cursor.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Cursor {
-
+class Cursor
+{
     /**
      * Move the cursor.
      * Steps can be:
@@ -61,25 +59,24 @@ class Cursor {
      *     • L, LEFT     : move to the first column.
      * Steps can be concatened by a single space if $repeat is equal to 1.
      *
-     * @access  public
      * @param   string  $steps     Steps.
      * @param   int     $repeat    How many times do we move?
      * @return  void
      */
-    public static function move ( $steps, $repeat = 1 ) {
-
-        if(1 > $repeat)
+    public static function move($steps, $repeat = 1)
+    {
+        if (1 > $repeat) {
             return;
-        elseif(1 === $repeat)
+        } elseif (1 === $repeat) {
             $handle = explode(' ', $steps);
-        else
+        } else {
             $handle = explode(' ', $steps, 1);
+        }
 
         $tput = Console::getTput();
 
-        foreach($handle as $step)
-            switch($step) {
-
+        foreach ($handle as $step) {
+            switch ($step) {
                 case 'u':
                 case 'up':
                 case '↑':
@@ -88,12 +85,14 @@ class Cursor {
                         $repeat,
                         $tput->get('parm_up_cursor')
                     );
-                  break;
+
+                    break;
 
                 case 'U':
                 case 'UP':
                     static::moveTo(null, 1);
-                  break;
+
+                    break;
 
                 case 'r':
                 case 'right':
@@ -103,12 +102,14 @@ class Cursor {
                         $repeat,
                         $tput->get('parm_right_cursor')
                     );
-                  break;
+
+                    break;
 
                 case 'R':
                 case 'RIGHT':
                     static::moveTo(9999);
-                  break;
+
+                    break;
 
                 case 'd':
                 case 'down':
@@ -118,12 +119,14 @@ class Cursor {
                         $repeat,
                         $tput->get('parm_down_cursor')
                     );
-                  break;
+
+                    break;
 
                 case 'D':
                 case 'DOWN':
                     static::moveTo(null, 9999);
-                  break;
+
+                    break;
 
                 case 'l':
                 case 'left':
@@ -133,13 +136,16 @@ class Cursor {
                         $repeat,
                         $tput->get('parm_left_cursor')
                     );
-                  break;
+
+                    break;
 
                 case 'L':
                 case 'LEFT':
                     static::moveTo(1);
-                  break;
+
+                    break;
             }
+        }
 
         return;
     }
@@ -148,22 +154,22 @@ class Cursor {
      * Move to the line X and the column Y.
      * If null, use the current coordinate.
      *
-     * @access  public
      * @param   int  $x    X coordinate.
      * @param   int  $y    Y coordinate.
      * @return  void
      */
-    public static function moveTo ( $x = null, $y = null ) {
-
-        if(null === $x || null === $y) {
-
+    public static function moveTo($x = null, $y = null)
+    {
+        if (null === $x || null === $y) {
             $position = static::getPosition();
 
-            if(null === $x)
+            if (null === $x) {
                 $x = $position['x'];
+            }
 
-            if(null === $y)
+            if (null === $y) {
                 $y = $position['y'];
+            }
         }
 
         echo str_replace(
@@ -178,19 +184,19 @@ class Cursor {
     /**
      * Get current position (x and y) of the cursor.
      *
-     * @access  public
      * @return  array
      */
-    public static function getPosition ( ) {
-
+    public static function getPosition()
+    {
         $tput  = Console::getTput();
         $user7 = $tput->get('user7');
 
-        if(null === $user7)
+        if (null === $user7) {
             return [
                 'x' => 0,
                 'y' => 0
             ];
+        }
 
         echo $user7;
 
@@ -202,14 +208,13 @@ class Cursor {
         $handle = &$y;
 
         do {
-
             $char = fread(STDIN, 1);
 
-            switch($char) {
-
+            switch ($char) {
                 case ';':
                     $handle = &$x;
-                  break;
+
+                    break;
 
                 case 'R':
                     break 2;
@@ -217,8 +222,7 @@ class Cursor {
                 default:
                     $handle .= $char;
             }
-
-        } while(true);
+        } while (true);
 
         return [
             'x' => (int) $x,
@@ -229,11 +233,10 @@ class Cursor {
     /**
      * Save current position.
      *
-     * @access  public
      * @return  void
      */
-    public static function save ( ) {
-
+    public static function save()
+    {
         echo Console::getTput()->get('save_cursor');
 
         return;
@@ -242,11 +245,10 @@ class Cursor {
     /**
      * Restore cursor to the last saved position.
      *
-     * @access  public
      * @return  void
      */
-    public static function restore ( ) {
-
+    public static function restore()
+    {
         echo Console::getTput()->get('restore_cursor');
 
         return;
@@ -263,53 +265,58 @@ class Cursor {
      *     •    line,  ↔ : clear all the line and static::move(1).
      * Parts can be concatenated by a single space.
      *
-     * @access  public
      * @param   string  $parts    Parts to clean.
      * @return  void
      */
-    public static function clear ( $parts = 'all' ) {
-
+    public static function clear($parts = 'all')
+    {
         $tput = Console::getTput();
 
-        foreach(explode(' ', $parts) as $part)
-            switch($part) {
-
+        foreach (explode(' ', $parts) as $part) {
+            switch ($part) {
                 case 'a':
                 case 'all':
                 case '↕':
                     echo $tput->get('clear_screen');
                     static::moveTo(1, 1);
-                  break;
+
+                    break;
 
                 case 'u':
                 case 'up':
                 case '↑':
                     echo "\033[1J";
-                  break;
+
+                    break;
 
                 case 'r':
                 case 'right':
                 case '→':
                     echo $tput->get('clr_eol');
-                  break;
+
+                    break;
 
                 case 'd':
                 case 'down':
                 case '↓':
                     echo $tput->get('clr_eos');
-                  break;
+
+                    break;
 
                 case 'l':
                 case 'left':
                 case '←':
                     echo $tput->get('clr_bol');
-                  break;
+
+                    break;
 
                 case 'line':
                 case '↔':
                     echo "\r" . $tput->get('clr_eol');
-                  break;
+
+                    break;
             }
+        }
 
         return;
     }
@@ -317,11 +324,10 @@ class Cursor {
     /**
      * Hide the cursor.
      *
-     * @access  public
      * @return  void
      */
-    public static function hide ( ) {
-
+    public static function hide()
+    {
         echo Console::getTput()->get('cursor_invisible');
 
         return;
@@ -330,11 +336,10 @@ class Cursor {
     /**
      * Show the cursor.
      *
-     * @access  public
      * @return  void
      */
-    public static function show ( ) {
-
+    public static function show()
+    {
         echo Console::getTput()->get('cursor_visible');
 
         return;
@@ -368,16 +373,15 @@ class Cursor {
      *     • #hexa.
      * Attributes can be concatenated by a single space.
      *
-     * @access  public
      * @param   string  $attributes    Attributes.
      * @return  void
      */
-    public static function colorize ( $attributes ) {
-
+    public static function colorize($attributes)
+    {
         static $_rgbTo256 = null;
 
-        if(null === $_rgbTo256)
-            $_rgbTo256 = array(
+        if (null === $_rgbTo256) {
+            $_rgbTo256 = [
                 '000000', '800000', '008000', '808000', '000080', '800080',
                 '008080', 'c0c0c0', '808080', 'ff0000', '00ff00', 'ffff00',
                 '0000ff', 'ff00ff', '00ffff', 'ffffff', '000000', '00005f',
@@ -421,141 +425,158 @@ class Cursor {
                 '585858', '606060', '666666', '767676', '808080', '8a8a8a',
                 '949494', '9e9e9e', 'a8a8a8', 'b2b2b2', 'bcbcbc', 'c6c6c6',
                 'd0d0d0', 'dadada', 'e4e4e4', 'eeeeee'
-            );
+            ];
+        }
 
         $tput = Console::getTput();
 
-        if(1 >= $tput->count('max_colors'))
+        if (1 >= $tput->count('max_colors')) {
             return;
+        }
 
         $handle = [];
 
-        foreach(explode(' ', $attributes) as $attribute) {
-
-            switch($attribute) {
-
+        foreach (explode(' ', $attributes) as $attribute) {
+            switch ($attribute) {
                 case 'n':
                 case 'normal':
                     $handle[] = 0;
-                  break;
+
+                    break;
 
                 case 'b':
                 case 'bold':
                     $handle[] = 1;
-                  break;
+
+                    break;
 
                 case 'u':
                 case 'underlined':
                     $handle[] = 4;
-                  break;
+
+                    break;
 
                 case 'bl':
                 case 'blink':
                     $handle[] = 5;
-                  break;
+
+                    break;
 
                 case 'i':
                 case 'inverse':
                     $handle[] = 7;
-                  break;
+
+                    break;
 
                 case '!b':
                 case '!bold':
                     $handle[] = 22;
-                  break;
+
+                    break;
 
                 case '!u':
                 case '!underlined':
                     $handle[] = 24;
-                  break;
+
+                    break;
 
                 case '!bl':
                 case '!blink':
                     $handle[] = 25;
-                  break;
+
+                    break;
 
                 case '!i':
                 case '!inverse':
                     $handle[] = 27;
-                  break;
+
+                    break;
 
                 default:
-                    if(0 === preg_match('#^([^\(]+)\(([^\)]+)\)$#', $attribute, $m))
+                    if (0 === preg_match('#^([^\(]+)\(([^\)]+)\)$#', $attribute, $m)) {
                         break;
+                    }
 
                     $shift = 0;
 
-                    switch($m[1]) {
-
+                    switch ($m[1]) {
                         case 'fg':
                         case 'foreground':
                             $shift = 0;
-                          break;
+
+                            break;
 
                         case 'bg':
                         case 'background':
                             $shift = 10;
-                          break;
+
+                            break;
 
                         default:
-                          break 2;
+                            break 2;
                     }
 
                     $_handle  = 0;
                     $_keyword = true;
 
-                    switch($m[2]) {
-
+                    switch ($m[2]) {
                         case 'black':
                             $_handle = 30;
-                          break;
+
+                            break;
 
                         case 'red':
                             $_handle = 31;
-                          break;
+
+                            break;
 
                         case 'green':
                             $_handle = 32;
-                          break;
+
+                            break;
 
                         case 'yellow':
                             $_handle = 33;
-                          break;
+
+                            break;
 
                         case 'blue':
                             $_handle = 34;
-                          break;
+
+                            break;
 
                         case 'magenta':
                             $_handle = 35;
-                          break;
+
+                            break;
 
                         case 'cyan':
                             $_handle = 36;
-                          break;
+
+                            break;
 
                         case 'white':
                             $_handle = 37;
-                          break;
+
+                            break;
 
                         case 'default':
                             $_handle = 39;
-                          break;
+
+                            break;
 
                         default:
                             $_keyword = false;
 
-                            if(   256 <=  $tput->count('max_colors')
-                               && '#' === $m[2][0]) {
-
+                            if (256 <=  $tput->count('max_colors') &&
+                                '#' === $m[2][0]) {
                                 $rgb      = hexdec(substr($m[2], 1));
                                 $r        = ($rgb >> 16) & 255;
                                 $g        = ($rgb >>  8) & 255;
                                 $b        =  $rgb        & 255;
                                 $distance = null;
 
-                                foreach($_rgbTo256 as $i => $_rgb) {
-
+                                foreach ($_rgbTo256 as $i => $_rgb) {
                                     $_rgb = hexdec($_rgb);
                                     $_r   = ($_rgb >> 16) & 255;
                                     $_g   = ($_rgb >>  8) & 255;
@@ -567,22 +588,22 @@ class Cursor {
                                       + pow($_b - $b, 2)
                                     );
 
-                                    if(   null === $distance
-                                       || $d   <=  $distance) {
-
+                                    if (null === $distance ||
+                                        $d   <=  $distance) {
                                         $distance = $d;
                                         $_handle  = $i;
                                     }
                                 }
-                            }
-                            else
+                            } else {
                                 $_handle = intval($m[2]);
+                            }
                     }
 
-                    if(true === $_keyword)
+                    if (true === $_keyword) {
                         $handle[] = $_handle + $shift;
-                    else
+                    } else {
                         $handle[] = (38 + $shift) . ';5;' . $_handle;
+                    }
             }
         }
 
@@ -594,17 +615,17 @@ class Cursor {
     /**
      * Change color number to a specific RGB color.
      *
-     * @access  public
      * @param   int  $fromCode    Color number.
      * @param   int  $toColor     RGB color.
      * @return  void
      */
-    public static function changeColor ( $fromCode, $toColor ) {
-
+    public static function changeColor($fromCode, $toColor)
+    {
         $tput = Console::getTput();
 
-        if(true !== $tput->has('can_change'))
+        if (true !== $tput->has('can_change')) {
             return;
+        }
 
         $r = ($toColor >> 16) & 255;
         $g = ($toColor >>  8) & 255;
@@ -638,39 +659,42 @@ class Cursor {
      *     • u, underline, _: underline;
      *     • v, vertical,  |: vertical.
      *
-     * @access  public
      * @param   int   $style    Style.
      * @param   bool  $blink    Whether the cursor is blink or steady.
      * @return  void
      */
-    public static function setStyle ( $style, $blink = true ) {
-
-        if(OS_WIN)
+    public static function setStyle($style, $blink = true)
+    {
+        if (OS_WIN) {
             return;
+        }
 
-        switch($style) {
-
+        switch ($style) {
             case 'b':
             case 'block':
             case '▋':
                 $_style = 1;
-              break;
+
+                break;
 
             case 'u':
             case 'underline':
             case '_':
                 $_style = 2;
-              break;
+
+                break;
 
             case 'v':
             case 'vertical':
             case '|':
                 $_style = 5;
-              break;
+
+                break;
         }
 
-        if(false === $blink)
+        if (false === $blink) {
             ++$_style;
+        }
 
         // Not sure what tput entry we can use here…
         echo "\033[" . $_style . " q";
@@ -681,11 +705,10 @@ class Cursor {
     /**
      * Make a stupid “bip”.
      *
-     * @access  public
      * @return  void
      */
-    public static function bip ( ) {
-
+    public static function bip()
+    {
         echo Console::getTput()->get('bell');
 
         return;

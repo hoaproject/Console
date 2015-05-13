@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,13 +47,11 @@ use Hoa\String;
  * And, of course, it proposes the getOption method, that allow user to loop
  * easily the command options/arguments.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class GetOption {
-
+class GetOption
+{
     /**
      * Argument: no argument is needed.
      *
@@ -107,21 +105,21 @@ class GetOption {
      * OPTIONAL_ARGUMENT.
      * The val is the short option value.
      *
-     * @var \Hoa\Console\GetOption array
+     * @var array
      */
     protected $_options       = [];
 
     /**
      * Parser.
      *
-     * @var \Hoa\Console\Parser object
+     * @var \Hoa\Console\Parser
      */
     protected $_parser        = null;
 
     /**
      * The pipette contains all the short value of options.
      *
-     * @var \Hoa\Console\GetOption char
+     * @var char
      */
     protected $_pipette       = [];
 
@@ -130,19 +128,17 @@ class GetOption {
     /**
      * Prepare the pipette.
      *
-     * @access  public
      * @param   array                         $options    The option definition.
      * @param   \Hoa\Console\Core\Cli\Parser  $parser     The parser.
      * @return  void
-     * @throw   \Hoa\Console\Exception
+     * @throws  \Hoa\Console\Exception
      */
-    public function __construct ( Array $options, Parser $parser ) {
-
+    public function __construct(Array $options, Parser $parser)
+    {
         $this->_options = $options;
         $this->_parser  = $parser;
 
-        if(empty($options)) {
-
+        if (empty($options)) {
             $this->_pipette[null] = null;
 
             return;
@@ -151,24 +147,22 @@ class GetOption {
         $names  = [];
         $_names = [];
 
-        foreach($options as $i => $option) {
-
-            if(isset($option[self::OPTION_NAME]))
+        foreach ($options as $i => $option) {
+            if (isset($option[self::OPTION_NAME])) {
                 $names[$option[self::OPTION_NAME]] = $i;
+            }
 
-            if(isset($option[self::OPTION_VAL]))
+            if (isset($option[self::OPTION_VAL])) {
                 $names[$option[self::OPTION_VAL]]  = $i;
+            }
         }
 
         $_names   = array_keys($names);
         $switches = $parser->getSwitches();
 
-        foreach($switches as $name => $value) {
-
-            if(false === in_array($name, $_names)) {
-
-                if(1 === strlen($name)) {
-
+        foreach ($switches as $name => $value) {
+            if (false === in_array($name, $_names)) {
+                if (1 === strlen($name)) {
                     $this->_pipette[] = ['__ambiguous', [
                         'solutions' => [],
                         'value'     => $value,
@@ -187,20 +181,21 @@ class GetOption {
                 );
                 $solutions   = [];
 
-                foreach($searched as $s) {
-
+                foreach ($searched as $s) {
                     $h = substr($haystack, $s['i'], $s['l']);
 
-                    if(   false !== strpos($h, ';')
-                       || false !== in_array($h, array_keys($switches))
-                       || false === in_array($h, $_names))
+                    if (false !== strpos($h, ';') ||
+                        false !== in_array($h, array_keys($switches)) ||
+                        false === in_array($h, $_names)) {
                         continue;
+                    }
 
                     $solutions[] = $h;
                 }
 
-                if(empty($solutions))
+                if (empty($solutions)) {
                     continue;
+                }
 
                 $this->_pipette[] = ['__ambiguous', [
                     'solutions' => $solutions,
@@ -214,16 +209,17 @@ class GetOption {
             $option   = $options[$names[$name]];
             $argument = $option[self::OPTION_HAS_ARG];
 
-            if(self::NO_ARGUMENT === $argument) {
-
-                if(!is_bool($value))
+            if (self::NO_ARGUMENT === $argument) {
+                if (!is_bool($value)) {
                     $parser->transferSwitchToInput($name, $value);
-            }
-            elseif(   self::REQUIRED_ARGUMENT === $argument
-                   && !is_string($value))
+                }
+            } elseif (self::REQUIRED_ARGUMENT === $argument && !is_string($value)) {
                 throw new Exception(
                     'The argument %s requires a value (it is not a switch).',
-                    0, $name);
+                    0,
+                    $name
+                );
+            }
 
             $this->_pipette[] = [$option[self::OPTION_VAL], $value];
         }
@@ -237,7 +233,6 @@ class GetOption {
     /**
      * Get option from the pipette.
      *
-     * @access  public
      * @param   string  &$optionValue    Place a variable that will receive the
      *                                   value of the current option.
      * @param   string  $short           Short options to scan (in a single
@@ -245,12 +240,11 @@ class GetOption {
      *                                   options will be selected.
      * @return  mixed
      */
-    public function getOption ( &$optionValue, $short = null ) {
-
+    public function getOption(&$optionValue, $short = null)
+    {
         static $first = true;
 
-        if(true === $this->isPipetteEmpty() && true === $first) {
-
+        if (true === $this->isPipetteEmpty() && true === $first) {
             $first       = false;
             $optionValue = null;
 
@@ -262,8 +256,7 @@ class GetOption {
         $key   = $c[0];
         $value = $c[1];
 
-        if(null == $k && null === $c) {
-
+        if (null == $k && null === $c) {
             reset($this->_pipette);
             $first = true;
 
@@ -272,14 +265,17 @@ class GetOption {
 
         $allow = [];
 
-        if(null === $short)
-            foreach($this->_options as $option)
+        if (null === $short) {
+            foreach ($this->_options as $option) {
                 $allow[] = $option[self::OPTION_VAL];
-        else
+            }
+        } else {
             $allow = str_split($short);
+        }
 
-        if(!in_array($key, $allow) && '__ambiguous' != $key)
+        if (!in_array($key, $allow) && '__ambiguous' != $key) {
             return false;
+        }
 
         $optionValue = $value;
         $return      = $key;
@@ -291,11 +287,10 @@ class GetOption {
     /**
      * Check if the pipette is empty.
      *
-     * @access  public
      * @return  bool
      */
-    public function isPipetteEmpty ( ) {
-
+    public function isPipetteEmpty()
+    {
         return count($this->_pipette) == 1;
     }
 
@@ -305,46 +300,52 @@ class GetOption {
      * For a smarter resolving, you could use the console kit (please, see
      * Hoa\Console\Dispatcher\Kit).
      *
-     * @access  public
      * @param   array  $solutions    Solutions.
      * @return  void
-     * @throw   \Hoa\Console\Exception
+     * @throws  \Hoa\Console\Exception
      */
-    public function resolveOptionAmbiguity ( Array $solution ) {
-
-        if(   !isset($solution['solutions'])
-           || !isset($solution['value'])
-           || !isset($solution['option']))
+    public function resolveOptionAmbiguity(Array $solution)
+    {
+        if (!isset($solution['solutions']) ||
+            !isset($solution['value']) ||
+            !isset($solution['option'])) {
             throw new Exception(
                 'Cannot resolve option ambiguity because the given solution ' .
-                'seems to be corruped.', 1);
+                'seems to be corruped.',
+                1
+            );
+        }
 
         $choices = $solution['solutions'];
 
-        if(1 > count($choices))
+        if (1 > count($choices)) {
             throw new Exception(
                 'Cannot resolve ambiguity, fix your typo in the option %s :-).',
-                2, $solution['option']);
+                2,
+                $solution['option']
+            );
+        }
 
         $theSolution = $choices[0];
 
-        foreach($this->_options as $option)
-            if(   $theSolution == $option[self::OPTION_NAME]
-               || $theSolution == $option[self::OPTION_VAL]) {
-
+        foreach ($this->_options as $option) {
+            if ($theSolution == $option[self::OPTION_NAME] ||
+                $theSolution == $option[self::OPTION_VAL]) {
                 $argument = $option[self::OPTION_HAS_ARG];
                 $value    = $solution['value'];
 
-                if(self::NO_ARGUMENT === $argument) {
-
-                    if(!is_bool($value))
+                if (self::NO_ARGUMENT === $argument) {
+                    if (!is_bool($value)) {
                         $this->_parser->transferSwitchToInput($theSolution, $value);
-                }
-                elseif(   self::REQUIRED_ARGUMENT === $argument
-                       && !is_string($value))
+                    }
+                } elseif (self::REQUIRED_ARGUMENT === $argument &&
+                          !is_string($value)) {
                     throw new Exception(
                         'The argument %s requires a value (it is not a switch).',
-                        3, $theSolution);
+                        3,
+                        $theSolution
+                    );
+                }
 
                 unset($this->_pipette[null]);
                 $this->_pipette[]     = [$option[self::OPTION_VAL], $value];
@@ -352,6 +353,7 @@ class GetOption {
 
                 return;
             }
+        }
 
         return;
     }

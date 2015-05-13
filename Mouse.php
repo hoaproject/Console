@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2013, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,31 +43,29 @@ use Hoa\Core;
  *
  * Allow to listen the mouse.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2013 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Mouse implements Core\Event\Listenable {
-
+class Mouse implements Core\Event\Listenable
+{
     /**
      * Singleton.
      *
-     * @var \Hoa\Console\Mouse object
+     * @var \Hoa\Console\Mouse
      */
     protected static $_instance = null;
 
     /**
      * Whether the mouse is tracked or not.
      *
-     * @var \Hoa\Console\Mouse bool
+     * @var bool
      */
     protected static $_enabled  = false;
 
     /**
      * Listeners.
      *
-     * @var \Hoa\Core\Event\Listener object
+     * @var \Hoa\Core\Event\Listener
      */
     protected $_on              = null;
 
@@ -76,11 +74,10 @@ class Mouse implements Core\Event\Listenable {
     /**
      * Constructor.
      *
-     * @access  private
      * @return  void
      */
-    private function __construct ( ) {
-
+    private function __construct()
+    {
         $this->_on = new Core\Event\Listener($this, [
             'mouseup',
             'mousedown',
@@ -94,13 +91,13 @@ class Mouse implements Core\Event\Listenable {
     /**
      * Singleton.
      *
-     * @access  public
      * @return  \Hoa\Console\Mouse
      */
-    public static function getInstance ( ) {
-
-        if(null === static::$_instance)
+    public static function getInstance()
+    {
+        if (null === static::$_instance) {
             static::$_instance = new static();
+        }
 
         return static::$_instance;
     }
@@ -108,13 +105,13 @@ class Mouse implements Core\Event\Listenable {
     /**
      * Track the mouse.
      *
-     * @access  public
      * @return  bool
      */
-    public static function track ( ) {
-
-        if(true === static::$_enabled)
+    public static function track()
+    {
+        if (true === static::$_enabled) {
             return;
+        }
 
         static::$_enabled = true;
 
@@ -133,24 +130,26 @@ class Mouse implements Core\Event\Listenable {
         ];
         $read = [STDIN];
 
-        while(true) {
-
+        while (true) {
             @stream_select($read, $write, $except, 30);
 
             $string = fread(STDIN, 1);
 
-            if("\033" !== $string)
+            if ("\033" !== $string) {
                 continue;
+            }
 
             $string .= $char = fread(STDIN, 1);
 
-            if('[' !== $char)
+            if ('[' !== $char) {
                 continue;
+            }
 
             $string .= $char = fread(STDIN, 1);
 
-            if('M' !== $char)
+            if ('M' !== $char) {
                 continue;
+            }
 
             $data = fread(STDIN, 3);
             $cb   = ord($data[0]);
@@ -166,21 +165,22 @@ class Mouse implements Core\Event\Listenable {
             $cb  = ($cb | 28) ^ 28; // 28 = 4 | 8 | 16
             $cb -= 32;
 
-            switch($cb) {
-
+            switch ($cb) {
                 case 64:
                     $instance->_on->fire(
                         'wheelup',
                         new Core\Event\Bucket($bucket)
                     );
-                  break;
+
+                    break;
 
                 case 65:
                     $instance->_on->fire(
                         'wheeldown',
                         new Core\Event\Bucket($bucket)
                     );
-                  break;
+
+                    break;
 
                 case 3:
                     $instance->_on->fire(
@@ -188,16 +188,17 @@ class Mouse implements Core\Event\Listenable {
                         new Core\Event\Bucket($bucket)
                     );
                     $bucket['button'] = null;
-                  break;
+
+                    break;
 
                 default:
-                    if(0 === $cb)
+                    if (0 === $cb) {
                         $bucket['button'] = 'left';
-                    elseif(1 === $cb)
+                    } elseif (1 === $cb) {
                         $bucket['button'] = 'middle';
-                    elseif(2 === $cb)
+                    } elseif (2 === $cb) {
                         $bucket['button'] = 'right';
-                    else {
+                    } else {
 
                         // hover
                         continue 2;
@@ -216,13 +217,13 @@ class Mouse implements Core\Event\Listenable {
     /**
      * Untrack the mouse.
      *
-     * @access  public
      * @return  void
      */
-    public static function untrack ( ) {
-
-        if(false === static::$_enabled)
+    public static function untrack()
+    {
+        if (false === static::$_enabled) {
             return;
+        }
 
         echo "\033[?1003l";
         echo "\033[?1000l";
@@ -235,14 +236,13 @@ class Mouse implements Core\Event\Listenable {
     /**
      * Attach a callable to a listenable component.
      *
-     * @access  public
      * @param   string  $listenerId    Listener ID.
      * @param   mixed   $callable      Callable.
      * @return  \Hoa\Core\Event\Listenable
-     * @throw   \Hoa\Core\Exception
+     * @throws  \Hoa\Core\Exception
      */
-    public function on ( $listenerId, $callable ) {
-
+    public function on($listenerId, $callable)
+    {
         $this->_on->attach($listenerId, $callable);
 
         return $this;

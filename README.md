@@ -96,8 +96,7 @@ Example:
 
 ```php
 $mouse = Hoa\Console\Mouse::getInstance();
-$mouse->on('mousedown', function ( $bucket ) {
-
+$mouse->on('mousedown', function ($bucket) {
     print_r($bucket->getData());
 });
 
@@ -183,13 +182,13 @@ channel:
 
 ```php
 event('hoa://Event/Console/Window:resize')
-    ->attach(function ( Hoa\Core\Event\Bucket $bucket ) {
-
+    ->attach(function (Hoa\Core\Event\Bucket $bucket) {
         $data = $bucket->getData();
         $size = $data['size'];
 
-        echo 'New dimensions: ', $size['x'], ' lines x ',
-             $size['y'], ' columns.', "\n";
+        echo
+            'New dimensions: ', $size['x'], ' lines x ',
+            $size['y'], ' columns.', "\n";
     });
 ```
 
@@ -239,8 +238,7 @@ or a callable:
 
 ```php
 $readline->addMapping('a', 'z'); // crazy, we replace “a” by “z”.
-$readline->addMapping('\C-R', function ( $readline ) {
-
+$readline->addMapping('\C-R', function ($readline) {
     // do something when pressing Ctrl-R.
 });
 ```
@@ -299,8 +297,7 @@ etc. This is very classical.
 
 ```php
 $processus = new Hoa\Console\Processus('ls');
-$processus->on('output', function ( Hoa\Core\Event\Bucket $bucket ) {
-
+$processus->on('output', function (Hoa\Core\Event\Bucket $bucket) {
     $data = $bucket->getData();
     echo '> ', $data['line'], "\n";
 });
@@ -348,15 +345,18 @@ $long  = null;
 
 //          short name                  value
 //               ↓                        ↓
-while(false !== $c = $options->getOption($v)) switch($c) {
+while(false !== $c = $options->getOption($v)) {
+    switch($c) {
+        case 's':
+            $short = true;
 
-    case 's':
-        $short = true;
-      break;
+            break;
 
-    case 'l':
-        $long = $v;
-      break;
+        case 'l':
+            $long = $v;
+
+            break;
+    }
 }
 
 var_dump($short, $long); // bool(true) and string(5) "value".
@@ -370,7 +370,8 @@ It also support typos in options. In this case, we have to add:
 ```php
     case '__ambiguous':
         $options->resolveOptionAmbiguity($v);
-      break;
+
+        break;
 ```
 
 If one solution is found, it will select this one automatically, else it will

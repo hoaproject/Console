@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,17 +43,15 @@ use Hoa\Console;
  *
  * Get terminal capabilities.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Termcap extends Console\Dispatcher\Kit {
-
+class Termcap extends Console\Dispatcher\Kit
+{
     /**
      * Options description.
      *
-     * @var \Hoa\Console\Bin\Termcap array
+     * @var array
      */
     protected $options = [
         ['terminal', Console\GetOption::NO_ARGUMENT,       't'],
@@ -73,59 +71,67 @@ class Termcap extends Console\Dispatcher\Kit {
     /**
      * The entry method.
      *
-     * @access  public
      * @return  int
      */
-    public function main ( ) {
-
+    public function main()
+    {
         $tput = Console::getTput();
 
-        while(false !== $c = $this->getOption($v)) switch($c) {
+        while (false !== $c = $this->getOption($v)) {
+            switch ($c) {
+                case 't':
+                    echo $tput->getTerm();
 
-            case 't':
-                echo $tput->getTerm();
-              return;
+                    return;
 
-            case 'f':
-                echo $tput->getTerminfo();
-              return;
+                case 'f':
+                    echo $tput->getTerminfo();
 
-            case 'H':
-                echo $tput->has($v) ? 1 : 0;
-              return;
+                    return;
 
-            case 'c':
-                echo $tput->count($v);
-              return;
+                case 'H':
+                    echo $tput->has($v) ? 1 : 0;
 
-            case 'g':
-                echo $tput->get($v);
-              return;
+                    return;
 
-            case 'b':
-                $informations = $tput->getInformations();
-                static::format($informations['booleans']);
-              return;
+                case 'c':
+                    echo $tput->count($v);
 
-            case 'n':
-                $informations = $tput->getInformations();
-                static::format($informations['numbers']);
-              return;
+                    return;
 
-            case 's':
-                $informations = $tput->getInformations();
-                static::format($informations['strings']);
-              return;
+                case 'g':
+                    echo $tput->get($v);
 
-            case '__ambiguous':
-                $this->resolveOptionAmbiguity($v);
-              break;
+                    return;
 
-            case 'h':
-            case '?':
-            default:
-                return $this->usage();
-              break;
+                case 'b':
+                    $informations = $tput->getInformations();
+                    static::format($informations['booleans']);
+
+                    return;
+
+                case 'n':
+                    $informations = $tput->getInformations();
+                    static::format($informations['numbers']);
+
+                    return;
+
+                case 's':
+                    $informations = $tput->getInformations();
+                    static::format($informations['strings']);
+
+                    return;
+
+                case '__ambiguous':
+                    $this->resolveOptionAmbiguity($v);
+
+                    break;
+
+                case 'h':
+                case '?':
+                default:
+                    return $this->usage();
+            }
         }
 
         return $this->usage();
@@ -134,27 +140,27 @@ class Termcap extends Console\Dispatcher\Kit {
     /**
      * The command usage.
      *
-     * @access  public
      * @return  int
      */
-    public function usage ( ) {
-
-        echo 'Usage   : console:termcap', "\n",
-             'Options :', "\n",
-             $this->makeUsageOptionsList([
-                 't'    => 'Get terminal name.',
-                 'f'    => 'Get path to the terminfo file.',
-                 'H'    => 'Get value of a boolean capability.',
-                 'c'    => 'Get value of a number capability.',
-                 'g'    => 'Get value of a string capability.',
-                 'b'    => 'Get all boolean capabilites.',
-                 'n'    => 'Get all number capabilites.',
-                 's'    => 'Get all string capabilites.',
-                 'help' => 'This help.'
-             ]), "\n",
-             'Examples:', "\n",
-             '    $ hoa console:termcap --count max_colors', "\n",
-             '    $ TERM=vt200 hoa console:termcap --has back_color_erase', "\n";
+    public function usage()
+    {
+        echo
+            'Usage   : console:termcap', "\n",
+            'Options :', "\n",
+            $this->makeUsageOptionsList([
+                't'    => 'Get terminal name.',
+                'f'    => 'Get path to the terminfo file.',
+                'H'    => 'Get value of a boolean capability.',
+                'c'    => 'Get value of a number capability.',
+                'g'    => 'Get value of a string capability.',
+                'b'    => 'Get all boolean capabilites.',
+                'n'    => 'Get all number capabilites.',
+                's'    => 'Get all string capabilites.',
+                'help' => 'This help.'
+            ]), "\n",
+            'Examples:', "\n",
+            '    $ hoa console:termcap --count max_colors', "\n",
+            '    $ TERM=vt200 hoa console:termcap --has back_color_erase', "\n";
 
         return;
     }
@@ -162,50 +168,52 @@ class Termcap extends Console\Dispatcher\Kit {
     /**
      * Format a collection of informations.
      *
-     * @access  public
      * @param   array  $data    Data.
      * @return  void
      */
-    public static function format ( Array $data ) {
-
+    public static function format(Array $data)
+    {
         $max = 0;
 
-        foreach($data as $key => $_)
-            if($max < ($handle = strlen($key)))
+        foreach ($data as $key => $_) {
+            if ($max < ($handle = strlen($key))) {
                 $max = $handle;
+            }
+        }
 
         $format = '%-' . ($max + 1) . 's: %s' . "\n";
 
-        foreach($data as $key => $value)
+        foreach ($data as $key => $value) {
             printf(
                 $format,
                 $key,
                 is_bool($value)
                     ? ($value ? 'true' : 'false')
                     : (is_string($value)
-                         ? str_replace(
-                               [
-                                   "\033",
-                                   "\n",
-                                   ord(0xa),
-                                   "\r",
-                                   "\b",
-                                   "\f",
-                                   "\0"
-                               ],
-                               [
-                                   '\e',
-                                   '\n',
-                                   '\l',
-                                   '\r',
-                                   '\b',
-                                   '\f',
-                                   '\0'
-                               ],
-                               $value
-                           )
-                         : $value)
+                        ? str_replace(
+                            [
+                                "\033",
+                                "\n",
+                                ord(0xa),
+                                "\r",
+                                "\b",
+                                "\f",
+                                "\0"
+                            ],
+                            [
+                                '\e',
+                                '\n',
+                                '\l',
+                                '\r',
+                                '\b',
+                                '\f',
+                                '\0'
+                            ],
+                            $value
+                          )
+                        : $value)
             );
+        }
 
         return;
     }

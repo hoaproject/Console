@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,13 +43,11 @@ use Hoa\Console;
  *
  * This class builts the text layout.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Text {
-
+class Text
+{
     /**
      * Align the text to left.
      *
@@ -77,15 +75,16 @@ class Text {
      * Colorize a portion of a text.
      * It is kind of a shortcut of \Hoa\Console\Color.
      *
-     * @access  public
      * @param   string  $text                Text.
      * @param   string  $attributesBefore    Style to apply.
      * @param   string  $attributesAfter     Reset style.
      * @return  string
      */
-    public static function colorize ( $text, $attributesBefore,
-                                      $attributesAfter = 'normal' ) {
-
+    public static function colorize(
+        $text,
+        $attributesBefore,
+        $attributesAfter = 'normal'
+    ) {
         ob_start();
         Console\Cursor::colorize($attributesBefore);
         echo $text;
@@ -113,7 +112,6 @@ class Text {
      * For example : '|: ', will set a ': ' between the first and second column,
      * and nothing for the other.
      *
-     * @access  public
      * @param   Array   $line                 The table represented by an array
      *                                        (see the documentation).
      * @param   int     $alignement           The global alignement of the text
@@ -125,14 +123,16 @@ class Text {
      *                                        column separator.
      * @return  string
      */
-    public static function columnize ( Array $line,
-                                       $alignement         = self::ALIGN_LEFT,
-                                       $horizontalPadding  = 2,
-                                       $verticalPadding    = 0,
-                                       $separator          = null ) {
-
-        if(empty($line))
+    public static function columnize(
+        Array $line,
+        $alignement        = self::ALIGN_LEFT,
+        $horizontalPadding = 2,
+        $verticalPadding   = 0,
+        $separator         = null
+    ) {
+        if (empty($line)) {
             return '';
+        }
 
         $separator = explode('|', $separator);
         $nbColumn  = 0;
@@ -140,12 +140,12 @@ class Text {
         $xtraWidth = 2 * ($verticalPadding + 2); // + separator
 
         // Get the number of column.
-        foreach($line as $key => &$column) {
-
-            if(!is_array($column))
+        foreach ($line as $key => &$column) {
+            if (!is_array($column)) {
                 $column = [$column];
+            }
 
-            $handle = count($column);
+            $handle                           = count($column);
             $handle > $nbColumn and $nbColumn = $handle;
         }
 
@@ -154,14 +154,13 @@ class Text {
         // Get the column width.
         $columnWidth = array_fill(0, $nbColumn, 0);
 
-        for($e = 0; $e < $nbColumn; $e++) {
-
-            for($i = 0; $i < $nbLine; $i++) {
-
-                if(!isset($line[$i][$e]))
+        for ($e = 0; $e < $nbColumn; $e++) {
+            for ($i = 0; $i < $nbLine; $i++) {
+                if (!isset($line[$i][$e])) {
                     continue;
+                }
 
-                $handle = self::getMaxLineWidth($line[$i][$e]);
+                $handle                                         = self::getMaxLineWidth($line[$i][$e]);
                 $handle > $columnWidth[$e] and $columnWidth[$e] = $handle;
             }
         }
@@ -171,51 +170,50 @@ class Text {
         $window    = Console\Window::getSize();
         $envWindow = $window['x'];
 
-        while($envWindow <= ($cWidthSum = $xtraWidth + array_sum($columnWidth))) {
-
+        while ($envWindow <= ($cWidthSum = $xtraWidth + array_sum($columnWidth))) {
             $diff            = $cWidthSum - $envWindow;
             $max             = max($columnWidth) - $xtraWidth;
             $newWidth        = $max - $diff;
             $i               = array_search(max($columnWidth), $columnWidth);
             $columnWidth[$i] = $newWidth;
 
-            foreach($line as $key => &$c)
-                if(isset($c[$i]))
+            foreach ($line as $key => &$c) {
+                if (isset($c[$i])) {
                     $c[$i] = self::wordwrap($c[$i], $newWidth);
+                }
+            }
         }
 
         // Manage the horizontal right padding.
-        $columnWidth     = array_map(
-                               function ( $x ) use ( $horizontalPadding ) {
-
-                                   return $x + 2 * $horizontalPadding;
-                               },
-                               $columnWidth
-                           );
+        $columnWidth = array_map(
+            function ($x) use ($horizontalPadding) {
+                return $x + 2 * $horizontalPadding;
+            },
+            $columnWidth
+        );
 
         // Prepare the new table, i.e. a new line (\n) must be a new line in the
         // array (structurally meaning).
         $newLine = [];
-        foreach($line as $key => $plpl) {
-
+        foreach ($line as $key => $plpl) {
             $i = self::getMaxLineNumber($plpl);
-            while($i-- >= 0)
+            while ($i-- >= 0) {
                 $newLine[] = array_fill(0, $nbColumn, null);
+            }
         }
 
         $yek = 0;
-        foreach($line as $key => $col) {
-
-            foreach($col as $kkey => $value) {
-
-                if(false === strpos($value, "\n")) {
-
+        foreach ($line as $key => $col) {
+            foreach ($col as $kkey => $value) {
+                if (false === strpos($value, "\n")) {
                     $newLine[$yek][$kkey] = $value;
+
                     continue;
                 }
 
-                foreach(explode("\n", $value) as $foo => $oof)
+                foreach (explode("\n", $value) as $foo => $oof) {
                     $newLine[$yek + $foo][$kkey] = $oof;
+                }
             }
 
             $i = self::getMaxLineNumber($col);
@@ -224,48 +222,52 @@ class Text {
         }
 
         // Place the column separator.
-        foreach($newLine as $key => $col)
-            foreach($col as $kkey => $value)
-                if(isset($separator[$kkey]))
-                    $newLine[$key][$kkey] = $separator[$kkey] .
-                                            str_replace(
-                                                "\n",
-                                                "\n" . $separator[$kkey],
-                                                $value
-                                            );
+        foreach ($newLine as $key => $col) {
+            foreach ($col as $kkey => $value) {
+                if (isset($separator[$kkey])) {
+                    $newLine[$key][$kkey] =
+                        $separator[$kkey] .
+                        str_replace(
+                            "\n",
+                            "\n" . $separator[$kkey],
+                            $value
+                        );
+                }
+            }
+        }
 
         $line   = $newLine;
         unset($newLine);
         $nbLine = count($line);
 
         // Complete the table with empty cells.
-        foreach($line as $key => &$column) {
-
+        foreach ($line as $key => &$column) {
             $handle = count($column);
 
-            if($nbColumn - $handle > 0)
+            if ($nbColumn - $handle > 0) {
                 $column += array_fill($handle, $nbColumn - $handle, null);
+            }
         }
 
-        // Built !
+        // Built!
         $out  = null;
         $dash = $alignement === self::ALIGN_LEFT ? '-' : '';
-        foreach($line as $key => $handle) {
-
+        foreach ($line as $key => $handle) {
             $format = null;
 
-            foreach($handle as $i => $hand)
-                if(preg_match_all('#(\\e\[[0-9]+m)#', $hand, $match)) {
-
+            foreach ($handle as $i => $hand) {
+                if (preg_match_all('#(\\e\[[0-9]+m)#', $hand, $match)) {
                     $a = $columnWidth[$i];
 
-                    foreach($match as $m)
+                    foreach ($match as $m) {
                         $a += strlen($m[1]);
+                    }
 
                     $format .= '%' . $dash . ($a + floor(count($match) / 2)) . 's';
-                }
-                else
+                } else {
                     $format .= '%' . $dash . $columnWidth[$i] . 's';
+                }
+            }
 
             $format .= str_repeat("\n", $verticalPadding + 1);
 
@@ -279,41 +281,44 @@ class Text {
     /**
      * Align a text according a “layer”. The layer width is given in arguments.
      *
-     * @access  public
      * @param   string  $text          The text.
      * @param   string  $alignement    The text alignement.
      * @param   int     $width         The layer width.
      * @return  string
      */
-    public static function align ( $text,
-                                   $alignement = self::ALIGN_LEFT,
-                                   $width      = null ) {
-
-        if(null === $width) {
-
+    public static function align(
+        $text,
+        $alignement = self::ALIGN_LEFT,
+        $width      = null
+    ) {
+        if (null === $width) {
             $window = Console\Window::getSize();
             $width  = $window['x'];
         }
 
         $out = null;
 
-        switch($alignement) {
-
+        switch ($alignement) {
             case self::ALIGN_LEFT:
                 $out .= sprintf('%-' . $width . 's', self::wordwrap($text, $width));
-              break;
+
+                break;
 
             case self::ALIGN_CENTER:
-                foreach(explode("\n", self::wordwrap($text, $width)) as $key => $value)
+                foreach (explode("\n", self::wordwrap($text, $width)) as $key => $value) {
                     $out .= str_repeat(' ', ceil(($width - strlen($value)) / 2)) .
                             $value .  "\n";
-              break;
+                }
+
+                break;
 
             case self::ALIGN_RIGHT:
             default:
-                foreach(explode("\n", self::wordwrap($text, $width)) as $key => $value)
+                foreach (explode("\n", self::wordwrap($text, $width)) as $key => $value) {
                     $out .= sprintf('%' . $width . 's' . "\n", $value);
-              break;
+                }
+
+                break;
         }
 
         return $out;
@@ -322,23 +327,23 @@ class Text {
     /**
      * Get the maximum line width.
      *
-     * @access  protected
      * @param   mixed      $lines    The line (or group of lines).
      * @return  int
      */
-    protected static function getMaxLineWidth ( $lines ) {
-
-        if(!is_array($lines))
+    protected static function getMaxLineWidth($lines)
+    {
+        if (!is_array($lines)) {
             $lines = [$lines];
+        }
 
         $width = 0;
 
-        foreach($lines as $foo => $line)
-            foreach(explode("\n", $line) as $fooo => $lin) {
-
-                $lin = preg_replace('#\\e\[[0-9]+m#', '', $lin);
+        foreach ($lines as $foo => $line) {
+            foreach (explode("\n", $line) as $fooo => $lin) {
+                $lin                             = preg_replace('#\\e\[[0-9]+m#', '', $lin);
                 strlen($lin) > $width and $width = strlen($lin);
             }
+        }
 
         return $width;
     }
@@ -346,20 +351,21 @@ class Text {
     /**
      * Get the maximum line number (count the new-line character).
      *
-     * @access  protected
      * @param   mixed      $lines    The line (or group of lines).
      * @return  int
      */
-    protected static function getMaxLineNumber ( $lines ) {
-
-        if(!is_array($lines))
+    protected static function getMaxLineNumber($lines)
+    {
+        if (!is_array($lines)) {
             $lines = [$lines];
+        }
 
         $number = 0;
 
-        foreach($lines as $foo => $line)
+        foreach ($lines as $foo => $line) {
             substr_count($line, "\n") > $number and
                 $number = substr_count($line, "\n");
+        }
 
         return $number;
     }
@@ -367,16 +373,14 @@ class Text {
     /**
      * My own wordwrap (just force the wordwrap() $cut parameter)..
      *
-     * @access  public
      * @param   string  $text     Text to wrap.
      * @param   int     $width    Line width.
      * @param   string  $break    String to make the break.
      * @return  string
      */
-    public static function wordwrap ( $text, $width = null, $break = "\n" ) {
-
-        if(null === $width) {
-
+    public static function wordwrap($text, $width = null, $break = "\n")
+    {
+        if (null === $width) {
             $window = Console\Window::getSize();
             $width  = $window['x'];
         }
@@ -387,25 +391,24 @@ class Text {
     /**
      * Underline with a special string.
      *
-     * @access  public
      * @param   string  $text       The text to underline.
      * @param   string  $pattern    The string used to underline.
      * @return  string
      */
-    public static function underline ( $text, $pattern = '*' ) {
-
+    public static function underline($text, $pattern = '*')
+    {
         $text = explode("\n", $text);
         $card = strlen($pattern);
 
-        foreach($text as $key => &$value) {
-
+        foreach ($text as $key => &$value) {
             $i   = -1;
             $max = strlen($value);
-            while($value{++$i} == ' ' && $i < $max);
+            while ($value{++$i} == ' ' && $i < $max);
 
-            $underline = str_repeat(' ', $i) .
-                         str_repeat($pattern, strlen(trim($value)) / $card) .
-                         str_repeat(' ', strlen($value) - $i - strlen(trim($value)));
+            $underline =
+                str_repeat(' ', $i) .
+                str_repeat($pattern, strlen(trim($value)) / $card) .
+                str_repeat(' ', strlen($value) - $i - strlen(trim($value)));
 
             $value .= "\n" . $underline;
         }

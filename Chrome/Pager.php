@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,13 +46,11 @@ use Hoa\Console;
  *     ob_start('Hoa\Console\Chrome\Pager::less');
  *     echo file_get_contents(__FILE__);
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Pager {
-
+class Pager
+{
     /**
      * Represent LESS(1).
      *
@@ -72,51 +70,49 @@ class Pager {
     /**
      * Use less.
      *
-     * @access  public
      * @param   string  $output    Output (from the output buffer).
      * @param   int     $mode      Mode (from the output buffer).
      * @return  string
      */
-    public static function less ( $output, $mode ) {
-
+    public static function less($output, $mode)
+    {
         return self::pager($output, $mode, self::LESS);
     }
 
     /**
      * Use more.
      *
-     * @access  public
      * @param   string  $output    Output (from the output buffer).
      * @param   int     $mode      Mode (from the output buffer).
      * @return  string
      */
-    public static function more ( $output, $mode ) {
-
+    public static function more($output, $mode)
+    {
         return self::pager($output, $mode, self::MORE);
     }
 
     /**
      * Use pager set in the environment (i.e. $_ENV['PAGER']).
      *
-     * @access  public
      * @param   string  $output    Output (from the output buffer).
      * @param   int     $mode      Mode (from the output buffer).
      * @param   string  $type      Type. Please, see self::LESS or self::MORE.
      * @return  string
      */
-    public static function pager ( $output, $mode, $type = null ) {
-
+    public static function pager($output, $mode, $type = null)
+    {
         static $process = null;
         static $pipes   = null;
 
-        if($mode & PHP_OUTPUT_HANDLER_START) {
+        if ($mode & PHP_OUTPUT_HANDLER_START) {
+            $pager
+                = null !== $type
+                    ? Console\Processus::locate($type)
+                    : (isset($_ENV['PAGER']) ? $_ENV['PAGER'] : null);
 
-            $pager = null !== $type
-                         ? Console\Processus::locate($type)
-                         : (isset($_ENV['PAGER']) ? $_ENV['PAGER'] : null);
-
-            if(null === $pager)
+            if (null === $pager) {
                 return $output;
+            }
 
             $process = new Console\Processus(
                 $pager,
@@ -128,8 +124,9 @@ class Pager {
 
         $process->writeAll($output);
 
-        if($mode & PHP_OUTPUT_HANDLER_FINAL)
+        if ($mode & PHP_OUTPUT_HANDLER_FINAL) {
             $process->close();
+        }
 
         return null;
     }
