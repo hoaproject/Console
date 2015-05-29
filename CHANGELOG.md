@@ -1,3 +1,8 @@
+# 2.15.05.29
+
+  * Move to `Hoa\Ustring`. (Ivan Enderlin, 2015-05-29T14:50:28+02:00)
+  * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-13T10:30:22+02:00)
+
 # 2.15.03.19
 
   * Add timeouts on `Window::getTitle` and `Window::getLabel` for tmux. (Ivan Enderlin, 2015-03-19T09:46:00+01:00)
