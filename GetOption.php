@@ -36,7 +36,7 @@
 
 namespace Hoa\Console;
 
-use Hoa\String;
+use Hoa\Ustring;
 
 /**
  * Class \Hoa\Console\GetOption.
@@ -174,7 +174,7 @@ class GetOption
 
                 $haystack    = implode(';', $_names);
                 $differences = (int) ceil(strlen($name) / 3);
-                $searched    = String\Search::approximated(
+                $searched    = Ustring\Search::approximated(
                     $haystack,
                     $name,
                     $differences
