@@ -102,7 +102,6 @@ class Pager
     public static function pager($output, $mode, $type = null)
     {
         static $process = null;
-        static $pipes   = null;
 
         if ($mode & PHP_OUTPUT_HANDLER_START) {
             $pager

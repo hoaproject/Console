@@ -137,7 +137,7 @@ class Console
     /**
      * Prepare the environment for advanced interactions.
      *
-     * @return  void
+     * @return  bool
      */
     public static function advancedInteraction()
     {
@@ -298,6 +298,11 @@ class Console
             self::IS_BLOCK     === $mode;
     }
 
+    /**
+     * Get Tput.
+     *
+     * @return  \Hoa\Console\Tput
+     */
     public static function getTput()
     {
         if (null === static::$_tput) {

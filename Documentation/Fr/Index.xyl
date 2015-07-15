@@ -679,11 +679,11 @@ var_dump($rl->readLine('> '));</code></pre>
   Chaque valeur calculée par l'itérateur doit être un objet de type
   <a href="http://php.net/splfileinfo"><code>SplFileInfo</code></a>. Ainsi, pour
   auto-compléter tous les fichiers et dossiers à partir de la racine
-  <a href="@central_resource:path=Library/Console/"><code>hoa://Library/Console/</code></a>,
+  <a href="@central_resource:path=Library/Console"><code>hoa://Library/Console</code></a>,
   nous écrirons :</p>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
-        resolve('hoa://Library/Console/')
+        resolve('hoa://Library/Console')
     )
 );</code></pre>
   <p>Utiliser une <em lang="en">factory</em> nous offre beaucoup de
@@ -694,7 +694,7 @@ var_dump($rl->readLine('> '));</code></pre>
   été modifiés les 6 derniers mois triés par leur taille, nous écrirons :</p>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
-        resolve('hoa://Library/Console/'),
+        resolve('hoa://Library/Console'),
         function ($path) {
             $finder = new Hoa\File\Finder();
             $finder->in($path)

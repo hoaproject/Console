@@ -319,7 +319,7 @@ class          Processus
     /**
      * Pipe descriptors of the processus.
      *
-     * @var string
+     * @var array
      */
     protected $_pipes       = null;
 
@@ -341,6 +341,7 @@ class          Processus
      *                                  a—).
      * @param   string  $cwd            Current working directory.
      * @param   array   $environment    Environment.
+     * @param   int     $timeout        Timeout.
      * @return  void
      * @throws  \Hoa\Console\Exception
      */
@@ -394,6 +395,7 @@ class          Processus
      * @param   string               $streamName    Stream name (e.g. path or URL).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
+     * @throws  \Hoa\Console\Exception
      */
     protected function &_open($streamName, Stream\Context $context = null)
     {
@@ -790,7 +792,7 @@ class          Processus
      * Write a boolean.
      *
      * @param   bool  $boolean    Boolean.
-     * param    int   $pipe       Pipe descriptor.
+     * @param   int   $pipe       Pipe descriptor.
      * @return  mixed
      */
     public function writeBoolean($boolean, $pipe = 0)

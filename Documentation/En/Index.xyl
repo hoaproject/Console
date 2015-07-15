@@ -637,11 +637,11 @@ var_dump($rl->readLine('> '));</code></pre>
   Each value computed by the iterator must be an object of type
   <a href="http://php.net/splfileinfo"><code>SplFileInfo</code></a>. Thus, to
   auto-complete all the files and directories from the
-  <a href="@central_resource:path=Library/Console/"><code>hoa://Library/Console/</code></a>
+  <a href="@central_resource:path=Library/Console"><code>hoa://Library/Console</code></a>
   root, we will write:</p>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
-        resolve('hoa://Library/Console/')
+        resolve('hoa://Library/Console')
     )
 );</code></pre>
   <p>Using a factory offers a lot of <strong>flexibility</strong> and allows us
@@ -651,7 +651,7 @@ var_dump($rl->readLine('> '));</code></pre>
   the last 6 months and sorted by their size, we will write:</p>
   <pre><code class="language-php">$rl->setAutocompleter(
     new Hoa\Console\Readline\Autocompleter\Path(
-        resolve('hoa://Library/Console/'),
+        resolve('hoa://Library/Console'),
         function ($path) {
             $finder = new Hoa\File\Finder();
             $finder->in($path)

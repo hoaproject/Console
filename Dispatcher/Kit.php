@@ -146,7 +146,7 @@ class Kit extends Dispatcher\Kit
      *                                 associated to the definition.
      * @return  string
      */
-    public function makeUsageOptionsList(Array $definition = [])
+    public function makeUsageOptionsList(Array $definitions = [])
     {
         $out = [];
 
@@ -161,10 +161,10 @@ class Kit extends Dispatcher\Kit
                            Console\GetOption::OPTIONAL_ARGUMENT
                         ? '[=]'
                         : '')),
-                (isset($definition[$options[Console\GetOption::OPTION_VAL]])
-                    ? $definition[$options[Console\GetOption::OPTION_VAL]]
-                    : (isset($definition[$options[0]])
-                        ? $definition[$options[Console\GetOption::OPTION_NAME]]
+                (isset($definitions[$options[Console\GetOption::OPTION_VAL]])
+                    ? $definitions[$options[Console\GetOption::OPTION_VAL]]
+                    : (isset($definitions[$options[0]])
+                        ? $definitions[$options[Console\GetOption::OPTION_NAME]]
                         : null
                     )
                 )
@@ -202,16 +202,17 @@ class Kit extends Dispatcher\Kit
 
         $solutions['solutions'] = [$new];
 
-        return $this->_options->resolveOptionAmbiguity($solutions);
+        $this->_options->resolveOptionAmbiguity($solutions);
+
+        return;
     }
 
     /**
      * Make a render of an operation.
      *
-     * @accesss public
-     * @param string  $text      The operation text.
-     * @param bool    $status    The operation status.
-     * @return void
+     * @param   string  $text      The operation text.
+     * @param   bool    $status    The operation status.
+     * @return  void
      */
     public function status($text, $status)
     {

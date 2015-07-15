@@ -119,7 +119,7 @@ class GetOption
     /**
      * The pipette contains all the short value of options.
      *
-     * @var char
+     * @var array
      */
     protected $_pipette       = [];
 
@@ -145,7 +145,6 @@ class GetOption
         }
 
         $names  = [];
-        $_names = [];
 
         foreach ($options as $i => $option) {
             if (isset($option[self::OPTION_NAME])) {
@@ -304,11 +303,11 @@ class GetOption
      * @return  void
      * @throws  \Hoa\Console\Exception
      */
-    public function resolveOptionAmbiguity(Array $solution)
+    public function resolveOptionAmbiguity(Array $solutions)
     {
-        if (!isset($solution['solutions']) ||
-            !isset($solution['value']) ||
-            !isset($solution['option'])) {
+        if (!isset($solutions['solutions']) ||
+            !isset($solutions['value']) ||
+            !isset($solutions['option'])) {
             throw new Exception(
                 'Cannot resolve option ambiguity because the given solution ' .
                 'seems to be corruped.',
@@ -316,13 +315,13 @@ class GetOption
             );
         }
 
-        $choices = $solution['solutions'];
+        $choices = $solutions['solutions'];
 
         if (1 > count($choices)) {
             throw new Exception(
                 'Cannot resolve ambiguity, fix your typo in the option %s :-).',
                 2,
-                $solution['option']
+                $solutions['option']
             );
         }
 
@@ -332,7 +331,7 @@ class GetOption
             if ($theSolution == $option[self::OPTION_NAME] ||
                 $theSolution == $option[self::OPTION_VAL]) {
                 $argument = $option[self::OPTION_HAS_ARG];
-                $value    = $solution['value'];
+                $value    = $solutions['value'];
 
                 if (self::NO_ARGUMENT === $argument) {
                     if (!is_bool($value)) {

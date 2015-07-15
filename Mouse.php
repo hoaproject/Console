@@ -139,13 +139,13 @@ class Mouse implements Core\Event\Listenable
                 continue;
             }
 
-            $string .= $char = fread(STDIN, 1);
+            $char = fread(STDIN, 1);
 
             if ('[' !== $char) {
                 continue;
             }
 
-            $string .= $char = fread(STDIN, 1);
+            $char = fread(STDIN, 1);
 
             if ('M' !== $char) {
                 continue;

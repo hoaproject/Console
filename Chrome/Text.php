@@ -238,7 +238,6 @@ class Text
 
         $line   = $newLine;
         unset($newLine);
-        $nbLine = count($line);
 
         // Complete the table with empty cells.
         foreach ($line as $key => &$column) {
@@ -282,7 +281,7 @@ class Text
      * Align a text according a “layer”. The layer width is given in arguments.
      *
      * @param   string  $text          The text.
-     * @param   string  $alignement    The text alignement.
+     * @param   int     $alignement    The text alignement.
      * @param   int     $width         The layer width.
      * @return  string
      */

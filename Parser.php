@@ -265,7 +265,7 @@ class Parser
     /**
      * Add a boolean switch.
      *
-     * @param   array  $swich    Switch.
+     * @param   array  $switch    Switch.
      * @return  void
      */
     protected function addBoolSwitch(Array $switch)
