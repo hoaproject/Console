@@ -299,7 +299,7 @@ class Console
     }
 
     /**
-     * Get Tput.
+     * Get the current tput instance.
      *
      * @return  \Hoa\Console\Tput
      */
