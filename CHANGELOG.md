@@ -1,3 +1,9 @@
+# 2.15.07.23
+
+  * More detailed API documentation. (Ivan Enderlin, 2015-07-16T08:12:43+02:00)
+  * Update the API documentation. (Ivan Enderlin, 2015-07-16T07:47:55+02:00)
+  * Fix phpDoc. (Metalaka, 2015-07-15T18:01:57+02:00)
+
 # 2.15.05.29
 
   * Move to `Hoa\Ustring`. (Ivan Enderlin, 2015-05-29T14:50:28+02:00)
