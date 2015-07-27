@@ -243,31 +243,31 @@ class Readline
         if (isset($this->_mapping[$char]) &&
             is_callable($this->_mapping[$char])) {
             $mapping = $this->_mapping[$char];
-            $return  = $mapping($this);
-        } else {
-            if (isset($this->_mapping[$char])) {
-                $this->_buffer = $this->_mapping[$char];
-            }
 
-            if ($this->getLineLength() == $this->getLineCurrent()) {
-                $this->appendLine($this->_buffer);
-                $return = static::STATE_CONTINUE;
-            } else {
-                $this->insertLine($this->_buffer);
-                $tail          = mb_substr(
-                    $this->getLine(),
-                    $this->getLineCurrent() - 1
-                );
-                $this->_buffer = "\033[K" . $tail . str_repeat(
-                    "\033[D",
-                    mb_strlen($tail) - 1
-                );
-
-                $return = static::STATE_CONTINUE;
-            }
+            return $mapping($this);
         }
 
-        return $return;
+        if (isset($this->_mapping[$char])) {
+            $this->_buffer = $this->_mapping[$char];
+        }
+
+        if ($this->getLineLength() == $this->getLineCurrent()) {
+            $this->appendLine($this->_buffer);
+
+            return static::STATE_CONTINUE;
+        }
+
+        $this->insertLine($this->_buffer);
+        $tail = mb_substr(
+            $this->getLine(),
+            $this->getLineCurrent() - 1
+        );
+        $this->_buffer = "\033[K" . $tail . str_repeat(
+            "\033[D",
+            mb_strlen($tail) - 1
+        );
+
+        return static::STATE_CONTINUE;
     }
 
     /**
