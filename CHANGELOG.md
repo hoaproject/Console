@@ -1,3 +1,9 @@
+# 2.15.07.27
+
+  * Bip when an “invalid” character is pressed. (Ivan Enderlin, 2015-07-27T08:30:51+02:00)
+  * Print character only if printable. (Ivan Enderlin, 2015-07-27T08:23:01+02:00)
+  * Optimize the `_readline` control flow graph. (Ivan Enderlin, 2015-07-27T08:20:50+02:00)
+
 # 2.15.07.23
 
   * More detailed API documentation. (Ivan Enderlin, 2015-07-16T08:12:43+02:00)
