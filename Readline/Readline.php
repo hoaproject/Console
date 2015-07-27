@@ -251,6 +251,8 @@ class Readline
         if (isset($this->_mapping[$char])) {
             $this->_buffer = $this->_mapping[$char];
         } elseif (false === Ustring::isCharPrintable($char)) {
+            Console\Cursor::bip();
+
             return static::STATE_CONTINUE | static::STATE_NO_ECHO;
         }
 
