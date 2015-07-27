@@ -38,6 +38,7 @@ namespace Hoa\Console\Readline;
 
 use Hoa\Console;
 use Hoa\Core;
+use Hoa\Ustring;
 
 /**
  * Class \Hoa\Console\Readline.
@@ -249,6 +250,8 @@ class Readline
 
         if (isset($this->_mapping[$char])) {
             $this->_buffer = $this->_mapping[$char];
+        } elseif (false === Ustring::isCharPrintable($char)) {
+            return static::STATE_CONTINUE | static::STATE_NO_ECHO;
         }
 
         if ($this->getLineLength() == $this->getLineCurrent()) {
