@@ -145,9 +145,10 @@ class Console
     /**
      * Prepare the environment for advanced interactions.
      *
+     * @param   bool  $force    Force it if STDIN is not direct.
      * @return  bool
      */
-    public static function advancedInteraction()
+    public static function advancedInteraction($force = false)
     {
         if (null !== self::$_advanced) {
             return self::$_advanced;
@@ -157,7 +158,7 @@ class Console
             return self::$_advanced = false;
         }
 
-        if (false === self::isDirect(STDIN)) {
+        if (false === $force && false === self::isDirect(STDIN)) {
             return self::$_advanced = false;
         }
 
