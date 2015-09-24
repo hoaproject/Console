@@ -211,15 +211,17 @@ class Cursor
 
         Console::getOutput()->writeAll($user7);
 
+        $input = Console::getInput();
+
         // Read $tput->get('user6').
-        fread(STDIN, 2); // skip \033 and [.
+        $input->read(2); // skip \033 and [.
 
         $x      = null;
         $y      = null;
         $handle = &$y;
 
         do {
-            $char = fread(STDIN, 1);
+            $char = $input->readCharacter();
 
             switch ($char) {
                 case ';':

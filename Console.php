@@ -127,6 +127,13 @@ class Console
     protected static $_mode   = [];
 
     /**
+     * Input.
+     *
+     * @var \Hoa\Console\Input
+     */
+    protected static $_input  = null;
+
+    /**
      * Output.
      *
      * @var \Hoa\Console\Output
@@ -305,6 +312,34 @@ class Console
             self::IS_LINK      === $mode ||
             self::IS_SOCKET    === $mode ||
             self::IS_BLOCK     === $mode;
+    }
+
+    /**
+     * Set input layer.
+     *
+     * @param   \Hoa\Console\Input  $input    Input.
+     * @return  \Hoa\Console\Input
+     */
+    public static function setInput(Input $input)
+    {
+        $old            = static::$_input;
+        static::$_input = $input;
+
+        return $old;
+    }
+
+    /**
+     * Get input layer.
+     *
+     * @return  \Hoa\Console\Input
+     */
+    public static function getInput()
+    {
+        if (null === static::$_input) {
+            static::$_input = new Input();
+        }
+
+        return static::$_input;
     }
 
     /**

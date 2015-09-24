@@ -155,15 +155,17 @@ class Window implements Core\Event\Source
         // DECSLPP.
         Console::getOutput()->writeAll("\033[18t");
 
+        $input = Console::getInput();
+
         // Read \033[8;y;xt.
-        fread(STDIN, 4); // skip \033, [, 8 and ;.
+        $input->read(4); // skip \033, [, 8 and ;.
 
         $x      = null;
         $y      = null;
         $handle = &$y;
 
         do {
-            $char = fread(STDIN, 1);
+            $char = $input->readCharacter();
 
             switch ($char) {
                 case ';':
@@ -229,15 +231,17 @@ class Window implements Core\Event\Source
         // DECSLPP.
         Console::getOutput()->writeAll("\033[13t");
 
+        $input = Console::getInput();
+
         // Read \033[3;x;yt.
-        fread(STDIN, 4); // skip \033, [, 3 and ;.
+        $input->read(4); // skip \033, [, 3 and ;.
 
         $x      = null;
         $y      = null;
         $handle = &$x;
 
         do {
-            $char = fread(STDIN, 1);
+            $char = $input->readCharacter();
 
             switch ($char) {
                 case ';':
@@ -427,7 +431,8 @@ class Window implements Core\Event\Source
         // DECSLPP.
         Console::getOutput()->writeAll("\033[21t");
 
-        $read   = [STDIN];
+        $input  = Console::getInput();
+        $read   = [$input->getStream()];
         $write  = [];
         $except = [];
         $out    = null;
@@ -437,13 +442,13 @@ class Window implements Core\Event\Source
         }
 
         // Read \033]l<title>\033\
-        fread(STDIN, 3); // skip \033, ] and l.
+        $input->read(3); // skip \033, ] and l.
 
         do {
-            $char = fread(STDIN, 1);
+            $char = $input->readCharacter();
 
             if ("\033" === $char) {
-                $chaar = fread(STDIN, 1);
+                $chaar = $input->readCharacter();
 
                 if ('\\' === $chaar) {
                     break;
@@ -472,7 +477,8 @@ class Window implements Core\Event\Source
         // DECSLPP.
         Console::getOutput()->writeAll("\033[20t");
 
-        $read   = [STDIN];
+        $input  = Console::getInput();
+        $read   = [$input->getStream()];
         $write  = [];
         $except = [];
         $out    = null;
@@ -482,13 +488,13 @@ class Window implements Core\Event\Source
         }
 
         // Read \033]L<label>\033\
-        fread(STDIN, 3); // skip \033, ] and L.
+        $input->read(3); // skip \033, ] and L.
 
         do {
-            $char = fread(STDIN, 1);
+            $char = $input->readCharacter();
 
             if ("\033" === $char) {
-                $chaar = fread(STDIN, 1);
+                $chaar = $input->readCharacter();
 
                 if ('\\' === $chaar) {
                     break;

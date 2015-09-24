@@ -130,30 +130,31 @@ class Mouse implements Core\Event\Listenable
             'meta'   => false,
             'ctrl'   => false
         ];
-        $read = [STDIN];
+        $input = Console::getInput();
+        $read  = [$input->getStream()];
 
         while (true) {
             @stream_select($read, $write, $except, 30);
 
-            $string = fread(STDIN, 1);
+            $string = $input->readCharacter();
 
             if ("\033" !== $string) {
                 continue;
             }
 
-            $char = fread(STDIN, 1);
+            $char = $input->readCharacter();
 
             if ('[' !== $char) {
                 continue;
             }
 
-            $char = fread(STDIN, 1);
+            $char = $input->readCharacter();
 
             if ('M' !== $char) {
                 continue;
             }
 
-            $data = fread(STDIN, 3);
+            $data = $input->read(3);
             $cb   = ord($data[0]);
             $cx   = ord($data[1]) - 32;
             $cy   = ord($data[2]) - 32;
@@ -201,7 +202,6 @@ class Mouse implements Core\Event\Listenable
                     } elseif (2 === $cb) {
                         $bucket['button'] = 'right';
                     } else {
-
                         // hover
                         continue 2;
                     }
