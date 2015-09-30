@@ -41,7 +41,7 @@ use Hoa\Core;
 /**
  * Class \Hoa\Console.
  *
- * Util.
+ * A set of utils and helpers about the console.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
