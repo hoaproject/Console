@@ -67,6 +67,8 @@ class Output implements Stream\IStream\Out
         }
 
         echo substr($string, 0, $length);
+
+        return;
     }
 
     /**

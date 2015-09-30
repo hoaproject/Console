@@ -73,17 +73,20 @@ class Cursor
             $handle = explode(' ', $steps, 1);
         }
 
-        $tput = Console::getTput();
+        $tput   = Console::getTput();
+        $output = Console::getOutput();
 
         foreach ($handle as $step) {
             switch ($step) {
                 case 'u':
                 case 'up':
                 case '↑':
-                    echo str_replace(
-                        '%p1%d',
-                        $repeat,
-                        $tput->get('parm_up_cursor')
+                    $output->writeAll(
+                        str_replace(
+                            '%p1%d',
+                            $repeat,
+                            $tput->get('parm_up_cursor')
+                        )
                     );
 
                     break;
@@ -97,10 +100,12 @@ class Cursor
                 case 'r':
                 case 'right':
                 case '→':
-                    echo str_replace(
-                        '%p1%d',
-                        $repeat,
-                        $tput->get('parm_right_cursor')
+                    $output->writeAll(
+                        str_replace(
+                            '%p1%d',
+                            $repeat,
+                            $tput->get('parm_right_cursor')
+                        )
                     );
 
                     break;
@@ -114,10 +119,12 @@ class Cursor
                 case 'd':
                 case 'down':
                 case '↓':
-                    echo str_replace(
-                        '%p1%d',
-                        $repeat,
-                        $tput->get('parm_down_cursor')
+                    $output->writeAll(
+                        str_replace(
+                            '%p1%d',
+                            $repeat,
+                            $tput->get('parm_down_cursor')
+                        )
                     );
 
                     break;
@@ -131,10 +138,12 @@ class Cursor
                 case 'l':
                 case 'left':
                 case '←':
-                    echo str_replace(
-                        '%p1%d',
-                        $repeat,
-                        $tput->get('parm_left_cursor')
+                    $output->writeAll(
+                        str_replace(
+                            '%p1%d',
+                            $repeat,
+                            $tput->get('parm_left_cursor')
+                        )
                     );
 
                     break;
@@ -172,10 +181,12 @@ class Cursor
             }
         }
 
-        echo str_replace(
-            ['%i%p1%d', '%p2%d'],
-            [$y, $x],
-            Console::getTput()->get('cursor_address')
+        Console::getOutput()->writeAll(
+            str_replace(
+                ['%i%p1%d', '%p2%d'],
+                [$y, $x],
+                Console::getTput()->get('cursor_address')
+            )
         );
 
         return;
@@ -198,7 +209,7 @@ class Cursor
             ];
         }
 
-        echo $user7;
+        Console::getOutput()->writeAll($user7);
 
         // Read $tput->get('user6').
         fread(STDIN, 2); // skip \033 and [.
@@ -237,7 +248,9 @@ class Cursor
      */
     public static function save()
     {
-        echo Console::getTput()->get('save_cursor');
+        Console::getOutput()->writeAll(
+            Console::getTput()->get('save_cursor')
+        );
 
         return;
     }
@@ -249,7 +262,9 @@ class Cursor
      */
     public static function restore()
     {
-        echo Console::getTput()->get('restore_cursor');
+        Console::getOutput()->writeAll(
+            Console::getTput()->get('restore_cursor')
+        );
 
         return;
     }
@@ -270,14 +285,15 @@ class Cursor
      */
     public static function clear($parts = 'all')
     {
-        $tput = Console::getTput();
+        $tput   = Console::getTput();
+        $output = Console::getOutput();
 
         foreach (explode(' ', $parts) as $part) {
             switch ($part) {
                 case 'a':
                 case 'all':
                 case '↕':
-                    echo $tput->get('clear_screen');
+                    $output->writeAll($tput->get('clear_screen'));
                     static::moveTo(1, 1);
 
                     break;
@@ -285,34 +301,34 @@ class Cursor
                 case 'u':
                 case 'up':
                 case '↑':
-                    echo "\033[1J";
+                    $output->writeAll("\033[1J");
 
                     break;
 
                 case 'r':
                 case 'right':
                 case '→':
-                    echo $tput->get('clr_eol');
+                    $output->writeAll($tput->get('clr_eol'));
 
                     break;
 
                 case 'd':
                 case 'down':
                 case '↓':
-                    echo $tput->get('clr_eos');
+                    $output->writeAll($tput->get('clr_eos'));
 
                     break;
 
                 case 'l':
                 case 'left':
                 case '←':
-                    echo $tput->get('clr_bol');
+                    $output->writeAll($tput->get('clr_bol'));
 
                     break;
 
                 case 'line':
                 case '↔':
-                    echo "\r" . $tput->get('clr_eol');
+                    $output->writeAll("\r" . $tput->get('clr_eol'));
 
                     break;
             }
@@ -328,7 +344,9 @@ class Cursor
      */
     public static function hide()
     {
-        echo Console::getTput()->get('cursor_invisible');
+        Console::getOutput()->writeAll(
+            Console::getTput()->get('cursor_invisible')
+        );
 
         return;
     }
@@ -340,7 +358,9 @@ class Cursor
      */
     public static function show()
     {
-        echo Console::getTput()->get('cursor_visible');
+        Console::getOutput()->writeAll(
+            Console::getTput()->get('cursor_visible')
+        );
 
         return;
     }
@@ -607,7 +627,7 @@ class Cursor
             }
         }
 
-        echo "\033[" . implode(';', $handle) . "m";
+        Console::getOutput()->writeAll("\033[" . implode(';', $handle) . "m");
 
         return;
     }
@@ -631,22 +651,24 @@ class Cursor
         $g = ($toColor >>  8) & 255;
         $b =  $toColor        & 255;
 
-        echo str_replace(
-            [
-                '%p1%d',
-                'rgb:',
-                '%p2%{255}%*%{1000}%/%2.2X/',
-                '%p3%{255}%*%{1000}%/%2.2X/',
-                '%p4%{255}%*%{1000}%/%2.2X'
-            ],
-            [
-                $fromCode,
-                '',
-                sprintf('%02x', $r),
-                sprintf('%02x', $g),
-                sprintf('%02x', $b)
-            ],
-            $tput->get('initialize_color')
+        Console::getOutput()->writeAll(
+            str_replace(
+                [
+                    '%p1%d',
+                    'rgb:',
+                    '%p2%{255}%*%{1000}%/%2.2X/',
+                    '%p3%{255}%*%{1000}%/%2.2X/',
+                    '%p4%{255}%*%{1000}%/%2.2X'
+                ],
+                [
+                    $fromCode,
+                    '',
+                    sprintf('%02x', $r),
+                    sprintf('%02x', $g),
+                    sprintf('%02x', $b)
+                ],
+                $tput->get('initialize_color')
+            )
         );
 
         return;
@@ -697,7 +719,7 @@ class Cursor
         }
 
         // Not sure what tput entry we can use here…
-        echo "\033[" . $_style . " q";
+        Console::getOutput()->writeAll("\033[" . $_style . " q");
 
         return;
     }
@@ -709,7 +731,9 @@ class Cursor
      */
     public static function bip()
     {
-        echo Console::getTput()->get('bell');
+        Console::getOutput()->writeAll(
+            Console::getTput()->get('bell')
+        );
 
         return;
     }

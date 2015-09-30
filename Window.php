@@ -105,7 +105,7 @@ class Window implements Core\Event\Source
             return;
         }
 
-        echo "\033[8;" . $y . ";" . $x . "t";
+        Console::getOutput()->writeAll("\033[8;" . $y . ";" . $x . "t");
 
         return;
     }
@@ -153,7 +153,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033[18t";
+        Console::getOutput()->writeAll("\033[18t");
 
         // Read \033[8;y;xt.
         fread(STDIN, 4); // skip \033, [, 8 and ;.
@@ -210,7 +210,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033[3;" . $x . ";" . $y . "t";
+        Console::getOutput()->writeAll("\033[3;" . $x . ";" . $y . "t");
 
         return;
     }
@@ -227,7 +227,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033[13t";
+        Console::getOutput()->writeAll("\033[13t");
 
         // Read \033[3;x;yt.
         fread(STDIN, 4); // skip \033, [, 3 and ;.
@@ -305,19 +305,25 @@ class Window implements Core\Event\Source
             }
         }
 
+        $output = Console::getOutput();
+
         if (0 < $count['up']) {
-            echo str_replace(
-                '%p1%d',
-                $count['up'] * $repeat,
-                $tput->get('parm_index')
+            $output->writeAll(
+                str_replace(
+                    '%p1%d',
+                    $count['up'] * $repeat,
+                    $tput->get('parm_index')
+                )
             );
         }
 
         if (0 < $count['down']) {
-            echo str_replace(
-                '%p1%d',
-                $count['down'] * $repeat,
-                $tput->get('parm_rindex')
+            $output->writeAll(
+                str_replace(
+                    '%p1%d',
+                    $count['down'] * $repeat,
+                    $tput->get('parm_rindex')
+                )
             );
         }
 
@@ -336,7 +342,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033[2t";
+        Console::getOutput()->writeAll("\033[2t");
 
         return;
     }
@@ -352,7 +358,7 @@ class Window implements Core\Event\Source
             return;
         }
 
-        echo "\033[1t";
+        Console::getOutput()->writeAll("\033[1t");
 
         return;
     }
@@ -368,7 +374,7 @@ class Window implements Core\Event\Source
             return;
         }
 
-        echo "\033[5t";
+        Console::getOutput()->writeAll("\033[5t");
 
         return;
     }
@@ -384,7 +390,7 @@ class Window implements Core\Event\Source
             return;
         }
 
-        echo "\033[6t";
+        Console::getOutput()->writeAll("\033[6t");
 
         return;
     }
@@ -402,7 +408,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033]0;" . $title . "\033\\";
+        Console::getOutput()->writeAll("\033]0;" . $title . "\033\\");
 
         return;
     }
@@ -419,7 +425,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033[21t";
+        Console::getOutput()->writeAll("\033[21t");
 
         $read   = [STDIN];
         $write  = [];
@@ -464,7 +470,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033[20t";
+        Console::getOutput()->writeAll("\033[20t");
 
         $read   = [STDIN];
         $write  = [];
@@ -509,7 +515,7 @@ class Window implements Core\Event\Source
         }
 
         // DECSLPP.
-        echo "\033[7t";
+        Console::getOutput()->writeAll("\033[7t");
 
         return;
     }
@@ -529,12 +535,14 @@ class Window implements Core\Event\Source
         $out = "\033]52;;" . base64_encode($data) . "\033\\";
 
         if (true === Console::isTmuxRunning()) {
-            echo "\033Ptmux;" . str_replace("\033", "\033\033", $out) . "\033\\";
+            Console::getOutput()->writeAll(
+                "\033Ptmux;" . str_replace("\033", "\033\033", $out) . "\033\\"
+            );
 
             return;
         }
 
-        echo $out;
+        Console::getOutput()->writeAll($out);
 
         return;
     }

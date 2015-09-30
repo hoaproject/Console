@@ -87,7 +87,7 @@ class Text
     ) {
         ob_start();
         Console\Cursor::colorize($attributesBefore);
-        echo $text;
+        Console::getOutput()->writeAll($text);
         Console\Cursor::colorize($attributesAfter);
         $out = ob_get_contents();
         ob_end_clean();

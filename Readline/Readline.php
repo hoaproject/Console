@@ -184,6 +184,7 @@ class Readline
         }
 
         $direct = Console::isDirect(STDIN);
+        $output = Console::getOutput();
 
         if (false === $direct || OS_WIN) {
             $out = fgets(STDIN);
@@ -195,9 +196,9 @@ class Readline
             $out = substr($out, 0, -1);
 
             if (true === $direct) {
-                echo $prefix;
+                $output->writeAll($prefix);
             } else {
-                echo $prefix, $out, "\n";
+                $output->writeAll($prefix . $out . "\n");
             }
 
             return $out;
@@ -206,7 +207,7 @@ class Readline
         $this->resetLine();
         $this->setPrefix($prefix);
         $read = [STDIN];
-        echo $prefix;
+        $output->writeAll($prefix);
 
         while (true) {
             @stream_select($read, $write, $except, 30, 0);
@@ -222,7 +223,7 @@ class Readline
             $return        = $this->_readLine($char);
 
             if (0 === ($return & self::STATE_NO_ECHO)) {
-                echo $this->_buffer;
+                $output->writeAll($this->_buffer);
             }
 
             if (0 !== ($return & self::STATE_BREAK)) {
@@ -610,7 +611,7 @@ class Readline
     {
         if (0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
             Console\Cursor::clear('↔');
-            echo $self->getPrefix();
+            Console::getOutput()->writeAll($self->getPrefix());
         }
         $self->setBuffer($buffer = $self->previousHistory());
         $self->setLine($buffer);
@@ -629,7 +630,7 @@ class Readline
     {
         if (0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
             Console\Cursor::clear('↔');
-            echo $self->getPrefix();
+            Console::getOutput()->writeAll($self->getPrefix());
         }
 
         $self->setBuffer($buffer = $self->nextHistory());
@@ -882,6 +883,7 @@ class Readline
      */
     public function _bindTab(Readline $self)
     {
+        $output        = Console::getOutput();
         $autocompleter = $self->getAutocompleter();
         $state         = static::STATE_CONTINUE | static::STATE_NO_ECHO;
 
@@ -972,15 +974,15 @@ class Readline
             Console\Cursor::clear('↓');
 
             foreach ($_solution as $j => $s) {
-                echo "\033[0m", $s, "\033[0m";
+                $output->writeAll("\033[0m" . $s . "\033[0m");
 
                 if ($i++ < $mColumns) {
-                    echo '  ';
+                    $output->writeAll('  ');
                 } else {
                     $i = 0;
 
                     if (isset($_solution[$j + 1])) {
-                        echo "\n";
+                        $output->writeAll("\n");
                     }
                 }
             }
@@ -998,14 +1000,15 @@ class Readline
                 &$mLine,
                 &$coord,
                 &$_solution,
-                &$cWidth
+                &$cWidth,
+                &$output
             ) {
                 Console\Cursor::save();
                 Console\Cursor::hide();
                 Console\Cursor::move('↓ LEFT');
                 Console\Cursor::move('→', $mColumn * ($cWidth + 2));
                 Console\Cursor::move('↓', $mLine);
-                echo "\033[0m" . $_solution[$coord] . "\033[0m";
+                $output->writeAll("\033[0m" . $_solution[$coord] . "\033[0m");
                 Console\Cursor::restore();
                 Console\Cursor::show();
 
@@ -1016,14 +1019,15 @@ class Readline
                 &$mLine,
                 &$coord,
                 &$_solution,
-                &$cWidth
+                &$cWidth,
+                &$output
             ) {
                 Console\Cursor::save();
                 Console\Cursor::hide();
                 Console\Cursor::move('↓ LEFT');
                 Console\Cursor::move('→', $mColumn * ($cWidth + 2));
                 Console\Cursor::move('↓', $mLine);
-                echo "\033[7m" . $_solution[$coord] . "\033[0m";
+                $output->writeAll("\033[7m" . $_solution[$coord] . "\033[0m");
                 Console\Cursor::restore();
                 Console\Cursor::show();
 
@@ -1128,9 +1132,9 @@ class Readline
                             );
 
                             Console\Cursor::move('←', $length);
-                            echo $solution[$coord];
+                            $output->writeAll($solution[$coord]);
                             Console\Cursor::clear('→');
-                            echo $tail;
+                            $output->writeAll($tail);
                             Console\Cursor::move('←', mb_strlen($tail));
                         }
 
@@ -1168,9 +1172,9 @@ class Readline
         );
 
         Console\Cursor::move('←', $length);
-        echo $solution;
+        $output->writeAll($solution);
         Console\Cursor::clear('→');
-        echo $tail;
+        $output->writeAll($tail);
         Console\Cursor::move('←', mb_strlen($tail));
 
         return $state;
