@@ -526,7 +526,15 @@ class Window implements Core\Event\Source
             return;
         }
 
-        echo "\033]52;;" . base64_encode($data) . "\033\\";
+        $out = "\033]52;;" . base64_encode($data) . "\033\\";
+
+        if (true === Console::isTmuxRunning()) {
+            echo "\033Ptmux;" . str_replace("\033", "\033\033", $out) . "\033\\";
+
+            return;
+        }
+
+        echo $out;
 
         return;
     }
