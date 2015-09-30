@@ -37,6 +37,7 @@
 namespace Hoa\Console;
 
 use Hoa\Core;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\Console.
@@ -124,6 +125,13 @@ class Console
      * @var array
      */
     protected static $_mode   = [];
+
+    /**
+     * Output.
+     *
+     * @var \Hoa\Console\Output
+     */
+    protected static $_output = null;
 
     /**
      * Tput.
@@ -296,6 +304,34 @@ class Console
             self::IS_LINK      === $mode ||
             self::IS_SOCKET    === $mode ||
             self::IS_BLOCK     === $mode;
+    }
+
+    /**
+     * Set output layer.
+     *
+     * @param   \Hoa\Stream\IStream\Out  $output    Output.
+     * @return  \Hoa\Stream\IStream\Out
+     */
+    public static function setOutput(Stream\IStream\Out $output)
+    {
+        $old             = static::$_output;
+        static::$_output = $output;
+
+        return $old;
+    }
+
+    /**
+     * Get output layer.
+     *
+     * @return  \Hoa\Stream\IStream\Out
+     */
+    public static function getOutput()
+    {
+        if (null === static::$_output) {
+            static::$_output = new Output();
+        }
+
+        return static::$_output;
     }
 
     /**
