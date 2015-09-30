@@ -44,7 +44,7 @@ namespace Hoa\Console;
  * vocabulary, patterns, limitations, etc.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
- * @license     New BSD License
+ * @license    New BSD License
  */
 class Parser
 {
