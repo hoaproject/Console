@@ -311,6 +311,16 @@ class Console
 
         return static::$_tput;
     }
+
+    /**
+     * Check whether we are running behind TMUX(1).
+     *
+     * @return  bool
+     */
+    public static function isTmuxRunning()
+    {
+        return isset($_SERVER['TMUX']);
+    }
 }
 
 /**
