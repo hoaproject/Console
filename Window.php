@@ -534,15 +534,12 @@ class Window implements Core\Event\Source
 
         $out = "\033]52;;" . base64_encode($data) . "\033\\";
 
-        if (true === Console::isTmuxRunning()) {
-            Console::getOutput()->writeAll(
-                "\033Ptmux;" . str_replace("\033", "\033\033", $out) . "\033\\"
-            );
+        $output              = Console::getOutput();
+        $considerMultiplexer = $output->isMultiplexerConsidered();
 
-            return;
-        }
-
-        Console::getOutput()->writeAll($out);
+        $output->considerMultiplexer(true);
+        $output->writeAll($out);
+        $output->considerMultiplexer($considerMultiplexer);
 
         return;
     }
