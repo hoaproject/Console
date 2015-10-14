@@ -50,6 +50,14 @@ use Hoa\Stream;
 class Output implements Stream\IStream\Out
 {
     /**
+     * Whether the multiplexer must be considered while writing on the output.
+     *
+     * @var bool
+     */
+    protected $_considerMultiplexer = false;
+
+
+    /**
      * Write n characters.
      *
      * @param   string  $string    String.
@@ -66,7 +74,22 @@ class Output implements Stream\IStream\Out
             );
         }
 
-        echo substr($string, 0, $length);
+        $out = substr($string, 0, $length);
+
+        if (false === $this->isMultiplexerConsidered()) {
+            echo $out;
+
+            return;
+        }
+
+        if (true === Console::isTmuxRunning()) {
+            echo
+                "\033Ptmux;" .
+                str_replace("\033", "\033\033", $out) .
+                "\033\\";
+        } else {
+            echo $out;
+        }
 
         return;
     }
@@ -182,5 +205,29 @@ class Output implements Stream\IStream\Out
     public function truncate($size)
     {
         return false;
+    }
+
+    /**
+     * Consider the multiplexer (if running) while writing on the output.
+     *
+     * @param   bool  $consider    Consider the multiplexer or not.
+     * @return  bool
+     */
+    public function considerMultiplexer($consider)
+    {
+        $old                        = $this->_considerMultiplexer;
+        $this->_considerMultiplexer = $consider;
+
+        return $old;
+    }
+
+    /**
+     * Check whether the multiplexer must be considered or not.
+     *
+     * @return  bool
+     */
+    public function isMultiplexerConsidered()
+    {
+        return $this->_considerMultiplexer;
     }
 }
