@@ -163,7 +163,7 @@ class Output implements Stream\IStream\Out
      */
     public function writeArray(Array $array)
     {
-        $array = implode("\n", $array);
+        $array = var_export($array, true);
 
         return $this->write($array, strlen($array));
     }
