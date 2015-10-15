@@ -120,13 +120,13 @@ class Window implements Core\Event\Source
         if (OS_WIN) {
             $modecon = explode("\n", ltrim(Processus::execute('mode con')));
 
-            $_y      = trim($modecon[2]);
+            $_y = trim($modecon[2]);
             preg_match('#[^:]+:\s*([0-9]+)#', $_y, $matches);
-            $y       = (int) $matches[1];
+            $y  = (int) $matches[1];
 
-            $_x      = trim($modecon[3]);
+            $_x = trim($modecon[3]);
             preg_match('#[^:]+:\s*([0-9]+)#', $_x, $matches);
-            $x       = (int) $matches[1];
+            $x  = (int) $matches[1];
 
             return [
                 'x' => $x,
