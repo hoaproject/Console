@@ -42,7 +42,7 @@ use Hoa\Test;
 /**
  * Class \Hoa\Console\Test\Unit\Parser.
  *
- * Test suite of the CLI parser.
+ * Test suite of the parser.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
