@@ -115,7 +115,7 @@ class Output implements Stream\IStream\Out
      */
     public function writeCharacter($character)
     {
-        return $this->write((string) $char[0], 1);
+        return $this->write((string) $character[0], 1);
     }
 
     /**
@@ -126,7 +126,7 @@ class Output implements Stream\IStream\Out
      */
     public function writeBoolean($boolean)
     {
-        return $this->write((string) (bool) $boolean, 1);
+        return $this->write(((bool) $boolean) ? '1' : '0', 1);
     }
 
     /**
