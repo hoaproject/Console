@@ -67,69 +67,69 @@ class Parser
 
     /**
      * Parse a command.
-     * Some explanations :
-     * 1. Command :
-     *   $ cmd         is the command : cmd ;
-     *   $ "cmd sub"   is the command : cmd sub ;
-     *   $ cmd\ sub    is the command : cmd sub.
+     * Some explanations:
+     * 1. Command:
+     *   $ cmd         is the command: cmd,
+     *   $ "cmd sub"   is the command: cmd sub,
+     *   $ cmd\ sub    is the command: cmd sub.
      *
-     * 2. Short option :
-     *   $ … -s        is a short option ;
+     * 2. Short option:
+     *   $ … -s        is a short option,
      *   $ … -abc      is equivalent to -a -b -c if and only if $longonly is set
      *                 to false, else (set to true) -abc is equivalent to --abc.
      *
-     * 3. Long option :
-     *   $ … --long    is a long option ;
+     * 3. Long option:
+     *   $ … --long    is a long option,
      *   $ … --lo-ng   is a long option.
      *   $ etc.
      *
-     * 4. Boolean switch or flag :
-     *   $ … -s        is a boolean switch, -s is set to true ;
-     *   $ … --long    is a boolean switch, --long is set to true ;
+     * 4. Boolean switch or flag:
+     *   $ … -s        is a boolean switch, -s is set to true,
+     *   $ … --long    is a boolean switch, --long is set to true,
      *   $ … -s -s and --long --long
-     *                 are boolean switches, -s and --long are set to false ;
+     *                 are boolean switches, -s and --long are set to false,
      *   $ … -aa       are boolean switches, -a is set to false, if and only if
      *                 the $longonly is set to false, else --aa is set to true.
      *
-     * 5. Valued switch :
+     * 5. Valued switch:
      *   x should be s, -long, abc etc.
      *   All the following examples are valued switches, where -x is set to the
      *   specified value.
-     *   $ … -x=value      : value ;
-     *   $ … -x=va\ lue    : va lue ;
-     *   $ … -x="va lue"   : va lue ;
-     *   $ … -x="va l\"ue" : va l"ue ;
-     *   $ … -x value      : value ;
-     *   $ … -x va\ lue    : va lue ;
-     *   $ … -x "value"    : value ;
-     *   $ … -x "va lue"   : va lue ;
-     *   $ … -x va\ l"ue   : va l"ue ;
-     *   $ … -x 'va "l"ue' : va "l"ue ;
+     *   $ … -x=value     : value,
+     *   $ … -x=va\ lue   : va lue,
+     *   $ … -x="va lue"  : va lue,
+     *   $ … -x="va l\"ue": va l"ue,
+     *   $ … -x value     : value,
+     *   $ … -x va\ lue   : va lue,
+     *   $ … -x "value"   : value,
+     *   $ … -x "va lue"  : va lue,
+     *   $ … -x va\ l"ue  : va l"ue,
+     *   $ … -x 'va "l"ue': va "l"ue,
      *   $ etc. (we did not written all cases, but the philosophy is here).
-     *   Two type of quotes are supported : double quotes ("), and simple
+     *   Two type of quotes are supported: double quotes ("), and simple
      *   quotes (').
-     *   We got very particulary cases :
-     *   $ … -x=-value     : -value ;
-     *   $ … -x "-value"   : -value ;
-     *   $ … -x \-value    : -value ;
-     *   $ … -x -value     : two switches, -x and -value are set to true ;
-     *   $ … -x=-7         : -7, a negative number.
-     *   And if we have more than one valued switch, the value is overwritted :
-     *   $ … -x a -x b     : b.
+     *   We got very particulary cases:
+     *   $ … -x=-value    : -value,
+     *   $ … -x "-value"  : -value,
+     *   $ … -x \-value   : -value,
+     *   $ … -x -value    : two switches, -x and -value are set to true,
+     *   $ … -x=-7        : -7, a negative number.
+     *   And if we have more than one valued switch, the value is overwritted:
+     *   $ … -x a -x b    : b.
      *   Maybe, it should produce an array, like the special valued switch (see
      *   the point 6. please).
      *
-     * 6. Special valued switch :
-     *   Some valued switch can have a list, or an interval in value ;
+     * 6. Special valued switch:
+     *   Some valued switch can have a list, or an interval in value,
      *   e.g. -x=a,b,c, or -x=1:7 etc.
      *   This class gives the value as it is, i.e. no manipulation or treatment
      *   is made.
-     *   $ … -x=a,b,c      : a,b,c (and no array('a', 'b', 'c')) ;
+     *   $ … -x=a,b,c     : a,b,c (and no array('a', 'b', 'c')),
      *   $ etc.
      *   These manipulations should be made by the user no ? The
      *   self::parseSpecialValue() is written for that.
      *
-     * 7. Input :
+     * 7. Input:
      *   The regular expression sets a value as much as possible to each
      *   switch (option). If a switch does not take a value (see the
      *   \Hoa\Console\GetOption::NO_ARGUMENT constant), the value will be
@@ -137,21 +137,21 @@ class Parser
      *   class, only in the \Hoa\Console\GetOption class, because this class
      *   does not have the options profile. We got the transferSwitchToInput()
      *   method, that is called in the GetOption class.
-     *   So :
-     *   $ cmd -x input           the input is the -x value ;
-     *   $ cmd -x -- input        the input is a real input, not a value ;
+     *   So:
+     *   $ cmd -x input           the input is the -x value,
+     *   $ cmd -x -- input        the input is a real input, not a value,
      *   $ cmd -x value input     -x is set to value, and the input is a real
-     *                            input ;
-     *   $ cmd -x value -- input  equivalent to -x value input ;
+     *                            input,
+     *   $ cmd -x value -- input  equivalent to -x value input,
      *   $ … -a b i -c d ii       -a is set to b, -c to d, and we got two
-     *                            inputs : i and ii.
+     *                            inputs: i and ii.
      *
-     * Warning : if the command was reconstitued from the $_SERVER variable, all
-     * these cases are not sure to work, because the command was already
+     * Warning: If the command was reconstitued from the `$_SERVER` variable, all
+     * these cases are not ensure to work, because the command was already
      * interpreted/parsed by an other parser (Shell, DOS etc.), and maybe they
-     * remove some character, or some particular case. But if we give the
-     * command manually — i.e. without any reconstitution —, all these cases
-     * will work :).
+     * remove some characters, or some particular cases. But if we pass the
+     * command manually —i.e. without any reconstitution—, all these cases
+     * will work :-).
      *
      * @param   string  $command    Command to parse.
      * @return  void
