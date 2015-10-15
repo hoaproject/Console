@@ -62,7 +62,8 @@ class Output implements Stream\IStream\Out
      *
      * @param   string  $string    String.
      * @param   int     $length    Length.
-     * @return  mixed
+     * @return  void
+     * @throws  \Hoa\Console\Exception
      */
     public function write($string, $length)
     {
@@ -98,7 +99,7 @@ class Output implements Stream\IStream\Out
      * Write a string.
      *
      * @param   string  $string    String.
-     * @return  mixed
+     * @return  void
      */
     public function writeString($string)
     {
@@ -111,7 +112,7 @@ class Output implements Stream\IStream\Out
      * Write a character.
      *
      * @param   string  $character    Character.
-     * @return  mixed
+     * @return  void
      */
     public function writeCharacter($character)
     {
@@ -121,8 +122,8 @@ class Output implements Stream\IStream\Out
     /**
      * Write a boolean.
      *
-     * @param   bool    $boolean    Boolean.
-     * @return  mixed
+     * @param   bool  $boolean    Boolean.
+     * @return  void
      */
     public function writeBoolean($boolean)
     {
@@ -132,8 +133,8 @@ class Output implements Stream\IStream\Out
     /**
      * Write an integer.
      *
-     * @param   int     $integer    Integer.
-     * @return  mixed
+     * @param   int   $integer    Integer.
+     * @return  void
      */
     public function writeInteger($integer)
     {
@@ -146,7 +147,7 @@ class Output implements Stream\IStream\Out
      * Write a float.
      *
      * @param   float   $float    Float.
-     * @return  mixed
+     * @return  void
      */
     public function writeFloat($float)
     {
@@ -159,7 +160,7 @@ class Output implements Stream\IStream\Out
      * Write an array.
      *
      * @param   array   $array    Array.
-     * @return  mixed
+     * @return  void
      */
     public function writeArray(Array $array)
     {
@@ -172,7 +173,7 @@ class Output implements Stream\IStream\Out
      * Write a line.
      *
      * @param   string  $line    Line.
-     * @return  mixed
+     * @return  void
      */
     public function writeLine($line)
     {
@@ -189,7 +190,7 @@ class Output implements Stream\IStream\Out
      * Write all, i.e. as much as possible.
      *
      * @param   string  $string    String.
-     * @return  mixed
+     * @return  void
      */
     public function writeAll($string)
     {
@@ -199,7 +200,7 @@ class Output implements Stream\IStream\Out
     /**
      * Truncate a stream to a given length.
      *
-     * @param   int     $size    Size.
+     * @param   int   $size    Size.
      * @return  bool
      */
     public function truncate($size)

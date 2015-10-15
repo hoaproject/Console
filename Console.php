@@ -129,7 +129,7 @@ class Console
     /**
      * Output.
      *
-     * @var \Hoa\Console\Output
+     * @var \Hoa\Stream\IStream\Out
      */
     protected static $_output = null;
 

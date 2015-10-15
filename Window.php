@@ -534,12 +534,18 @@ class Window implements Core\Event\Source
 
         $out = "\033]52;;" . base64_encode($data) . "\033\\";
 
-        $output              = Console::getOutput();
-        $considerMultiplexer = $output->isMultiplexerConsidered();
+        $output = Console::getOutput();
 
-        $output->considerMultiplexer(true);
+        if ($output instanceof Output) {
+            $considerMultiplexer = $output->isMultiplexerConsidered();
+            $output->considerMultiplexer(true);
+        }
+
         $output->writeAll($out);
-        $output->considerMultiplexer($considerMultiplexer);
+
+        if ($output instanceof Output) {
+            $output->considerMultiplexer($considerMultiplexer);
+        }
 
         return;
     }

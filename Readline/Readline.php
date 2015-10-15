@@ -1001,7 +1001,7 @@ class Readline
                 &$coord,
                 &$_solution,
                 &$cWidth,
-                &$output
+                $output
             ) {
                 Console\Cursor::save();
                 Console\Cursor::hide();
@@ -1020,7 +1020,7 @@ class Readline
                 &$coord,
                 &$_solution,
                 &$cWidth,
-                &$output
+                $output
             ) {
                 Console\Cursor::save();
                 Console\Cursor::hide();

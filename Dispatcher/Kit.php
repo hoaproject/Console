@@ -229,7 +229,7 @@ class Kit extends Dispatcher\Kit
                 ? '[' . Console\Chrome\Text::colorize('ok', 'foreground(green)') . ']'
                 : '[' . Console\Chrome\Text::colorize('!!', 'foreground(white) background(red)') . ']');
 
-        Console::getOutput($out . "\n");
+        Console::getOutput()->writeAll($out . "\n");
 
         return;
     }
