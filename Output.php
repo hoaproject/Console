@@ -36,6 +36,7 @@
 
 namespace Hoa\Console;
 
+use Hoa\File;
 use Hoa\Stream;
 
 /**
@@ -56,6 +57,25 @@ class Output implements Stream\IStream\Out
      */
     protected $_considerMultiplexer = false;
 
+    /**
+     * Real output stream.
+     *
+     * @var \Hoa\Stream\IStream\Out
+     */
+    protected $_output              = null;
+
+
+    /**
+     * Wraps an `Hoa\Stream\IStream\Out` stream.
+     *
+     * @param  \Hoa\Stream\IStream\Out  $output    Output.
+     */
+    public function __construct(Stream\IStream\Out $output = null)
+    {
+        $this->_output = $output;
+
+        return;
+    }
 
     /**
      * Write n characters.
@@ -77,22 +97,22 @@ class Output implements Stream\IStream\Out
 
         $out = substr($string, 0, $length);
 
-        if (false === $this->isMultiplexerConsidered()) {
-            echo $out;
+        if (true === $this->isMultiplexerConsidered()) {
+            if (true === Console::isTmuxRunning()) {
+                $out =
+                    "\033Ptmux;" .
+                    str_replace("\033", "\033\033", $out) .
+                    "\033\\";
+            }
 
-            return;
+            $length = strlen($out);
         }
 
-        if (true === Console::isTmuxRunning()) {
-            echo
-                "\033Ptmux;" .
-                str_replace("\033", "\033\033", $out) .
-                "\033\\";
+        if (null === $this->_output) {
+            echo $out;
         } else {
-            echo $out;
+            $this->_output->write($out, $length);
         }
-
-        return;
     }
 
     /**
@@ -133,7 +153,7 @@ class Output implements Stream\IStream\Out
     /**
      * Write an integer.
      *
-     * @param   int   $integer    Integer.
+     * @param   int  $integer    Integer.
      * @return  void
      */
     public function writeInteger($integer)
@@ -146,7 +166,7 @@ class Output implements Stream\IStream\Out
     /**
      * Write a float.
      *
-     * @param   float   $float    Float.
+     * @param   float  $float    Float.
      * @return  void
      */
     public function writeFloat($float)
@@ -159,7 +179,7 @@ class Output implements Stream\IStream\Out
     /**
      * Write an array.
      *
-     * @param   array   $array    Array.
+     * @param   array  $array    Array.
      * @return  void
      */
     public function writeArray(Array $array)
@@ -200,7 +220,7 @@ class Output implements Stream\IStream\Out
     /**
      * Truncate a stream to a given length.
      *
-     * @param   int   $size    Size.
+     * @param   int  $size    Size.
      * @return  bool
      */
     public function truncate($size)

@@ -532,20 +532,12 @@ class Window implements Core\Event\Source
             return;
         }
 
-        $out = "\033]52;;" . base64_encode($data) . "\033\\";
-
-        $output = Console::getOutput();
-
-        if ($output instanceof Output) {
-            $considerMultiplexer = $output->isMultiplexerConsidered();
-            $output->considerMultiplexer(true);
-        }
+        $out                 = "\033]52;;" . base64_encode($data) . "\033\\";
+        $output              = Console::getOutput();
+        $considerMultiplexer = $output->considerMultiplexer(true);
 
         $output->writeAll($out);
-
-        if ($output instanceof Output) {
-            $output->considerMultiplexer($considerMultiplexer);
-        }
+        $output->considerMultiplexer($considerMultiplexer);
 
         return;
     }

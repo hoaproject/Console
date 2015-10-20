@@ -129,7 +129,7 @@ class Console
     /**
      * Output.
      *
-     * @var \Hoa\Stream\IStream\Out
+     * @var \Hoa\Console\Output
      */
     protected static $_output = null;
 
@@ -309,10 +309,10 @@ class Console
     /**
      * Set output layer.
      *
-     * @param   \Hoa\Stream\IStream\Out  $output    Output.
-     * @return  \Hoa\Stream\IStream\Out
+     * @param   \Hoa\Console\Output  $output    Output.
+     * @return  \Hoa\Console\Output
      */
-    public static function setOutput(Stream\IStream\Out $output)
+    public static function setOutput(Output $output)
     {
         $old             = static::$_output;
         static::$_output = $output;
@@ -323,7 +323,7 @@ class Console
     /**
      * Get output layer.
      *
-     * @return  \Hoa\Stream\IStream\Out
+     * @return  \Hoa\Console\Output
      */
     public static function getOutput()
     {
