@@ -128,8 +128,8 @@ class GetOption
     /**
      * Prepare the pipette.
      *
-     * @param   array                         $options    The option definition.
-     * @param   \Hoa\Console\Core\Cli\Parser  $parser     The parser.
+     * @param   array                $options    The option definition.
+     * @param   \Hoa\Console\Parser  $parser     The parser.
      * @return  void
      * @throws  \Hoa\Console\Exception
      */

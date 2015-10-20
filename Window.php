@@ -566,7 +566,7 @@ if (function_exists('pcntl_signal')) {
                 'hoa://Event/Console/Window:resize',
                 $_window,
                 new Core\Event\Bucket([
-                    'size' => \Window::getSize()
+                    'size' => Window::getSize()
                 ])
             );
         }
