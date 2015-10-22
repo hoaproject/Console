@@ -131,7 +131,7 @@ class Mouse implements Core\Event\Listenable
             'ctrl'   => false
         ];
         $input = Console::getInput();
-        $read  = [$input->getStream()];
+        $read  = [$input->getStream()->getStream()];
 
         while (true) {
             @stream_select($read, $write, $except, 30);

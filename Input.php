@@ -83,6 +83,16 @@ class Input implements Stream\IStream\In
     }
 
     /**
+     * Get underlying stream.
+     *
+     * @return \Hoa\Stream\IStream\In
+     */
+    public function getStream()
+    {
+        return $this->_input;
+    }
+
+    /**
      * Test for end-of-file.
      *
      * @return  bool

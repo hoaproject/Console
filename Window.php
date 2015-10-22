@@ -432,7 +432,7 @@ class Window implements Core\Event\Source
         Console::getOutput()->writeAll("\033[21t");
 
         $input  = Console::getInput();
-        $read   = [$input->getStream()];
+        $read   = [$input->getStream()->getStream()];
         $write  = [];
         $except = [];
         $out    = null;
@@ -478,7 +478,7 @@ class Window implements Core\Event\Source
         Console::getOutput()->writeAll("\033[20t");
 
         $input  = Console::getInput();
-        $read   = [$input->getStream()];
+        $read   = [$input->getStream()->getStream()];
         $write  = [];
         $except = [];
         $out    = null;
