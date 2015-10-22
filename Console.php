@@ -169,8 +169,8 @@ class Console
             return self::$_advanced = false;
         }
 
-        self::$_old = Processus::execute('stty -f /dev/tty -g');
-        Processus::execute('stty -f /dev/tty -echo -icanon min 1 time 0');
+        self::$_old = Processus::execute('stty -g < /dev/tty', false);
+        Processus::execute('stty -echo -icanon min 1 time 0 < /dev/tty', false);
 
         return self::$_advanced = true;
     }
@@ -186,7 +186,7 @@ class Console
             return;
         }
 
-        Processus::execute('stty -f /dev/tty ' . self::$_old);
+        Processus::execute('stty ' . self::$_old . ' < /dev/tty', false);
 
         return;
     }
