@@ -165,7 +165,9 @@ class Console
             return self::$_advanced = false;
         }
 
-        if (false === $force && false === self::isDirect(STDIN)) {
+        if (false === $force &&
+            true  === defined('STDIN') &&
+            false === self::isDirect(STDIN)) {
             return self::$_advanced = false;
         }
 
