@@ -373,6 +373,20 @@ class Console
     }
 
     /**
+     * Set tput.
+     *
+     * @param   \Hoa\Console\Tput  $tput    Tput.
+     * @return  \Hoa\Console\Tput
+     */
+    public static function setTput(Tput $tput)
+    {
+        $old           = static::$_tput;
+        static::$_tput = $tput;
+
+        return $old;
+    }
+
+    /**
      * Get the current tput instance of the current process.
      *
      * @return  \Hoa\Console\Tput
