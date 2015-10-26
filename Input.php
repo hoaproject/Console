@@ -107,7 +107,6 @@ class Input implements Stream\IStream\In
      *
      * @param   int     $length    Length.
      * @return  string
-     * @throws  \Hoa\Exception
      */
     public function read($length)
     {
