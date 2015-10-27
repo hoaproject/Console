@@ -68,7 +68,7 @@ class Window implements Core\Event\Source
      *
      * @return  void
      */
-    public function __construct()
+    private function __construct()
     {
         Core\Event::register(
             'hoa://Event/Console/Window:resize',
