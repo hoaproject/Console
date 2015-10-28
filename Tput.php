@@ -784,7 +784,7 @@ class Tput
     public static function getTerm()
     {
         return
-            isset($_SERVER['TERM'])
+            isset($_SERVER['TERM']) && !empty($_SERVER['TERM'])
                 ? $_SERVER['TERM']
                 : (OS_WIN ? 'windows-ansi' : 'xterm');
     }
