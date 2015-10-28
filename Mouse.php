@@ -176,7 +176,11 @@ class Mouse implements Core\Event\Listenable
         $read  = [$input->getStream()->getStream()];
 
         while (true) {
-            @stream_select($read, $write, $except, 30);
+            if (false === @stream_select($read, $write, $except, 30)) {
+                static::untrack();
+
+                break;
+            }
 
             $string = $input->readCharacter();
 
