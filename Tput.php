@@ -837,6 +837,10 @@ class Tput
             }
         }
 
+        if (null === $pathname && 'xterm' !== $term) {
+            return static::getTerminfo('xterm');
+        }
+
         return $pathname;
     }
 }
