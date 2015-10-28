@@ -36,8 +36,8 @@
 
 namespace Hoa\Console\Test\Unit;
 
-use Hoa\Console\Cursor as SUT;
 use Hoa\Console as LUT;
+use Hoa\Console\Cursor as SUT;
 use Hoa\File;
 use Hoa\Test;
 

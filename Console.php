@@ -37,7 +37,6 @@
 namespace Hoa\Console;
 
 use Hoa\Core;
-use Hoa\Stream;
 
 /**
  * Class \Hoa\Console.

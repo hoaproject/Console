@@ -36,8 +36,8 @@
 
 namespace Hoa\Console\Test\Unit;
 
-use Hoa\Console\Window as SUT;
 use Hoa\Console as LUT;
+use Hoa\Console\Window as SUT;
 use Hoa\File;
 use Hoa\Test;
 
@@ -210,7 +210,7 @@ class Window extends Test\Unit\Suite
             ->given(
                 $title = 'hello 🌍',
                 $file  = new File\ReadWrite('hoa://Test/Vfs/Input'),
-                $file->writeAll("\033]l" . $title. "\033\\"),
+                $file->writeAll("\033]l" . $title . "\033\\"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file)),
                 $this->function->stream_select = function () {
@@ -247,7 +247,7 @@ class Window extends Test\Unit\Suite
             ->given(
                 $label = 'hello 🌍',
                 $file  = new File\ReadWrite('hoa://Test/Vfs/Input'),
-                $file->writeAll("\033]L" . $label. "\033\\"),
+                $file->writeAll("\033]L" . $label . "\033\\"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file)),
                 $this->function->stream_select = function () {
