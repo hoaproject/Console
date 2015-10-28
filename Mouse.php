@@ -49,6 +49,48 @@ use Hoa\Core;
 class Mouse implements Core\Event\Listenable
 {
     /**
+     * Pointer code for left button.
+     *
+     * @const int
+     */
+    const BUTTON_LEFT    = 0;
+
+    /**
+     * Pointer code for the middle button.
+     *
+     * @const int
+     */
+    const BUTTON_MIDDLE  = 1;
+
+    /**
+     * Pointer code for the right button.
+     *
+     * @const int
+     */
+    const BUTTON_RIGHT   = 2;
+
+    /**
+     * Pointer code for the release of the button.
+     *
+     * @const int
+     */
+    const BUTTON_RELEASE = 3;
+
+    /**
+     * Pointer code for the wheel up.
+     *
+     * @const int
+     */
+    const WHEEL_UP       = 64;
+
+    /**
+     * Pointer code for the wheel down.
+     *
+     * @const int
+     */
+    const WHEEL_DOWN     = 65;
+
+    /**
      * Singleton.
      *
      * @var \Hoa\Console\Mouse
@@ -169,7 +211,7 @@ class Mouse implements Core\Event\Listenable
             $cb -= 32;
 
             switch ($cb) {
-                case 64:
+                case static::WHEEL_UP:
                     $instance->_on->fire(
                         'wheelup',
                         new Core\Event\Bucket($bucket)
@@ -177,7 +219,7 @@ class Mouse implements Core\Event\Listenable
 
                     break;
 
-                case 65:
+                case static::WHEEL_DOWN:
                     $instance->_on->fire(
                         'wheeldown',
                         new Core\Event\Bucket($bucket)
@@ -185,7 +227,7 @@ class Mouse implements Core\Event\Listenable
 
                     break;
 
-                case 3:
+                case static::BUTTON_RELEASE:
                     $instance->_on->fire(
                         'mouseup',
                         new Core\Event\Bucket($bucket)
@@ -195,11 +237,11 @@ class Mouse implements Core\Event\Listenable
                     break;
 
                 default:
-                    if (0 === $cb) {
+                    if (static::BUTTON_LEFT === $cb) {
                         $bucket['button'] = 'left';
-                    } elseif (1 === $cb) {
+                    } elseif (static::BUTTON_MIDDLE === $cb) {
                         $bucket['button'] = 'middle';
-                    } elseif (2 === $cb) {
+                    } elseif (static::BUTTON_RIGHT === $cb) {
                         $bucket['button'] = 'right';
                     } else {
                         // hover
