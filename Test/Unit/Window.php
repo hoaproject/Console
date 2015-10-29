@@ -51,9 +51,10 @@ use Hoa\Test;
  */
 class Window extends Test\Unit\Suite
 {
-    public function setUp()
+    public function beforeTestMethod($methodName)
     {
-        LUT::setTput(new LUT\Tput('hoa://Library/Console/Terminfo/78/xterm'));
+        parent::beforeTestMethod($methodName);
+        LUT::setTput(new LUT\Tput('hoa://Library/Console/Terminfo/78/xterm-256color'));
 
         return;
     }
