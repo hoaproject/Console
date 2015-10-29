@@ -43,7 +43,7 @@ use Hoa\Ustring;
 /**
  * Class \Hoa\Console\Readline.
  *
- * Read, edit, bind… a line from STDIN.
+ * Read, edit, bind… a line from the input.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
@@ -172,22 +172,24 @@ class Readline
     }
 
     /**
-     * Read a line from STDIN.
+     * Read a line from the input.
      *
      * @param   string  $prefix    Prefix.
      * @return  string
      */
     public function readLine($prefix = null)
     {
-        if (feof(STDIN)) {
+        $input = Console::getInput();
+
+        if (true === $input->eof()) {
             return false;
         }
 
-        $direct = Console::isDirect(STDIN);
+        $direct = Console::isDirect($input->getStream()->getStream());
         $output = Console::getOutput();
 
         if (false === $direct || OS_WIN) {
-            $out = fgets(STDIN);
+            $out = $input->readLine();
 
             if (false === $out) {
                 return false;
@@ -206,14 +208,14 @@ class Readline
 
         $this->resetLine();
         $this->setPrefix($prefix);
-        $read = [STDIN];
+        $read = [$input->getStream()->getStream()];
         $output->writeAll($prefix);
 
         while (true) {
             @stream_select($read, $write, $except, 30, 0);
 
             if (empty($read)) {
-                $read = [STDIN];
+                $read = [$input->getStream()->getStream()];
 
                 continue;
             }
@@ -536,14 +538,14 @@ class Readline
     }
 
     /**
-     * Read on STDIN. Not for user.
+     * Read on input. Not for user.
      *
      * @param   int  $length    Length.
      * @return  string
      */
     public function _read($length = 512)
     {
-        return fread(STDIN, $length);
+        return Console::getInput()->read($length);
     }
 
     /**
@@ -991,7 +993,8 @@ class Readline
             Console\Cursor::show();
 
             ++$mColumns;
-            $read     = [STDIN];
+            $input    = Console::getInput();
+            $read     = [$input->getStream()->getStream()];
             $mColumn  = -1;
             $mLine    = -1;
             $coord    = -1;
@@ -1051,7 +1054,7 @@ class Readline
                 @stream_select($read, $write, $except, 30, 0);
 
                 if (empty($read)) {
-                    $read = [STDIN];
+                    $read = [$input->getStream()->getStream()];
 
                     continue;
                 }

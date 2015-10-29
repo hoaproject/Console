@@ -39,7 +39,7 @@ namespace Hoa\Console\Readline;
 /**
  * Class \Hoa\Console\Readline\Password.
  *
- * Read, edit, bind… a password from STDIN.
+ * Read, edit, bind… a password from the input.
  *
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
