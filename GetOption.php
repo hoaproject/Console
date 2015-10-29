@@ -243,9 +243,10 @@ class GetOption
     {
         static $first = true;
 
+        $optionValue = null;
+
         if (true === $this->isPipetteEmpty() && true === $first) {
-            $first       = false;
-            $optionValue = null;
+            $first = false;
 
             return false;
         }
