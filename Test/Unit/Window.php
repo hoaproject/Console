@@ -89,7 +89,7 @@ class Window extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033[3;7;42t"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file))
@@ -209,7 +209,7 @@ class Window extends Test\Unit\Suite
         $this
             ->given(
                 $title = 'hello 🌍',
-                $file  = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file  = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033]l" . $title . "\033\\"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file)),
@@ -246,7 +246,7 @@ class Window extends Test\Unit\Suite
         $this
             ->given(
                 $label = 'hello 🌍',
-                $file  = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file  = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033]L" . $label . "\033\\"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file)),

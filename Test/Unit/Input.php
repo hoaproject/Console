@@ -63,7 +63,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file  = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file  = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $input = new SUT($file)
             )
             ->when($result = $input->eof())
@@ -76,7 +76,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('foobar'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -91,7 +91,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('foobar'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -106,7 +106,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('foobar'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -121,7 +121,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('1'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -136,7 +136,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('0'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -151,7 +151,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('42'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -166,7 +166,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('4.2'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -181,7 +181,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('foo bar'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -199,7 +199,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('foo' . "\n" . 'bar'),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -215,7 +215,7 @@ class Input extends Test\Unit\Suite
         $this
             ->given(
                 $content = '4.2foo' . "\n" . 'bar',
-                $file    = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file    = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll($content),
                 $file->rewind(),
                 $input = new SUT($file)
@@ -230,7 +230,7 @@ class Input extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll('foo 42' . "\n" . 'bar 153'),
                 $file->rewind(),
                 $input = new SUT($file)

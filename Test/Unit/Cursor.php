@@ -224,7 +224,7 @@ class Cursor extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033[42;7R"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file))
@@ -239,7 +239,7 @@ class Cursor extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033[42;7R"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file))
@@ -254,7 +254,7 @@ class Cursor extends Test\Unit\Suite
     {
         $this
             ->given(
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033[42;7R"),
                 $file->rewind(),
                 $input  = LUT::setInput(new LUT\Input($file))

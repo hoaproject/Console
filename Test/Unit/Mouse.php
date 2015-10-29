@@ -181,7 +181,7 @@ class Mouse extends Test\Unit\Suite
         $this
             ->given(
                 $self = $this,
-                $file = new File\ReadWrite('hoa://Test/Vfs/Input'),
+                $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll(
                     "\033[M" .
                     chr(($pointerActionCode + 32) & ~28) .
