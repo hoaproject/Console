@@ -481,6 +481,7 @@ class Readline
     /**
      * Set prefix.
      *
+     * @param   string  $prefix    Prefix.
      * @return  void
      */
     public function setPrefix($prefix)
@@ -527,7 +528,6 @@ class Readline
     /**
      * Get the autocompleter.
      *
-     * @param   \Hoa\Console\Readline\Autocompleter  $autocompleter    Auto-completer.
      * @return  \Hoa\Console\Readline\Autocompleter
      */
     public function getAutocompleter()
