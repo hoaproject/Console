@@ -71,25 +71,49 @@ class Window extends Test\Unit\Suite
     public function case_set_size()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setSize(7, 42))
             ->then
                 ->output
                     ->isEqualTo("\033[8;42;7t");
     }
 
+    public function case_set_size_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::setSize(7, 42))
+            ->then
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_move_to()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::moveTo(7, 42))
             ->then
                 ->output
                     ->isEqualTo("\033[3;7;42t");
     }
 
+    public function case_move_to_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::moveTo(7, 42))
+            ->then
+                ->output
+                ->isEmpty();
+    }
+
     public function case_get_position()
     {
         $this
             ->given(
+                $this->constant->OS_WIN = false,
+
                 $file = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033[3;7;42t"),
                 $file->rewind(),
@@ -106,9 +130,22 @@ class Window extends Test\Unit\Suite
                     ]);
     }
 
+    public function case_get_position_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when($result = SUT::getPosition())
+            ->then
+                ->variable($result)
+                    ->isNull()
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_scroll_u()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::scroll('u'))
             ->then
                 ->output
@@ -118,6 +155,7 @@ class Window extends Test\Unit\Suite
     public function case_scroll_up()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::scroll('up'))
             ->then
                 ->output
@@ -127,6 +165,7 @@ class Window extends Test\Unit\Suite
     public function case_scroll_d()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::scroll('d'))
             ->then
                 ->output
@@ -136,6 +175,7 @@ class Window extends Test\Unit\Suite
     public function case_scroll_down()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::scroll('d'))
             ->then
                 ->output
@@ -145,6 +185,7 @@ class Window extends Test\Unit\Suite
     public function case_scroll_u_d_up_down()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::scroll('u d up down'))
             ->then
                 ->output
@@ -154,61 +195,129 @@ class Window extends Test\Unit\Suite
     public function case_scroll_up_repeated()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::scroll('up', 3))
             ->then
                 ->output
                     ->isEqualTo("\033[3S");
     }
 
+    public function case_scroll_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::scroll('u'))
+            ->then
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_minimize()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::minimize())
             ->then
                 ->output
                     ->isEqualTo("\033[2t");
     }
 
+    public function case_minimize_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::minimize())
+            ->then
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_restore()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::restore())
             ->then
                 ->output
                     ->isEqualTo("\033[1t");
     }
 
+    public function case_restore_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::restore())
+            ->then
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_raise()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::raise())
             ->then
                 ->output
                     ->isEqualTo("\033[5t");
     }
 
+    public function case_raise_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::raise())
+            ->then
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_lower()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::lower())
             ->then
                 ->output
                     ->isEqualTo("\033[6t");
     }
 
+    public function case_lower_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::lower())
+            ->then
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_set_title()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setTitle('foobar 😄'))
             ->then
                 ->output
                     ->isEqualTo("\033]0;foobar 😄\033\\");
     }
 
+    public function case_set_title_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::setTitle('foobar 😄'))
+            ->then
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_get_title()
     {
         $this
             ->given(
+                $this->constant->OS_WIN = false,
+
                 $title = 'hello 🌍',
                 $file  = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033]l" . $title . "\033\\"),
@@ -224,6 +333,18 @@ class Window extends Test\Unit\Suite
                     ->isEqualTo("\033[21t")
                 ->string($result)
                     ->isEqualTo($title);
+    }
+
+    public function case_get_title_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when($result = SUT::getTitle())
+            ->then
+                ->variable($result)
+                    ->isNull()
+                ->output
+                    ->isEmpty();
     }
 
     public function case_get_title_timed_out()
@@ -246,6 +367,8 @@ class Window extends Test\Unit\Suite
     {
         $this
             ->given(
+                $this->constant->OS_WIN = false,
+
                 $label = 'hello 🌍',
                 $file  = new File\ReadWrite('hoa://Test/Vfs/Input?type=file'),
                 $file->writeAll("\033]L" . $label . "\033\\"),
@@ -279,13 +402,36 @@ class Window extends Test\Unit\Suite
                     ->isNull();
     }
 
+    public function case_get_label_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when($result = SUT::getLabel())
+            ->then
+                ->variable($result)
+                    ->isNull()
+                ->output
+                    ->isEmpty();
+    }
+
     public function case_refresh()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::refresh())
             ->then
                 ->output
                     ->isEqualTo("\033[7t");
+    }
+
+    public function case_refresh_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::refresh())
+            ->then
+                ->output
+                    ->isEmpty();
     }
 
     public function case_copy()
@@ -293,6 +439,7 @@ class Window extends Test\Unit\Suite
         unset($_SERVER['TMUX']);
 
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::copy('bla'))
             ->then
                 ->output
@@ -302,14 +449,27 @@ class Window extends Test\Unit\Suite
     public function case_copy_on_tmux()
     {
         $this
-            ->given($_SERVER['TMUX'] = 'foo')
+            ->given(
+                $_SERVER['TMUX']        = 'foo',
+                $this->constant->OS_WIN = false
+            )
             ->when(SUT::copy('bla'))
             ->then
                 ->output
-                ->isEqualTo(
-                    "\033Ptmux;" .
-                        "\033\033]52;;" . base64_encode('bla') . "\033\033\\" .
-                    "\033\\"
-                );
+                    ->isEqualTo(
+                        "\033Ptmux;" .
+                            "\033\033]52;;" . base64_encode('bla') . "\033\033\\" .
+                        "\033\\"
+                    );
+    }
+
+    public function case_copy_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::copy('bla'))
+            ->then
+                ->output
+                    ->isEmpty();
     }
 }

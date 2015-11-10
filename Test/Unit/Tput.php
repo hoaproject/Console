@@ -59,17 +59,12 @@ class Tput extends Test\Unit\Suite
                     ->isEqualTo('foo');
     }
 
-    /*
     public function case_get_unknown_term_on_windows()
     {
         unset($_SERVER['TERM']);
 
         $this
-            ->given(
-                $this->constant = function($constant) {
-                    var_dump($constant);
-                }
-            )
+            ->given($this->constant->OS_WIN = true)
             ->when($result = SUT::getTerm())
             ->then
                 ->string($result)
@@ -78,9 +73,15 @@ class Tput extends Test\Unit\Suite
 
     public function case_get_unknown_term()
     {
+        unset($_SERVER['TERM']);
 
+        $this
+            ->given($this->constant->OS_WIN = false)
+            ->when($result = SUT::getTerm())
+            ->then
+                ->string($result)
+                    ->isEqualTo('xterm');
     }
-    */
 
     public function case_unknown_file_when_parsing()
     {

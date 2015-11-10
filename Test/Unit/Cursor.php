@@ -850,6 +850,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_b()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('b'))
             ->then
                 ->output
@@ -859,6 +860,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_block()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('block'))
             ->then
                 ->output
@@ -868,6 +870,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_▋()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('▋'))
             ->then
                 ->output
@@ -877,6 +880,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_block_no_blink()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('block', false))
             ->then
                 ->output
@@ -886,6 +890,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_u()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('u'))
             ->then
                 ->output
@@ -895,6 +900,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_underline()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('underline'))
             ->then
                 ->output
@@ -904,6 +910,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style__()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('_'))
             ->then
                 ->output
@@ -913,6 +920,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_underline_no_blink()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('underline', false))
             ->then
                 ->output
@@ -922,6 +930,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_v()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('v'))
             ->then
                 ->output
@@ -931,6 +940,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_vertical()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('vertical'))
             ->then
                 ->output
@@ -940,6 +950,7 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_pipe()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('|'))
             ->then
                 ->output
@@ -949,10 +960,21 @@ class Cursor extends Test\Unit\Suite
     public function case_set_style_vertical_no_blink()
     {
         $this
+            ->given($this->constant->OS_WIN = false)
             ->when(SUT::setStyle('vertical', false))
             ->then
                 ->output
                     ->isEqualTo("\033[6 q");
+    }
+
+    public function case_set_style_on_windows()
+    {
+        $this
+            ->given($this->constant->OS_WIN = true)
+            ->when(SUT::setStyle('b'))
+            ->then
+                ->output
+                    ->isEmpty();
     }
 
     public function case_bip()
