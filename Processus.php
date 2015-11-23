@@ -36,7 +36,7 @@
 
 namespace Hoa\Console;
 
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\Stream;
 
 /**
@@ -384,7 +384,7 @@ class          Processus
 
         $this->setTimeout($timeout);
         parent::__construct($this->getCommandLine(), null, true);
-        $this->_on->addIds(['input', 'output', 'timeout', 'start', 'stop']);
+        $this->getListener()->addIds(['input', 'output', 'timeout', 'start', 'stop']);
 
         return;
     }
@@ -452,7 +452,7 @@ class          Processus
             ));
         }
 
-        $this->_on->fire('start', new Core\Event\Bucket());
+        $this->getListener()->fire('start', new Event\Bucket());
 
         $_read   = [];
         $_write  = [];
@@ -504,7 +504,7 @@ class          Processus
             $select = stream_select($read, $write, $except, $this->getTimeout());
 
             if (0 === $select) {
-                $this->_on->fire('timeout', new Core\Event\Bucket());
+                $this->getListener()->fire('timeout', new Event\Bucket());
 
                 break;
             }
@@ -516,9 +516,9 @@ class          Processus
                 if (false === $line) {
                     $result = [false];
                 } else {
-                    $result = $this->_on->fire(
+                    $result = $this->getListener()->fire(
                         'output',
-                        new Core\Event\Bucket([
+                        new Event\Bucket([
                             'pipe' => $pipe,
                             'line' => $line
                         ])
@@ -534,9 +534,9 @@ class          Processus
             }
 
             foreach ($write as $j => $_w) {
-                $result = $this->_on->fire(
+                $result = $this->getListener()->fire(
                     'input',
-                    new Core\Event\Bucket([
+                    new Event\Bucket([
                         'pipe' => array_search($_w, $this->_pipes)
                     ])
                 );
@@ -552,7 +552,7 @@ class          Processus
             }
         }
 
-        $this->_on->fire('stop', new Core\Event\Bucket());
+        $this->getListener()->fire('stop', new Event\Bucket());
 
         return;
     }

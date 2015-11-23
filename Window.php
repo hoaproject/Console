@@ -36,7 +36,7 @@
 
 namespace Hoa\Console;
 
-use Hoa\Core;
+use Hoa\Event;
 
 /**
  * Class \Hoa\Console\Window.
@@ -50,7 +50,7 @@ use Hoa\Core;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Window implements Core\Event\Source
+class Window implements Event\Source
 {
     /**
      * Singleton (only for events).
@@ -70,7 +70,7 @@ class Window implements Core\Event\Source
      */
     private function __construct()
     {
-        Core\Event::register(
+        Event::register(
             'hoa://Event/Console/Window:resize',
             $this
         );
@@ -568,10 +568,10 @@ if (function_exists('pcntl_signal')) {
                 $_window = Window::getInstance();
             }
 
-            Core\Event::notify(
+            Event::notify(
                 'hoa://Event/Console/Window:resize',
                 $_window,
-                new Core\Event\Bucket([
+                new Event\Bucket([
                     'size' => Window::getSize()
                 ])
             );

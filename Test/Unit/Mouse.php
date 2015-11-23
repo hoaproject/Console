@@ -38,7 +38,7 @@ namespace Hoa\Console\Test\Unit;
 
 use Hoa\Console as LUT;
 use Hoa\Console\Mouse as SUT;
-use Hoa\Core;
+use Hoa\Event;
 use Hoa\File;
 use Hoa\Test;
 
@@ -204,7 +204,7 @@ class Mouse extends Test\Unit\Suite
 
                 SUT::getInstance()->on(
                     $listenerName,
-                    function (Core\Event\Bucket $bucket) use (&$_listenerData) {
+                    function (Event\Bucket $bucket) use (&$_listenerData) {
                         $_listenerData = $bucket->getData();
 
                         return;
