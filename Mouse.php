@@ -36,7 +36,7 @@
 
 namespace Hoa\Console;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Event;
 
 /**

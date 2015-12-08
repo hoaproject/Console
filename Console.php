@@ -36,6 +36,7 @@
 
 namespace Hoa\Console;
 
+use Hoa\Consistency;
 use Hoa\Core;
 
 /**
@@ -418,4 +419,4 @@ Core::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Console\Console');
+Consistency::flexEntity('Hoa\Console\Console');

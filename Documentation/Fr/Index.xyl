@@ -138,7 +138,7 @@ print_r(Hoa\Console\Window::getPosition());
 declare(ticks = 1);
 
 event('hoa://Event/Console/Window:resize')
-    ->attach(function (Hoa\Core\Event\Bucket $bucket) {
+    ->attach(function (Hoa\Event\Bucket $bucket) {
         $data = $bucket->getData();
         $size = $data['size'];
 
@@ -1099,7 +1099,7 @@ NULL</code></pre>
   <strong>dispatcheur</strong> : écrire des commandes dans plusieurs fonctions
   ou classes et les appeler en fonction des options et entrées données à notre
   programme. Nous vous conseillons de regarder le code source de
-  <a href="@central_resource:path=Library/Core/Bin/Hoa.php"><code>hoa://Library/Core/Bin/Hoa.php</code></a>
+  <a href="@central_resource:path=Library/Cli/Bin/Hoa.php"><code>hoa://Library/Cli/Bin/Hoa.php</code></a>
   pour vous aider, ainsi que les chapitres de
   <a href="@hack:chapter=Router"><code>Hoa\Router</code></a> et
   <a href="@hack:chapter=Dispatcher"><code>Hoa\Dispatcher</code></a>. Nous
@@ -1147,7 +1147,7 @@ try {
 
     // Dispatch!
     exit($dispatcher->dispatch($router));
-} catch (Hoa\Core\Exception $e) {
+} catch (Hoa\Exception $e) {
     echo $e->raise(true);
     exit($e->getCode() + 1);
 }</code></pre>
@@ -1598,7 +1598,7 @@ $ hoa | xargs -I@ echo @</code></pre>
         'PATH' => '/usr/bin:/bin'
     ]
 );
-$processus->on('input', function (Hoa\Core\Event\Bucket $bucket) {
+$processus->on('input', function (Hoa\Event\Bucket $bucket) {
     $bucket->getSource()->writeAll(
         '&amp;lt;?php' . "\n" .
         'var_dump(getcwd());' . "\n" .
@@ -1607,7 +1607,7 @@ $processus->on('input', function (Hoa\Core\Event\Bucket $bucket) {
 
     return false;
 });
-$processus->on('output', function (Hoa\Core\Event\Bucket $bucket) {
+$processus->on('output', function (Hoa\Event\Bucket $bucket) {
     $data = $bucket->getData();
     echo '> ', $data['line'], "\n";
 
@@ -1645,14 +1645,14 @@ $processus->run();
 $processus->setTimeout(3);
 
 // Sleep 10 seconds.
-$processus->on('input', function (Hoa\Core\Event\Bucket $bucket) {
+$processus->on('input', function (Hoa\Event\Bucket $bucket) {
     $bucket->getSource()->writeAll('&amp;lt;?php sleep(10);');
 
     return false;
 });
 
 // Terminate the processus on timeout.
-$processus->on('timeout', function (Hoa\Core\Event\Bucket $bucket) {
+$processus->on('timeout', function (Hoa\Event\Bucket $bucket) {
     echo 'TIMEOUT, terminate', "\n";
     $bucket->getSource()->terminate();
 

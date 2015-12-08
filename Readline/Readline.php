@@ -36,8 +36,8 @@
 
 namespace Hoa\Console\Readline;
 
+use Hoa\Consistency;
 use Hoa\Console;
-use Hoa\Core;
 use Hoa\Ustring;
 
 /**
@@ -1192,4 +1192,4 @@ Console::advancedInteraction();
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Console\Readline\Readline');
+Consistency::flexEntity('Hoa\Console\Readline\Readline');

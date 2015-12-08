@@ -36,7 +36,7 @@
 
 namespace Hoa\Console\Readline\Autocompleter;
 
-use Hoa\Core;
+use Hoa\Consistency;
 
 /**
  * Interface \Hoa\Console\Readline\Autocompleter.
@@ -69,4 +69,4 @@ interface Autocompleter
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\Console\Readline\Autocompleter\Autocompleter');
+Consistency::flexEntity('Hoa\Console\Readline\Autocompleter\Autocompleter');
