@@ -181,7 +181,7 @@ window is resized by listening the `hoa://Event/Console/Window:resize` event
 channel:
 
 ```php
-event('hoa://Event/Console/Window:resize')
+Hoa\Event\Event::getEvent('hoa://Event/Console/Window:resize')
     ->attach(function (Hoa\Event\Bucket $bucket) {
         $data = $bucket->getData();
         $size = $data['size'];

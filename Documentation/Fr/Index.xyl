@@ -137,7 +137,7 @@ print_r(Hoa\Console\Window::getPosition());
 
 declare(ticks = 1);
 
-event('hoa://Event/Console/Window:resize')
+Hoa\Event\Event::getEvent('hoa://Event/Console/Window:resize')
     ->attach(function (Hoa\Event\Bucket $bucket) {
         $data = $bucket->getData();
         $size = $data['size'];
