@@ -414,7 +414,7 @@ class Console
 /**
  * Restore interaction.
  */
-Core::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
+Consistency::registerShutdownFunction('Hoa\Console\Console', 'restoreInteraction');
 
 /**
  * Flex entity.
