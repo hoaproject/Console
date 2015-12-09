@@ -293,4 +293,4 @@ Console::advancedInteraction();
 /**
  * Untrack mouse.
  */
-Consistency::registerShutdownFunction('\Hoa\Console\Mouse', 'untrack');
+Consistency::registerShutdownFunction(xcallable('Hoa\Console\Mouse::untrack'));
