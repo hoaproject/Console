@@ -120,8 +120,7 @@ print_r(Hoa\Console\Window::getPosition());
   <a href="http://php.net/stream_select">the <code>stream_select</code>
   function</a>, this is a <strong>detail</strong>, only present to test our
   code, else the program will terminate directly. Thus:</p>
-  <pre><code class="language-php">from('Hoa')
--> import('Console.Window', true); // make sure that it is loaded.
+  <pre><code class="language-php">Consistency\Autoloader::load('Hoa\Console\Window'); // make sure it is loaded.
 
 declare(ticks = 1);
 
