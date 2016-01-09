@@ -1124,12 +1124,7 @@ NULL</code></pre>
   retour de notre programme sera donné par la valeur de retour de notre
   contrôleur et de notre action. En cas d'erreur, nous l'afficherons et nous
   forcerons un code de retour supérieur à zéro. Ainsi :</p>
-  <pre><code class="language-php">// Where is our Application/ directory?
-Hoa\Core\Core::getInstance()->initialize([
-    'root.application' => '(:cwd:)/Application'
-]);
-
-try {
+  <pre><code class="language-php">try {
     // Prepare the router.
     $router = new Hoa\Router\Cli();
     $router->get(

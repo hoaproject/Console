@@ -1069,12 +1069,7 @@ NULL</code></pre>
   of our program will be given by the value returned by our controller and
   action. If an error occurred, we will print it and force an exit code greater
   than zero. Thus:</p>
-  <pre><code class="language-php">// Where is our Application/ directory?
-Hoa\Core\Core::getInstance()->initialize([
-    'root.application' => '(:cwd:)/Application'
-]);
-
-try {
+  <pre><code class="language-php">try {
     // Prepare the router.
     $router = new Hoa\Router\Cli();
     $router->get(

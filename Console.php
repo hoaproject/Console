@@ -37,7 +37,6 @@
 namespace Hoa\Console;
 
 use Hoa\Consistency;
-use Hoa\Core;
 
 /**
  * Class \Hoa\Console.
