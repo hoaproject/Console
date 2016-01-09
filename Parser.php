@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,7 +43,7 @@ namespace Hoa\Console;
  * See the parse() method to get more informations about command-line
  * vocabulary, patterns, limitations, etc.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Parser
@@ -247,7 +247,7 @@ class Parser
      * @param   array  $input    Intput.
      * @return  void
      */
-    protected function addInput(Array $input)
+    protected function addInput(array $input)
     {
         $handle = $input['i'];
 
@@ -268,7 +268,7 @@ class Parser
      * @param   array  $switch    Switch.
      * @return  void
      */
-    protected function addBoolSwitch(Array $switch)
+    protected function addBoolSwitch(array $switch)
     {
         $this->addSwitch($switch['b'], true);
 
@@ -281,7 +281,7 @@ class Parser
      * @param   array  $switch    Switch.
      * @return  void
      */
-    protected function addValuedSwitch(Array $switch)
+    protected function addValuedSwitch(array $switch)
     {
         $this->addSwitch($switch['b'], $switch['s'], $switch[4]);
 
@@ -441,7 +441,7 @@ class Parser
      * @todo    Could be ameliorate with a ":" explode, and some eval.
      *          Check if operands are integer.
      */
-    public function parseSpecialValue($value, Array $keywords = [])
+    public function parseSpecialValue($value, array $keywords = [])
     {
         $out = [];
 

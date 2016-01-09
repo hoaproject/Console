@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,7 +44,7 @@ use Hoa\Stream;
  *
  * Manipulate a processus as a stream.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class          Processus
@@ -347,10 +347,10 @@ class          Processus
      */
     public function __construct(
         $command,
-        Array $options     = null,
-        Array $descriptors = null,
+        array $options     = null,
+        array $descriptors = null,
         $cwd               = null,
-        Array $environment = null,
+        array $environment = null,
         $timeout           = 30
     ) {
         $this->setCommand($command);
@@ -835,7 +835,7 @@ class          Processus
      * @param   int     $pipe     Pipe descriptor.
      * @return  mixed
      */
-    public function writeArray(Array $array, $pipe = 0)
+    public function writeArray(array $array, $pipe = 0)
     {
         $array = var_export($array, true);
 
@@ -979,7 +979,7 @@ class          Processus
      * @param   array  $options    Options (option => value, or input).
      * @return  array
      */
-    protected function setOptions(Array $options)
+    protected function setOptions(array $options)
     {
         foreach ($options as &$option) {
             $option = escapeshellarg($option);
@@ -1051,7 +1051,7 @@ class          Processus
      * @param   array  $environment    Environment.
      * @return  array
      */
-    protected function setEnvironment(Array $environment)
+    protected function setEnvironment(array $environment)
     {
         $old                = $this->_environment;
         $this->_environment = $environment;

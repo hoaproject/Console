@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,7 @@ use Hoa\Test;
  *
  * Test suite of the mouse.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Mouse extends Test\Unit\Suite
@@ -177,7 +177,7 @@ class Mouse extends Test\Unit\Suite
         );
     }
 
-    public function _case_track($x, $y, $pointerActionCode, $listenerName, Array $listenerData)
+    public function _case_track($x, $y, $pointerActionCode, $listenerName, array $listenerData)
     {
         $this
             ->given(

@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,7 +46,7 @@ use Hoa\View;
  *
  * A structure, given to action, that holds some important data.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Kit extends Dispatcher\Kit
@@ -121,7 +121,7 @@ class Kit extends Dispatcher\Kit
      *                             \Hoa\Console\GetOption.
      * @return  array
      */
-    public function setOptions(Array $options)
+    public function setOptions(array $options)
     {
         $old           = $this->options;
         $this->options = $options;
@@ -146,7 +146,7 @@ class Kit extends Dispatcher\Kit
      *                                 associated to the definition.
      * @return  string
      */
-    public function makeUsageOptionsList(Array $definitions = [])
+    public function makeUsageOptionsList(array $definitions = [])
     {
         $out = [];
 
@@ -187,7 +187,7 @@ class Kit extends Dispatcher\Kit
      * @param   array  $solutions    Solutions.
      * @return  void
      */
-    public function resolveOptionAmbiguity(Array $solutions)
+    public function resolveOptionAmbiguity(array $solutions)
     {
         echo
             'You have made a typo in the option ',

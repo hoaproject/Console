@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -41,7 +41,7 @@ namespace Hoa\Console\Readline\Autocompleter;
  *
  * Aggregate several autocompleters.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class Aggregate implements Autocompleter
@@ -61,7 +61,7 @@ class Aggregate implements Autocompleter
      * @param   array  $autocompleters    Auto-completers.
      * @return  void
      */
-    public function __construct(Array $autocompleters)
+    public function __construct(array $autocompleters)
     {
         $this->setAutocompleters($autocompleters);
 
@@ -108,7 +108,7 @@ class Aggregate implements Autocompleter
      * @param   array  $autocompleters    Auto-completers.
      * @return  \ArrayObject
      */
-    protected function setAutocompleters(Array $autocompleters)
+    protected function setAutocompleters(array $autocompleters)
     {
         $old                   = $this->_autocompleters;
         $this->_autocompleters = new \ArrayObject($autocompleters);

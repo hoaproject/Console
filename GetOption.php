@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Hoa community. All rights reserved.
+ * Copyright © 2007-2016, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,7 @@ use Hoa\Ustring;
  * And, of course, it proposes the getOption method, that allow user to loop
  * easily the command options/arguments.
  *
- * @copyright  Copyright © 2007-2015 Hoa community
+ * @copyright  Copyright © 2007-2016 Hoa community
  * @license    New BSD License
  */
 class GetOption
@@ -133,7 +133,7 @@ class GetOption
      * @return  void
      * @throws  \Hoa\Console\Exception
      */
-    public function __construct(Array $options, Parser $parser)
+    public function __construct(array $options, Parser $parser)
     {
         $this->_options = $options;
         $this->_parser  = $parser;
@@ -304,7 +304,7 @@ class GetOption
      * @return  void
      * @throws  \Hoa\Console\Exception
      */
-    public function resolveOptionAmbiguity(Array $solutions)
+    public function resolveOptionAmbiguity(array $solutions)
     {
         if (!isset($solutions['solutions']) ||
             !isset($solutions['value']) ||
