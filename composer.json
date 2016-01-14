@@ -26,9 +26,9 @@
         "hoa/consistency": "~1.0",
         "hoa/event"      : "~1.0",
         "hoa/exception"  : "~1.0",
-        "hoa/file"       : "~0.0",
+        "hoa/file"       : "~1.0",
         "hoa/protocol"   : "~1.0",
-        "hoa/stream"     : "~0.0",
+        "hoa/stream"     : "~1.0",
         "hoa/ustring"    : "~4.0"
     },
     "require-dev": {
