@@ -64,6 +64,7 @@ class Output implements Stream\IStream\Out
     protected $_output              = null;
 
 
+
     /**
      * Wraps an `Hoa\Stream\IStream\Out` stream.
      *
@@ -74,6 +75,16 @@ class Output implements Stream\IStream\Out
         $this->_output = $output;
 
         return;
+    }
+
+    /**
+     * Get the real output stream.
+     *
+     * @return  \Hoa\Stream\IStream\Out
+     */
+    public function getStream()
+    {
+        return $this->_output;
     }
 
     /**
@@ -249,15 +260,5 @@ class Output implements Stream\IStream\Out
     public function isMultiplexerConsidered()
     {
         return $this->_considerMultiplexer;
-    }
-
-    /**
-     * Get the real output stream.
-     *
-     * @return  \Hoa\Stream\IStream\Out
-     */
-    public function getStream()
-    {
-        return $this->_output;
     }
 }
