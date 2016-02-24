@@ -261,4 +261,14 @@ class Output implements Stream\IStream\Out
     {
         return $this->_considerMultiplexer;
     }
+
+    /**
+     * Get the real output stream.
+     *
+     * @return  \Hoa\Stream\IStream\Out
+     */
+    public function getStream()
+    {
+        return $this->_output;
+    }
 }
