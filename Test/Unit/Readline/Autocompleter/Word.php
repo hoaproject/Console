@@ -128,7 +128,7 @@ class Word extends Test\Unit\Suite
             ->when($result = $autocompleter->getWordDefinition())
             ->then
                 ->string($result)
-                    ->isEqualTo('\b\w+\b');
+                    ->isEqualTo('\b\w+');
     }
 
     public function case_set_words()

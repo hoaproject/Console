@@ -104,7 +104,7 @@ class Word implements Autocompleter
      */
     public function getWordDefinition()
     {
-        return '\b\w+\b';
+        return '\b\w+';
     }
 
     /**

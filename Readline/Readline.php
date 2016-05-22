@@ -901,31 +901,23 @@ class Readline
         }
 
         $matches = preg_match_all(
-            '#' . $autocompleter->getWordDefinition() . '#u',
-            $line,
-            $words,
-            PREG_OFFSET_CAPTURE
+            '#' . $autocompleter->getWordDefinition() . '$#u',
+            mb_substr($line, 0, $current),
+            $words
         );
 
         if (0 === $matches) {
             return $state;
         }
 
-        for (
-            $i = 0, $max = count($words[0]);
-            $i < $max && $current > $words[0][$i][1];
-            ++$i
-        );
+        $word = $words[0][0];
 
-        $word = $words[0][$i - 1];
-
-        if ('' === trim($word[0])) {
+        if ('' === trim($word)) {
             return $state;
         }
 
-        $prefix   = mb_substr($word[0], 0, $current - $word[1]);
-        $solution = $autocompleter->complete($prefix);
-        $length   = mb_strlen($prefix);
+        $solution = $autocompleter->complete($word);
+        $length   = mb_strlen($word);
 
         if (null === $solution) {
             return $state;
