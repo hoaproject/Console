@@ -345,8 +345,8 @@ $long  = null;
 
 //          short name                  value
 //               ↓                        ↓
-while(false !== $c = $options->getOption($v)) {
-    switch($c) {
+while (false !== $c = $options->getOption($v)) {
+    switch ($c) {
         case 's':
             $short = true;
 
