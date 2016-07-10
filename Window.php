@@ -272,7 +272,7 @@ class Window implements Event\Source
      *
      * @param   string  $directions    Directions.
      * @param   int     $repeat        How many times do we scroll?
-     * @reutrn  void
+     * @return  void
      */
     public static function scroll($directions, $repeat = 1)
     {
