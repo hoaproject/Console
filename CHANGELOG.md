@@ -1,3 +1,12 @@
+# 3.16.09.06
+
+  * Documentation: Fix API documentation. (Alexis von Glasow, 2016-07-11T00:01:57+02:00)
+  * Quality: Fix example CS in the `README.md`. (Ivan Enderlin, 2016-07-01T16:37:50+02:00)
+  * Autocompleter: Force to work on a sub-line. (Ivan Enderlin, 2016-05-22T15:46:58+02:00)
+  * Quality: Fix methods ordering. (Ivan Enderlin, 2016-02-24T07:28:41+01:00)
+  * Implement `Hoa\Console\Output::getStream` which is now required by `Hoa\Stream\IStream\Out`. (Metalaka, 2015-11-01T20:15:43+01:00)
+  * Fix phpDoc. (Metalaka, 2015-11-01T20:13:12+01:00)
+
 # 3.16.01.14
 
   * Composer: New stable libraries. (Ivan Enderlin, 2016-01-14T21:45:35+01:00)
