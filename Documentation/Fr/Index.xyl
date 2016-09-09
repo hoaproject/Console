@@ -730,7 +730,7 @@ var_dump($rl->readLine('> '));</code></pre>
   souplesse. Nous pouvons ainsi toujours ajouter ou supprimer des
   auto-compléteurs après les avoir déclarés dans le constructeur.</p>
   <figure>
-    <img src="http://central.hoa-project.net/Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw" />
+    <img src="https://central.hoa-project.net/Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw" />
     <figcaption>Exemple d'une agrégation de l'auto-compléteur
     <code>Hoa\Console\Readline\Autocompleter\Path</code> avec
     <code>Hoa\Console\Readline\Autocompleter\Word</code>.</figcaption>

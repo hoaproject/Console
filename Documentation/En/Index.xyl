@@ -687,7 +687,7 @@ var_dump($rl->readLine('> '));</code></pre>
   more flexibility. We can consequently add or delete auto-completers after
   having declared them in the constructor.</p>
   <figure>
-    <img src="http://central.hoa-project.net/Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw" />
+    <img src="https://central.hoa-project.net/Resource/Library/Console/Documentation/Image/Readline_autocompleters.gif?format=raw" />
     <figcaption>Example of an aggregation of the
     <code>Hoa\Console\Readline\Autocompleter\Path</code> auto-completer with
     <code>Hoa\Console\Readline\Autocompleter\Word</code>.</figcaption>
