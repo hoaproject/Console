@@ -26,6 +26,8 @@
 This library allows to interact easily with a terminal: getoption, cursor,
 window, processus, readline etc.
 
+[Learn more](https://central.hoa-project.net/Documentation/Library/Console).
+
 ## Installation
 
 With [Composer](https://getcomposer.org/), to include this library into
