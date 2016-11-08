@@ -1,3 +1,11 @@
+# 3.16.11.08
+
+  * Documentation: Add the “Learn more” link. (Ivan Enderlin, 2016-10-14T23:40:05+02:00)
+  * Documentation: New `README.md` file. (Ivan Enderlin, 2016-10-14T23:29:22+02:00)
+  * Documentation: Fix `docs` and `source` links. (Ivan Enderlin, 2016-10-05T20:28:46+02:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T20:12:17+02:00)
+  * Documentation: Use TLS on `central.hoa`. (Ivan Enderlin, 2016-09-09T14:59:03+02:00)
+
 # 3.16.09.06
 
   * Documentation: Fix API documentation. (Alexis von Glasow, 2016-07-11T00:01:57+02:00)
