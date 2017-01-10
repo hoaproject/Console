@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2016, Hoa community. All rights reserved.
+ * Copyright © 2007-2017, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -47,7 +47,7 @@ use Hoa\Event;
  * if the window has been resized. Please, see the constructor documentation to
  * get more informations.
  *
- * @copyright  Copyright © 2007-2016 Hoa community
+ * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Window implements Event\Source
@@ -66,7 +66,6 @@ class Window implements Event\Source
      * We need to declare(ticks = 1) in the main script to ensure that the event
      * is fired. Also, we need the pcntl_signal() function enabled.
      *
-     * @return  void
      */
     private function __construct()
     {
