@@ -1,3 +1,7 @@
+# 3.17.01.11
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-10T12:48:50+01:00)
+
 # 3.16.11.08
 
   * Documentation: Add the “Learn more” link. (Ivan Enderlin, 2016-10-14T23:40:05+02:00)
