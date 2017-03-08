@@ -633,10 +633,10 @@ class Tput
 
 
         // Names.
-        $i = $headers['header_size'];
-
-        list($out['name'], $out['description']) =
-            explode('|', substr($data, $i, $headers['names_size'] - 1));
+        $i                  = $headers['header_size'];
+        $nameAndDescription = explode('|', substr($data, $i, $headers['names_size'] - 1));
+        $out['name']        = $nameAndDescription[0];
+        $out['description'] = $nameAndDescription[1];
 
         // Booleans.
         $i            += $headers['names_size'];
