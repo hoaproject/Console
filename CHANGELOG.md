@@ -1,3 +1,8 @@
+# 3.17.05.02
+
+  * Tput: Deterministic order for `name` and `desc…`. (Ivan Enderlin, 2017-03-08T09:26:31+01:00)
+  * CI: Set up Travis. (Ivan Enderlin, 2017-03-08T08:58:58+01:00)
+
 # 3.17.01.11
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-10T12:48:50+01:00)
