@@ -820,7 +820,7 @@ class Tput
         $paths[] = '/usr/local/share/lib/terminfo';
         $paths[] = '/usr/local/lib/terminfo';
         $paths[] = '/usr/local/ncurses/lib/terminfo';
-        $paths[] = 'hoa://Library/Console/Terminfo';
+        $paths[] = 'hoa://Library/Console/Source/Terminfo';
 
         $term      = $term ?: static::getTerm();
         $fileHexa  = dechex(ord($term[0])) . DS . $term;

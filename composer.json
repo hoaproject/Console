@@ -39,7 +39,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\Console\\": "."
+            "Hoa\\Console\\"      : "Source",
+            "Hoa\\Console\\Bin\\" : "Bin",
+            "Hoa\\Console\\Test\\": "Test"
         }
     },
     "suggest": {

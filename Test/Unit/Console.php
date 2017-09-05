@@ -152,7 +152,7 @@ class Console extends Test\Unit\Suite
     public function case_set_tput()
     {
         $this
-            ->given($tput = new LUT\Tput('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new LUT\Tput('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = SUT::setTput($tput))
             ->then
                 ->variable($result)

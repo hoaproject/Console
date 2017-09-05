@@ -55,7 +55,7 @@ class Mouse extends Test\Unit\Suite
     public function beforeTestMethod($methodName)
     {
         parent::beforeTestMethod($methodName);
-        LUT::setTput(new LUT\Tput('hoa://Library/Console/Terminfo/78/xterm-256color'));
+        LUT::setTput(new LUT\Tput('hoa://Library/Console/Source/Terminfo/78/xterm-256color'));
 
         return;
     }

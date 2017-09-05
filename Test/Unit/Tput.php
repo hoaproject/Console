@@ -95,12 +95,12 @@ class Tput extends Test\Unit\Suite
     public function case_all_informations()
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->getInformations())
             ->then
                 ->array($result)
                     ->isIdenticalTo([
-                        'file'    => 'hoa://Library/Console/Terminfo/78/xterm',
+                        'file'    => 'hoa://Library/Console/Source/Terminfo/78/xterm',
                         'headers' => [
                             'data_size'         => 3258,
                             'header_size'       => 12,
@@ -347,7 +347,7 @@ class Tput extends Test\Unit\Suite
     public function case_has()
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->has('auto_left_margin'))
             ->then
                 ->boolean($result)
@@ -362,7 +362,7 @@ class Tput extends Test\Unit\Suite
     public function case_has_unknown_boolean()
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->has('💩'))
             ->then
                 ->boolean($result)
@@ -372,7 +372,7 @@ class Tput extends Test\Unit\Suite
     public function case_count()
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->count('columns'))
             ->then
                 ->integer($result)
@@ -382,7 +382,7 @@ class Tput extends Test\Unit\Suite
     public function case_count_unknown_integer()
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->count('💩'))
             ->then
                 ->integer($result)
@@ -392,7 +392,7 @@ class Tput extends Test\Unit\Suite
     public function case_get()
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->get('cursor_down'))
             ->then
                 ->string($result)
@@ -402,7 +402,7 @@ class Tput extends Test\Unit\Suite
     public function case_get_unknown_string()
     {
         $this
-            ->given($tput = new SUT('hoa://Library/Console/Terminfo/78/xterm'))
+            ->given($tput = new SUT('hoa://Library/Console/Source/Terminfo/78/xterm'))
             ->when($result = $tput->get('💩'))
             ->then
                 ->variable($result)
