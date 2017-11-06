@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Hoa
@@ -43,7 +43,6 @@ use Hoa\Console;
  *
  * Get terminal capabilities.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Termcap extends Console\Dispatcher\Kit
@@ -142,7 +141,7 @@ class Termcap extends Console\Dispatcher\Kit
      *
      * @return  void
      */
-    public function usage()
+    public function usage(): void
     {
         echo
             'Usage   : console:termcap', "\n",
@@ -171,7 +170,7 @@ class Termcap extends Console\Dispatcher\Kit
      * @param   array  $data    Data.
      * @return  void
      */
-    public static function format(array $data)
+    public static function format(array $data): void
     {
         $max = 0;
 

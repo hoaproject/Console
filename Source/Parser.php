@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -37,14 +39,9 @@
 namespace Hoa\Console;
 
 /**
- * Class \Hoa\Console\Parser.
- *
  * This class parses a command line.
  * See the parse() method to get more informations about command-line
  * vocabulary, patterns, limitations, etc.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Parser
 {
@@ -156,7 +153,7 @@ class Parser
      * @param   string  $command    Command to parse.
      * @return  void
      */
-    public function parse($command)
+    public function parse(string $command): void
     {
         unset($this->_parsed);
         $this->_parsed = [
@@ -247,7 +244,7 @@ class Parser
      * @param   array  $input    Intput.
      * @return  void
      */
-    protected function addInput(array $input)
+    protected function addInput(array $input): void
     {
         $handle = $input['i'];
 
@@ -268,7 +265,7 @@ class Parser
      * @param   array  $switch    Switch.
      * @return  void
      */
-    protected function addBoolSwitch(array $switch)
+    protected function addBoolSwitch(array $switch): void
     {
         $this->addSwitch($switch['b'], true);
 
@@ -281,7 +278,7 @@ class Parser
      * @param   array  $switch    Switch.
      * @return  void
      */
-    protected function addValuedSwitch(array $switch)
+    protected function addValuedSwitch(array $switch): void
     {
         $this->addSwitch($switch['b'], $switch['s'], $switch[4]);
 
@@ -296,7 +293,7 @@ class Parser
      * @param   string  $escape    Character to escape.
      * @return  void
      */
-    protected function addSwitch($name, $value, $escape = null)
+    protected function addSwitch(string $name, string $value, string $escape = null)
     {
         if (substr($name, 0, 2) == '--') {
             return $this->addSwitch(substr($name, 2), $value, $escape);
@@ -348,7 +345,7 @@ class Parser
      * @param   string  $value    The switch value.
      * @return  void
      */
-    public function transferSwitchToInput($name, &$value)
+    public function transferSwitchToInput(string $name, string &$value): void
     {
         if (!isset($this->_parsed['switch'][$name])) {
             return;
@@ -366,7 +363,7 @@ class Parser
      *
      * @return  array
      */
-    public function getInputs()
+    public function getInputs(): array
     {
         return $this->_parsed['input'];
     }
@@ -409,7 +406,7 @@ class Parser
         &$x = null,
         &$y = null,
         &$z = null
-    ) {
+    ): void {
         $inputs = $this->getInputs();
         $i      = 'a';
         $ii     = -1;
@@ -417,8 +414,6 @@ class Parser
         while (isset($inputs[++$ii]) && $i <= 'z') {
             ${$i++} = $inputs[$ii];
         }
-
-        return;
     }
 
     /**
@@ -426,7 +421,7 @@ class Parser
      *
      * @return  array
      */
-    public function getSwitches()
+    public function getSwitches(): array
     {
         return $this->_parsed['switch'];
     }
@@ -441,7 +436,7 @@ class Parser
      * @todo    Could be ameliorate with a ":" explode, and some eval.
      *          Check if operands are integer.
      */
-    public function parseSpecialValue($value, array $keywords = [])
+    public function parseSpecialValue(string $value, array $keywords = []): array
     {
         $out = [];
 
@@ -492,7 +487,7 @@ class Parser
      * @param   bool  $longonly    The long-only value.
      * @return  bool
      */
-    public function setLongOnly($longonly = false)
+    public function setLongOnly(bool $longonly = false): bool
     {
         $old             = $this->_longonly;
         $this->_longonly = $longonly;
@@ -505,7 +500,7 @@ class Parser
      *
      * @return  bool
      */
-    public function getLongOnly()
+    public function getLongOnly(): bool
     {
         return $this->_longonly;
     }

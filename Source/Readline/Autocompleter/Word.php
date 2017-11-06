@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -41,7 +43,6 @@ namespace Hoa\Console\Readline\Autocompleter;
  *
  * The simplest auto-completer: complete a word.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Word implements Autocompleter
@@ -101,7 +102,7 @@ class Word implements Autocompleter
      *
      * @return  string
      */
-    public function getWordDefinition()
+    public function getWordDefinition(): string
     {
         return '\b\w+';
     }
@@ -112,7 +113,7 @@ class Word implements Autocompleter
      * @param   array  $words    Words.
      * @return  array
      */
-    public function setWords(array $words)
+    public function setWords(array $words): array
     {
         $old          = $this->_words;
         $this->_words = $words;
@@ -125,7 +126,7 @@ class Word implements Autocompleter
      *
      * @return  array
      */
-    public function getWords()
+    public function getWords(): array
     {
         return $this->_words;
     }

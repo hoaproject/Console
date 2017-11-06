@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite of the input object.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Input extends Test\Unit\Suite
 {
-    public function case_is_a_stream()
+    public function case_is_a_stream(): void
     {
         $this
             ->when($result = new SUT())
@@ -59,7 +60,7 @@ class Input extends Test\Unit\Suite
                     ->isInstanceOf('Hoa\Stream\IStream\In');
     }
 
-    public function case_eof()
+    public function case_eof(): void
     {
         $this
             ->given(
@@ -72,7 +73,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo($file->eof());
     }
 
-    public function case_read()
+    public function case_read(): void
     {
         $this
             ->given(
@@ -87,7 +88,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo('foo');
     }
 
-    public function case_read_string()
+    public function case_read_string(): void
     {
         $this
             ->given(
@@ -102,7 +103,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo('foo');
     }
 
-    public function case_read_character()
+    public function case_read_character(): void
     {
         $this
             ->given(
@@ -117,7 +118,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo('f');
     }
 
-    public function case_read_boolean_true()
+    public function case_read_boolean_true(): void
     {
         $this
             ->given(
@@ -132,7 +133,7 @@ class Input extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_read_boolean_false()
+    public function case_read_boolean_false(): void
     {
         $this
             ->given(
@@ -147,7 +148,7 @@ class Input extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_read_integer()
+    public function case_read_integer(): void
     {
         $this
             ->given(
@@ -162,7 +163,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo(42);
     }
 
-    public function case_read_float()
+    public function case_read_float(): void
     {
         $this
             ->given(
@@ -177,7 +178,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo(4.2);
     }
 
-    public function case_read_array()
+    public function case_read_array(): void
     {
         $this
             ->given(
@@ -195,7 +196,7 @@ class Input extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_read_line()
+    public function case_read_line(): void
     {
         $this
             ->given(
@@ -210,7 +211,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo('foo' . "\n");
     }
 
-    public function case_read_all()
+    public function case_read_all(): void
     {
         $this
             ->given(
@@ -226,7 +227,7 @@ class Input extends Test\Unit\Suite
                     ->isEqualTo($content);
     }
 
-    public function case_scanf()
+    public function case_scanf(): void
     {
         $this
             ->given(

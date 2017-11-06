@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -46,7 +48,6 @@ use Hoa\View;
  *
  * A structure, given to action, that holds some important data.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Kit extends Dispatcher\Kit
@@ -100,7 +101,7 @@ class Kit extends Dispatcher\Kit
      * @param   string  $short           Please, see original API.
      * @return  mixed
      */
-    public function getOption(&$optionValue, $short = null)
+    public function getOption(&$optionValue, string $short = null)
     {
         if (null === $this->_options && !empty($this->options)) {
             $this->setOptions($this->options);
@@ -120,7 +121,7 @@ class Kit extends Dispatcher\Kit
      *                             \Hoa\Console\GetOption.
      * @return  array
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): array
     {
         $old           = $this->options;
         $this->options = $options;
@@ -145,7 +146,7 @@ class Kit extends Dispatcher\Kit
      *                                 associated to the definition.
      * @return  string
      */
-    public function makeUsageOptionsList(array $definitions = [])
+    public function makeUsageOptionsList(array $definitions = []): string
     {
         $out = [];
 
@@ -160,9 +161,11 @@ class Kit extends Dispatcher\Kit
                            Console\GetOption::OPTIONAL_ARGUMENT
                         ? '[=]'
                         : '')),
-                (isset($definitions[$options[Console\GetOption::OPTION_VAL]])
+                (
+                    isset($definitions[$options[Console\GetOption::OPTION_VAL]])
                     ? $definitions[$options[Console\GetOption::OPTION_VAL]]
-                    : (isset($definitions[$options[0]])
+                    : (
+                        isset($definitions[$options[0]])
                         ? $definitions[$options[Console\GetOption::OPTION_NAME]]
                         : null
                     )
@@ -186,7 +189,7 @@ class Kit extends Dispatcher\Kit
      * @param   array  $solutions    Solutions.
      * @return  void
      */
-    public function resolveOptionAmbiguity(array $solutions)
+    public function resolveOptionAmbiguity(array $solutions): void
     {
         echo
             'You have made a typo in the option ',
@@ -213,7 +216,7 @@ class Kit extends Dispatcher\Kit
      * @param   bool    $status    The operation status.
      * @return  void
      */
-    public function status($text, $status)
+    public function status(string $text, bool $status): void
     {
         $window = Console\Window::getSize();
         $out    =
@@ -239,7 +242,7 @@ class Kit extends Dispatcher\Kit
      * @param   string  $prefix    Prefix.
      * @return  string
      */
-    public function readLine($prefix = null)
+    public function readLine(string $prefix = null): string
     {
         static $_rl = null;
 
@@ -256,7 +259,7 @@ class Kit extends Dispatcher\Kit
      * @param   string  $prefix    Prefix.
      * @return  string
      */
-    public function readPassword($prefix = null)
+    public function readPassword(string $prefix = null): string
     {
         static $_rl = null;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -47,12 +49,11 @@ use Hoa\Test;
  *
  * Test suite of the mouse.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Mouse extends Test\Unit\Suite
 {
-    public function beforeTestMethod($methodName)
+    public function beforeTestMethod($methodName): void
     {
         parent::beforeTestMethod($methodName);
         LUT::setTput(new LUT\Tput('hoa://Library/Console/Source/Terminfo/78/xterm-256color'));
@@ -60,7 +61,7 @@ class Mouse extends Test\Unit\Suite
         return;
     }
 
-    public function case_get_instance()
+    public function case_get_instance(): void
     {
         $this
             ->when($result = SUT::getInstance())
@@ -177,7 +178,7 @@ class Mouse extends Test\Unit\Suite
         );
     }
 
-    public function _case_track($x, $y, $pointerActionCode, $listenerName, array $listenerData)
+    public function _case_track($x, $y, $pointerActionCode, $listenerName, array $listenerData): void
     {
         $this
             ->given(
@@ -204,7 +205,7 @@ class Mouse extends Test\Unit\Suite
 
                 SUT::getInstance()->on(
                     $listenerName,
-                    function (Event\Bucket $bucket) use (&$_listenerData) {
+                    function (Event\Bucket $bucket) use (&$_listenerData): void {
                         $_listenerData = $bucket->getData();
 
                         return;
@@ -228,7 +229,7 @@ class Mouse extends Test\Unit\Suite
                     ->isEqualTo($listenerData);
     }
 
-    public function case_untrack_when_not_tracked()
+    public function case_untrack_when_not_tracked(): void
     {
         $this
             ->when($result = SUT::untrack())

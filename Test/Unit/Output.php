@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,12 +46,11 @@ use Hoa\Test;
  *
  * Test suite of the output object.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Output extends Test\Unit\Suite
 {
-    public function case_is_a_stream()
+    public function case_is_a_stream(): void
     {
         $this
             ->when($result = new SUT())
@@ -58,7 +59,7 @@ class Output extends Test\Unit\Suite
                     ->isInstanceOf('Hoa\Stream\IStream\Out');
     }
 
-    public function case_write()
+    public function case_write(): void
     {
         $this
             ->given($output = new SUT())
@@ -68,7 +69,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('foo');
     }
 
-    public function case_write_string()
+    public function case_write_string(): void
     {
         $this
             ->given($output = new SUT())
@@ -78,7 +79,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('123');
     }
 
-    public function case_write_character()
+    public function case_write_character(): void
     {
         $this
             ->given($output = new SUT())
@@ -88,7 +89,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('f');
     }
 
-    public function case_write_boolean_true()
+    public function case_write_boolean_true(): void
     {
         $this
             ->given($output = new SUT())
@@ -98,7 +99,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('1');
     }
 
-    public function case_write_boolean_false()
+    public function case_write_boolean_false(): void
     {
         $this
             ->given($output = new SUT())
@@ -108,7 +109,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('0');
     }
 
-    public function case_write_integer()
+    public function case_write_integer(): void
     {
         $this
             ->given($output = new SUT())
@@ -118,7 +119,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('-42');
     }
 
-    public function case_write_float()
+    public function case_write_float(): void
     {
         $this
             ->given($output = new SUT())
@@ -128,7 +129,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('-4.2');
     }
 
-    public function case_write_array()
+    public function case_write_array(): void
     {
         $this
             ->given($output = new SUT())
@@ -142,7 +143,7 @@ class Output extends Test\Unit\Suite
                     );
     }
 
-    public function case_write_line_no_newline()
+    public function case_write_line_no_newline(): void
     {
         $this
             ->given($output = new SUT())
@@ -152,7 +153,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('foo' . "\n");
     }
 
-    public function case_write_line_with_newline()
+    public function case_write_line_with_newline(): void
     {
         $this
             ->given($output = new SUT())
@@ -162,7 +163,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('foo' . "\n");
     }
 
-    public function case_write_line_with_newlines()
+    public function case_write_line_with_newlines(): void
     {
         $this
             ->given($output = new SUT())
@@ -172,7 +173,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('foo' . "\n");
     }
 
-    public function case_write_all()
+    public function case_write_all(): void
     {
         $this
             ->given($output = new SUT())
@@ -182,7 +183,7 @@ class Output extends Test\Unit\Suite
                     ->isIdenticalTo('foobar');
     }
 
-    public function case_truncate()
+    public function case_truncate(): void
     {
         $this
             ->given($output = new SUT())
@@ -192,7 +193,7 @@ class Output extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_default_multiplexer_consideration()
+    public function case_default_multiplexer_consideration(): void
     {
         $this
             ->given($output = new SUT())
@@ -202,7 +203,7 @@ class Output extends Test\Unit\Suite
                     ->isFalse();
     }
 
-    public function case_consider_multiplexer()
+    public function case_consider_multiplexer(): void
     {
         $this
             ->given($output = new SUT())

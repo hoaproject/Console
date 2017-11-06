@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -46,7 +48,6 @@ use Hoa\Console;
  *     ob_start('Hoa\Console\Chrome\Pager::less');
  *     echo file_get_contents(__FILE__);
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Pager
@@ -56,14 +57,14 @@ class Pager
      *
      * @const string
      */
-    const LESS = 'less';
+    public const LESS = 'less';
 
     /**
      * Represent MORE(1).
      *
      * @const string
      */
-    const MORE = 'more';
+    public const MORE = 'more';
 
 
 
@@ -74,7 +75,7 @@ class Pager
      * @param   int     $mode      Mode (from the output buffer).
      * @return  string
      */
-    public static function less($output, $mode)
+    public static function less(string $output, int $mode): string
     {
         return self::pager($output, $mode, self::LESS);
     }
@@ -86,7 +87,7 @@ class Pager
      * @param   int     $mode      Mode (from the output buffer).
      * @return  string
      */
-    public static function more($output, $mode)
+    public static function more(string $output, int $mode): string
     {
         return self::pager($output, $mode, self::MORE);
     }
@@ -99,7 +100,7 @@ class Pager
      * @param   string  $type      Type. Please, see self::LESS or self::MORE.
      * @return  string
      */
-    public static function pager($output, $mode, $type = null)
+    public static function pager(string $output, int $mode, string $type = null): string
     {
         static $process = null;
 
@@ -107,7 +108,7 @@ class Pager
             $pager
                 = null !== $type
                     ? Console\Processus::locate($type)
-                    : (isset($_ENV['PAGER']) ? $_ENV['PAGER'] : null);
+                    : ($_ENV['PAGER'] ?? null);
 
             if (null === $pager) {
                 return $output;

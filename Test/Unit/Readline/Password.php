@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite of the password readline.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Password extends Test\Unit\Suite
 {
-    public function case_ensure_hidden()
+    public function case_ensure_hidden(): void
     {
         $this
             ->when($result = SUT::STATE_CONTINUE)

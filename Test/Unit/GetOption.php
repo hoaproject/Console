@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,12 +47,11 @@ use Hoa\Test;
  *
  * Test suite of the option reader.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class GetOption extends Test\Unit\Suite
 {
-    public function case_empty()
+    public function case_empty(): void
     {
         $this
             ->given(
@@ -69,7 +70,7 @@ class GetOption extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_one_entry()
+    public function case_one_entry(): void
     {
         $this
             ->given(
@@ -101,7 +102,7 @@ class GetOption extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_more_entries()
+    public function case_more_entries(): void
     {
         $this
             ->given(
@@ -144,7 +145,7 @@ class GetOption extends Test\Unit\Suite
                     ->isNull();
     }
 
-    public function case_ambiguous()
+    public function case_ambiguous(): void
     {
         $this
             ->given(
@@ -173,7 +174,7 @@ class GetOption extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_resolve_option_ambiguity_no_solution()
+    public function case_resolve_option_ambiguity_no_solution(): void
     {
         $this
             ->given(
@@ -188,13 +189,13 @@ class GetOption extends Test\Unit\Suite
                     'option'    => 'baz'
                 ]
             )
-            ->exception(function () use ($options, $solutions) {
+            ->exception(function () use ($options, $solutions): void {
                 $options->resolveOptionAmbiguity($solutions);
             })
                 ->isInstanceOf('Hoa\Console\Exception');
     }
 
-    public function case_resolve_option_ambiguity()
+    public function case_resolve_option_ambiguity(): void
     {
         $this
             ->given(

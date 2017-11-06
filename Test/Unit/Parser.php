@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,7 +46,6 @@ use Hoa\Test;
  *
  * Test suite of the parser.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Parser extends Test\Unit\Suite
@@ -205,7 +206,7 @@ class Parser extends Test\Unit\Suite
         );
     }
 
-    protected function _case($command, array $switches, array $inputs = [])
+    protected function _case($command, array $switches, array $inputs = []): void
     {
         $this
             ->given($parser = new SUT())
@@ -219,7 +220,7 @@ class Parser extends Test\Unit\Suite
                     ->isIdenticalTo($inputs);
     }
 
-    public function case_state_is_reset()
+    public function case_state_is_reset(): void
     {
         $this
             ->given($parser = new SUT())
@@ -241,7 +242,7 @@ class Parser extends Test\Unit\Suite
                     ->isIdenticalTo(['qux']);
     }
 
-    public function case_parse_special_value_list()
+    public function case_parse_special_value_list(): void
     {
         $this
             ->given($parser = new SUT())
@@ -255,7 +256,7 @@ class Parser extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_parse_special_value_list_with_keywords()
+    public function case_parse_special_value_list_with_keywords(): void
     {
         $this
             ->given($parser = new SUT())
@@ -269,7 +270,7 @@ class Parser extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_parse_special_value_list_with_range()
+    public function case_parse_special_value_list_with_range(): void
     {
         $this
             ->given($parser = new SUT())
@@ -285,7 +286,7 @@ class Parser extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_set_long_only()
+    public function case_set_long_only(): void
     {
         $this
             ->given($parser = new SUT())

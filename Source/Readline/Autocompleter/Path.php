@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -41,7 +43,6 @@ namespace Hoa\Console\Readline\Autocompleter;
  *
  * Path autocompleter.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Path implements Autocompleter
@@ -51,7 +52,7 @@ class Path implements Autocompleter
      *
      * @const string
      */
-    const PWD = null;
+    public const PWD = null;
 
     /**
      * Root.
@@ -78,7 +79,7 @@ class Path implements Autocompleter
      *                                          method).
      */
     public function __construct(
-        $root                     = null,
+        string $root                     = null,
         \Closure $iteratorFactory = null
     ) {
         if (null === $root) {
@@ -160,7 +161,7 @@ class Path implements Autocompleter
      *
      * @return  string
      */
-    public function getWordDefinition()
+    public function getWordDefinition(): string
     {
         return '/?[\w\d\\_\-\.]+(/[\w\d\\_\-\.]*)*';
     }
@@ -171,7 +172,7 @@ class Path implements Autocompleter
      * @param   string  $root    Root.
      * @return  string
      */
-    public function setRoot($root)
+    public function setRoot(string $root): string
     {
         $old         = $this->_root;
         $this->_root = $root;
@@ -184,7 +185,7 @@ class Path implements Autocompleter
      *
      * @return  string
      */
-    public function getRoot()
+    public function getRoot(): string
     {
         return $this->_root;
     }
@@ -196,7 +197,7 @@ class Path implements Autocompleter
      *                                        $path of the iterator.
      * @return  string
      */
-    public function setIteratorFactory(\Closure $iteratorFactory)
+    public function setIteratorFactory(\Closure $iteratorFactory): string
     {
         $old                    = $this->_iteratorFactory;
         $this->_iteratorFactory = $iteratorFactory;
@@ -209,7 +210,7 @@ class Path implements Autocompleter
      *
      * @return  \Closure
      */
-    public function getIteratorFactory()
+    public function getIteratorFactory(): \Closure
     {
         return $this->_iteratorFactory;
     }
@@ -219,7 +220,7 @@ class Path implements Autocompleter
      *
      * @return  \Closure
      */
-    public static function getDefaultIteratorFactory()
+    public static function getDefaultIteratorFactory(): \Closure
     {
         return function ($path) {
             return new \DirectoryIterator($path);

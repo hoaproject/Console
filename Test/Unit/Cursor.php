@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -46,12 +48,11 @@ use Hoa\Test;
  *
  * Test suite of the cursor.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Cursor extends Test\Unit\Suite
 {
-    public function beforeTestMethod($methodName)
+    public function beforeTestMethod($methodName): void
     {
         parent::beforeTestMethod($methodName);
         LUT::setTput(new LUT\Tput('hoa://Library/Console/Source/Terminfo/78/xterm-256color'));
@@ -59,7 +60,7 @@ class Cursor extends Test\Unit\Suite
         return;
     }
 
-    public function case_move_u()
+    public function case_move_u(): void
     {
         $this
             ->when(SUT::move('u'))
@@ -68,7 +69,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1A");
     }
 
-    public function case_move_up()
+    public function case_move_up(): void
     {
         $this
             ->when(SUT::move('up'))
@@ -77,7 +78,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1A");
     }
 
-    public function case_move_↑()
+    public function case_move_↑(): void
     {
         $this
             ->when(SUT::move('↑'))
@@ -86,7 +87,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1A");
     }
 
-    public function case_move_↑_repeated()
+    public function case_move_↑_repeated(): void
     {
         $this
             ->when(SUT::move('↑', 42))
@@ -95,7 +96,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[42A");
     }
 
-    public function case_move_r()
+    public function case_move_r(): void
     {
         $this
             ->when(SUT::move('r'))
@@ -104,7 +105,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1C");
     }
 
-    public function case_move_right()
+    public function case_move_right(): void
     {
         $this
             ->when(SUT::move('right'))
@@ -113,7 +114,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1C");
     }
 
-    public function case_move_→()
+    public function case_move_→(): void
     {
         $this
             ->when(SUT::move('→'))
@@ -122,7 +123,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1C");
     }
 
-    public function case_move_→_repeated()
+    public function case_move_→_repeated(): void
     {
         $this
             ->when(SUT::move('→', 42))
@@ -131,7 +132,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[42C");
     }
 
-    public function case_move_d()
+    public function case_move_d(): void
     {
         $this
             ->when(SUT::move('d'))
@@ -140,7 +141,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1B");
     }
 
-    public function case_move_down()
+    public function case_move_down(): void
     {
         $this
             ->when(SUT::move('down'))
@@ -149,7 +150,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1B");
     }
 
-    public function case_move_↓()
+    public function case_move_↓(): void
     {
         $this
             ->when(SUT::move('↓'))
@@ -158,7 +159,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1B");
     }
 
-    public function case_move_↓_repeated()
+    public function case_move_↓_repeated(): void
     {
         $this
             ->when(SUT::move('↓', 42))
@@ -167,7 +168,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[42B");
     }
 
-    public function case_move_l()
+    public function case_move_l(): void
     {
         $this
             ->when(SUT::move('l'))
@@ -176,7 +177,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1D");
     }
 
-    public function case_move_left()
+    public function case_move_left(): void
     {
         $this
             ->when(SUT::move('left'))
@@ -185,7 +186,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1D");
     }
 
-    public function case_move_←()
+    public function case_move_←(): void
     {
         $this
             ->when(SUT::move('←'))
@@ -194,7 +195,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1D");
     }
 
-    public function case_move_←_repeated()
+    public function case_move_←_repeated(): void
     {
         $this
             ->when(SUT::move('←', 42))
@@ -203,7 +204,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[42D");
     }
 
-    public function case_move_sequence()
+    public function case_move_sequence(): void
     {
         $this
             ->when(SUT::move('↑ → ↓ ←'))
@@ -212,7 +213,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1A\033[1C\033[1B\033[1D");
     }
 
-    public function case_move_to_x_y()
+    public function case_move_to_x_y(): void
     {
         $this
             ->when(SUT::moveTo(7, 42))
@@ -221,7 +222,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[42;7H");
     }
 
-    public function case_move_to_x()
+    public function case_move_to_x(): void
     {
         $this
             ->given(
@@ -236,7 +237,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[6n\033[42;153H");
     }
 
-    public function case_move_to_y()
+    public function case_move_to_y(): void
     {
         $this
             ->given(
@@ -251,7 +252,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[6n\033[153;7H");
     }
 
-    public function case_get_position()
+    public function case_get_position(): void
     {
         $this
             ->given(
@@ -271,7 +272,7 @@ class Cursor extends Test\Unit\Suite
                     ]);
     }
 
-    public function case_save()
+    public function case_save(): void
     {
         $this
             ->when(SUT::save())
@@ -280,7 +281,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\0337");
     }
 
-    public function case_restore()
+    public function case_restore(): void
     {
         $this
             ->when(SUT::restore())
@@ -289,7 +290,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\0338");
     }
 
-    public function case_clear_a()
+    public function case_clear_a(): void
     {
         $this
             ->when(SUT::clear('a'))
@@ -298,7 +299,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[H\033[2J\033[1;1H");
     }
 
-    public function case_clear_all()
+    public function case_clear_all(): void
     {
         $this
             ->when(SUT::clear('all'))
@@ -307,7 +308,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[H\033[2J\033[1;1H");
     }
 
-    public function case_clear_↕()
+    public function case_clear_↕(): void
     {
         $this
             ->when(SUT::clear('↕'))
@@ -316,7 +317,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[H\033[2J\033[1;1H");
     }
 
-    public function case_clear_u()
+    public function case_clear_u(): void
     {
         $this
             ->when(SUT::clear('u'))
@@ -325,7 +326,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1J");
     }
 
-    public function case_clear_up()
+    public function case_clear_up(): void
     {
         $this
             ->when(SUT::clear('up'))
@@ -334,7 +335,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1J");
     }
 
-    public function case_clear_↑()
+    public function case_clear_↑(): void
     {
         $this
             ->when(SUT::clear('↑'))
@@ -343,7 +344,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1J");
     }
 
-    public function case_clear_r()
+    public function case_clear_r(): void
     {
         $this
             ->when(SUT::clear('r'))
@@ -352,7 +353,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[K");
     }
 
-    public function case_clear_right()
+    public function case_clear_right(): void
     {
         $this
             ->when(SUT::clear('right'))
@@ -361,7 +362,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[K");
     }
 
-    public function case_clear_→()
+    public function case_clear_→(): void
     {
         $this
             ->when(SUT::clear('→'))
@@ -370,7 +371,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[K");
     }
 
-    public function case_clear_d()
+    public function case_clear_d(): void
     {
         $this
             ->when(SUT::clear('d'))
@@ -379,7 +380,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[J");
     }
 
-    public function case_clear_down()
+    public function case_clear_down(): void
     {
         $this
             ->when(SUT::clear('down'))
@@ -388,7 +389,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[J");
     }
 
-    public function case_clear_↓()
+    public function case_clear_↓(): void
     {
         $this
             ->when(SUT::clear('↓'))
@@ -397,7 +398,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[J");
     }
 
-    public function case_clear_l()
+    public function case_clear_l(): void
     {
         $this
             ->when(SUT::clear('l'))
@@ -406,7 +407,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1K");
     }
 
-    public function case_clear_left()
+    public function case_clear_left(): void
     {
         $this
             ->when(SUT::clear('left'))
@@ -415,7 +416,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1K");
     }
 
-    public function case_clear_←()
+    public function case_clear_←(): void
     {
         $this
             ->when(SUT::clear('←'))
@@ -424,7 +425,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1K");
     }
 
-    public function case_clear_line()
+    public function case_clear_line(): void
     {
         $this
             ->when(SUT::clear('line'))
@@ -433,7 +434,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\r\033[K");
     }
 
-    public function case_clear_↔()
+    public function case_clear_↔(): void
     {
         $this
             ->when(SUT::clear('↔'))
@@ -442,7 +443,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\r\033[K");
     }
 
-    public function case_hide()
+    public function case_hide(): void
     {
         $this
             ->when(SUT::hide())
@@ -451,7 +452,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[?25l");
     }
 
-    public function case_show()
+    public function case_show(): void
     {
         $this
             ->when(SUT::show())
@@ -460,7 +461,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[?12;25h");
     }
 
-    public function case_colorize_n()
+    public function case_colorize_n(): void
     {
         $this
             ->when(SUT::colorize('n'))
@@ -469,7 +470,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[0m");
     }
 
-    public function case_colorize_normal()
+    public function case_colorize_normal(): void
     {
         $this
             ->when(SUT::colorize('normal'))
@@ -478,7 +479,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[0m");
     }
 
-    public function case_colorize_normal_repeated()
+    public function case_colorize_normal_repeated(): void
     {
         $this
             ->when(SUT::colorize('n normal'))
@@ -487,7 +488,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[0;0m");
     }
 
-    public function case_colorize_b()
+    public function case_colorize_b(): void
     {
         $this
             ->when(SUT::colorize('b'))
@@ -496,7 +497,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1m");
     }
 
-    public function case_colorize_bold()
+    public function case_colorize_bold(): void
     {
         $this
             ->when(SUT::colorize('bold'))
@@ -505,7 +506,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1m");
     }
 
-    public function case_colorize_u()
+    public function case_colorize_u(): void
     {
         $this
             ->when(SUT::colorize('u'))
@@ -514,7 +515,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[4m");
     }
 
-    public function case_colorize_underlined()
+    public function case_colorize_underlined(): void
     {
         $this
             ->when(SUT::colorize('underlined'))
@@ -523,7 +524,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[4m");
     }
 
-    public function case_colorize_bl()
+    public function case_colorize_bl(): void
     {
         $this
             ->when(SUT::colorize('bl'))
@@ -532,7 +533,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[5m");
     }
 
-    public function case_colorize_blink()
+    public function case_colorize_blink(): void
     {
         $this
             ->when(SUT::colorize('blink'))
@@ -541,7 +542,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[5m");
     }
 
-    public function case_colorize_i()
+    public function case_colorize_i(): void
     {
         $this
             ->when(SUT::colorize('i'))
@@ -550,7 +551,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[7m");
     }
 
-    public function case_colorize_inverse()
+    public function case_colorize_inverse(): void
     {
         $this
             ->when(SUT::colorize('inverse'))
@@ -559,7 +560,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[7m");
     }
 
-    public function case_colorize_not_b()
+    public function case_colorize_not_b(): void
     {
         $this
             ->when(SUT::colorize('!b'))
@@ -568,7 +569,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[22m");
     }
 
-    public function case_colorize_not_bold()
+    public function case_colorize_not_bold(): void
     {
         $this
             ->when(SUT::colorize('!bold'))
@@ -577,7 +578,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[22m");
     }
 
-    public function case_colorize_not_u()
+    public function case_colorize_not_u(): void
     {
         $this
             ->when(SUT::colorize('!u'))
@@ -586,7 +587,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[24m");
     }
 
-    public function case_colorize_not_underlined()
+    public function case_colorize_not_underlined(): void
     {
         $this
             ->when(SUT::colorize('!underlined'))
@@ -595,7 +596,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[24m");
     }
 
-    public function case_colorize_not_bl()
+    public function case_colorize_not_bl(): void
     {
         $this
             ->when(SUT::colorize('!bl'))
@@ -604,7 +605,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[25m");
     }
 
-    public function case_colorize_not_blink()
+    public function case_colorize_not_blink(): void
     {
         $this
             ->when(SUT::colorize('!blink'))
@@ -613,7 +614,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[25m");
     }
 
-    public function case_colorize_not_i()
+    public function case_colorize_not_i(): void
     {
         $this
             ->when(SUT::colorize('!i'))
@@ -622,7 +623,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[27m");
     }
 
-    public function case_colorize_not_inverse()
+    public function case_colorize_not_inverse(): void
     {
         $this
             ->when(SUT::colorize('!inverse'))
@@ -631,7 +632,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[27m");
     }
 
-    public function case_colorize_fg_black()
+    public function case_colorize_fg_black(): void
     {
         $this
             ->when(SUT::colorize('fg(black)'))
@@ -640,7 +641,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[30m");
     }
 
-    public function case_colorize_foreground_black()
+    public function case_colorize_foreground_black(): void
     {
         $this
             ->when(SUT::colorize('foreground(black)'))
@@ -649,7 +650,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[30m");
     }
 
-    public function case_colorize_fg_red()
+    public function case_colorize_fg_red(): void
     {
         $this
             ->when(SUT::colorize('fg(red)'))
@@ -658,7 +659,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[31m");
     }
 
-    public function case_colorize_fg_green()
+    public function case_colorize_fg_green(): void
     {
         $this
             ->when(SUT::colorize('fg(green)'))
@@ -667,7 +668,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[32m");
     }
 
-    public function case_colorize_fg_yellow()
+    public function case_colorize_fg_yellow(): void
     {
         $this
             ->when(SUT::colorize('fg(yellow)'))
@@ -676,7 +677,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[33m");
     }
 
-    public function case_colorize_fg_blue()
+    public function case_colorize_fg_blue(): void
     {
         $this
             ->when(SUT::colorize('fg(blue)'))
@@ -685,7 +686,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[34m");
     }
 
-    public function case_colorize_fg_magenta()
+    public function case_colorize_fg_magenta(): void
     {
         $this
             ->when(SUT::colorize('fg(magenta)'))
@@ -694,7 +695,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[35m");
     }
 
-    public function case_colorize_fg_cyan()
+    public function case_colorize_fg_cyan(): void
     {
         $this
             ->when(SUT::colorize('fg(cyan)'))
@@ -703,7 +704,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[36m");
     }
 
-    public function case_colorize_fg_white()
+    public function case_colorize_fg_white(): void
     {
         $this
             ->when(SUT::colorize('fg(white)'))
@@ -712,7 +713,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[37m");
     }
 
-    public function case_colorize_fg_default()
+    public function case_colorize_fg_default(): void
     {
         $this
             ->when(SUT::colorize('fg(default)'))
@@ -721,7 +722,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[39m");
     }
 
-    public function case_colorize_bg_black()
+    public function case_colorize_bg_black(): void
     {
         $this
             ->when(SUT::colorize('bg(black)'))
@@ -730,7 +731,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[40m");
     }
 
-    public function case_colorize_background_black()
+    public function case_colorize_background_black(): void
     {
         $this
             ->when(SUT::colorize('background(black)'))
@@ -739,7 +740,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[40m");
     }
 
-    public function case_colorize_bg_red()
+    public function case_colorize_bg_red(): void
     {
         $this
             ->when(SUT::colorize('bg(red)'))
@@ -748,7 +749,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[41m");
     }
 
-    public function case_colorize_bg_green()
+    public function case_colorize_bg_green(): void
     {
         $this
             ->when(SUT::colorize('bg(green)'))
@@ -757,7 +758,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[42m");
     }
 
-    public function case_colorize_bg_yellow()
+    public function case_colorize_bg_yellow(): void
     {
         $this
             ->when(SUT::colorize('bg(yellow)'))
@@ -766,7 +767,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[43m");
     }
 
-    public function case_colorize_bg_blue()
+    public function case_colorize_bg_blue(): void
     {
         $this
             ->when(SUT::colorize('bg(blue)'))
@@ -775,7 +776,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[44m");
     }
 
-    public function case_colorize_bg_magenta()
+    public function case_colorize_bg_magenta(): void
     {
         $this
             ->when(SUT::colorize('bg(magenta)'))
@@ -784,7 +785,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[45m");
     }
 
-    public function case_colorize_bg_cyan()
+    public function case_colorize_bg_cyan(): void
     {
         $this
             ->when(SUT::colorize('bg(cyan)'))
@@ -793,7 +794,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[46m");
     }
 
-    public function case_colorize_bg_white()
+    public function case_colorize_bg_white(): void
     {
         $this
             ->when(SUT::colorize('bg(white)'))
@@ -802,7 +803,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[47m");
     }
 
-    public function case_colorize_bg_default()
+    public function case_colorize_bg_default(): void
     {
         $this
             ->when(SUT::colorize('bg(default)'))
@@ -811,7 +812,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[49m");
     }
 
-    public function case_colorize_foreground_ff0066()
+    public function case_colorize_foreground_ff0066(): void
     {
         $this
             ->when(SUT::colorize('foreground(#ff0066)'))
@@ -820,7 +821,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[38;5;197m");
     }
 
-    public function case_colorize_background_ff0066()
+    public function case_colorize_background_ff0066(): void
     {
         $this
             ->when(SUT::colorize('background(#ff0066)'))
@@ -829,7 +830,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[48;5;197m");
     }
 
-    public function case_colorize_foreground_color_index()
+    public function case_colorize_foreground_color_index(): void
     {
         $this
             ->when(SUT::colorize('foreground(42)'))
@@ -838,7 +839,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[38;5;42m");
     }
 
-    public function case_change_color()
+    public function case_change_color(): void
     {
         $this
             ->when(SUT::changeColor(35, 0xff0066))
@@ -847,7 +848,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033]4;35;ff0066\033\\");
     }
 
-    public function case_set_style_b()
+    public function case_set_style_b(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -857,7 +858,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1 q");
     }
 
-    public function case_set_style_block()
+    public function case_set_style_block(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -867,7 +868,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1 q");
     }
 
-    public function case_set_style_▋()
+    public function case_set_style_▋(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -877,7 +878,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[1 q");
     }
 
-    public function case_set_style_block_no_blink()
+    public function case_set_style_block_no_blink(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -887,7 +888,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[2 q");
     }
 
-    public function case_set_style_u()
+    public function case_set_style_u(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -897,7 +898,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[2 q");
     }
 
-    public function case_set_style_underline()
+    public function case_set_style_underline(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -907,7 +908,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[2 q");
     }
 
-    public function case_set_style__()
+    public function case_set_style__(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -917,7 +918,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[2 q");
     }
 
-    public function case_set_style_underline_no_blink()
+    public function case_set_style_underline_no_blink(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -927,7 +928,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[3 q");
     }
 
-    public function case_set_style_v()
+    public function case_set_style_v(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -937,7 +938,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[5 q");
     }
 
-    public function case_set_style_vertical()
+    public function case_set_style_vertical(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -947,7 +948,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[5 q");
     }
 
-    public function case_set_style_pipe()
+    public function case_set_style_pipe(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -957,7 +958,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[5 q");
     }
 
-    public function case_set_style_vertical_no_blink()
+    public function case_set_style_vertical_no_blink(): void
     {
         $this
             ->given($this->constant->OS_WIN = false)
@@ -967,7 +968,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEqualTo("\033[6 q");
     }
 
-    public function case_set_style_on_windows()
+    public function case_set_style_on_windows(): void
     {
         $this
             ->given($this->constant->OS_WIN = true)
@@ -977,7 +978,7 @@ class Cursor extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_bip()
+    public function case_bip(): void
     {
         $this
             ->when(SUT::bip())

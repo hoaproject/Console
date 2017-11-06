@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,7 +45,6 @@ use Hoa\Console;
  *
  * Start an editor.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Editor
@@ -56,7 +57,7 @@ class Editor
      *                             default).
      * @return  string
      */
-    public static function open($file = '', $editor = null)
+    public static function open(string $file = '', string $editor = null): string
     {
         if (null === $editor) {
             if (isset($_SERVER['EDITOR'])) {

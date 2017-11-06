@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,12 +46,11 @@ use Hoa\Test;
  *
  * Test suite of the word autocompleter for the readline.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Word extends Test\Unit\Suite
 {
-    public function case_constructor()
+    public function case_constructor(): void
     {
         $this
             ->given($words = ['foo', 'bar', 'baz', 'qux'])
@@ -61,7 +62,7 @@ class Word extends Test\Unit\Suite
                     ->isEqualTo($words);
     }
 
-    public function case_complete_no_solution()
+    public function case_complete_no_solution(): void
     {
         $this
             ->given(
@@ -76,7 +77,7 @@ class Word extends Test\Unit\Suite
                     ->isEqualTo('q');
     }
 
-    public function case_complete_one_solution()
+    public function case_complete_one_solution(): void
     {
         $this
             ->given(
@@ -91,7 +92,7 @@ class Word extends Test\Unit\Suite
                     ->isEqualTo('f');
     }
 
-    public function case_complete_with_smallest_prefix()
+    public function case_complete_with_smallest_prefix(): void
     {
         $this
             ->given(
@@ -106,7 +107,7 @@ class Word extends Test\Unit\Suite
                     ->isEqualTo('b');
     }
 
-    public function case_complete_with_longer_prefix()
+    public function case_complete_with_longer_prefix(): void
     {
         $this
             ->given(
@@ -121,7 +122,7 @@ class Word extends Test\Unit\Suite
                     ->isEqualTo('bar');
     }
 
-    public function case_get_word_definition()
+    public function case_get_word_definition(): void
     {
         $this
             ->given($autocompleter = new SUT([]))
@@ -131,7 +132,7 @@ class Word extends Test\Unit\Suite
                     ->isEqualTo('\b\w+');
     }
 
-    public function case_set_words()
+    public function case_set_words(): void
     {
         $this
             ->given(
@@ -144,7 +145,7 @@ class Word extends Test\Unit\Suite
                     ->isEmpty();
     }
 
-    public function case_get_words()
+    public function case_get_words(): void
     {
         $this
             ->given(

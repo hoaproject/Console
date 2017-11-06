@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -41,7 +43,6 @@ namespace Hoa\Console\Readline\Autocompleter;
  *
  * Aggregate several autocompleters.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Aggregate implements Autocompleter
@@ -107,7 +108,7 @@ class Aggregate implements Autocompleter
      * @param   array  $autocompleters    Auto-completers.
      * @return  \ArrayObject
      */
-    protected function setAutocompleters(array $autocompleters)
+    protected function setAutocompleters(array $autocompleters): \ArrayObject
     {
         $old                   = $this->_autocompleters;
         $this->_autocompleters = new \ArrayObject($autocompleters);
@@ -120,7 +121,7 @@ class Aggregate implements Autocompleter
      *
      * @return  \ArrayObject
      */
-    public function getAutocompleters()
+    public function getAutocompleters(): \ArrayObject
     {
         return $this->_autocompleters;
     }
@@ -130,7 +131,7 @@ class Aggregate implements Autocompleter
      *
      * @return  string
      */
-    public function getWordDefinition()
+    public function getWordDefinition(): string
     {
         return '.*';
     }

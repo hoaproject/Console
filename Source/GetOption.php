@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -47,7 +49,6 @@ use Hoa\Ustring;
  * And, of course, it proposes the getOption method, that allow user to loop
  * easily the command options/arguments.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class GetOption
@@ -57,42 +58,42 @@ class GetOption
      *
      * @const int
      */
-    const NO_ARGUMENT        = 0;
+    public const NO_ARGUMENT        = 0;
 
     /**
      * Argument: required.
      *
      * @const int
      */
-    const REQUIRED_ARGUMENT  = 1;
+    public const REQUIRED_ARGUMENT  = 1;
 
     /**
      * Argument: optional.
      *
      * @const int
      */
-    const OPTIONAL_ARGUMENT  = 2;
+    public const OPTIONAL_ARGUMENT  = 2;
 
     /**
      * Option bucket: name.
      *
      * @const int
      */
-    const OPTION_NAME        = 0;
+    public const OPTION_NAME        = 0;
 
     /**
      * Option bucket: has argument.
      *
      * @const int
      */
-    const OPTION_HAS_ARG     = 1;
+    public const OPTION_HAS_ARG     = 1;
 
     /**
      * Option bucket: value.
      *
      * @const int
      */
-    const OPTION_VAL         = 2;
+    public const OPTION_VAL         = 2;
 
     /**
      * Describe the command options (or switches).
@@ -238,7 +239,7 @@ class GetOption
      *                                   options will be selected.
      * @return  mixed
      */
-    public function getOption(&$optionValue, $short = null)
+    public function getOption(&$optionValue, string $short = null)
     {
         static $first = true;
 
@@ -288,7 +289,7 @@ class GetOption
      *
      * @return  bool
      */
-    public function isPipetteEmpty()
+    public function isPipetteEmpty(): bool
     {
         return count($this->_pipette) == 1;
     }
@@ -303,7 +304,7 @@ class GetOption
      * @return  void
      * @throws  \Hoa\Console\Exception
      */
-    public function resolveOptionAmbiguity(array $solutions)
+    public function resolveOptionAmbiguity(array $solutions): void
     {
         if (!isset($solutions['solutions']) ||
             !isset($solutions['value']) ||

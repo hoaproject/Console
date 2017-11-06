@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,7 +45,6 @@ use Hoa\Consistency;
  *
  * Interface for all auto-completers.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 interface Autocompleter
@@ -63,7 +64,7 @@ interface Autocompleter
      *
      * @return  string
      */
-    public function getWordDefinition();
+    public function getWordDefinition(): string;
 }
 
 /**

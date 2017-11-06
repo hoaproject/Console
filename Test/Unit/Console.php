@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -45,7 +47,6 @@ use Hoa\Test;
  *
  * Test suite of the console class.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Console extends Test\Unit\Suite
@@ -95,7 +96,7 @@ class Console extends Test\Unit\Suite
         return $this->_case_get_mode_xxx(0170000, -1);
     }
 
-    protected function _case_get_mode_xxx($mask, $expect)
+    protected function _case_get_mode_xxx($mask, $expect): void
     {
         $this
             ->given($this->function->fstat = ['mode' => $mask & 0170000])
@@ -105,7 +106,7 @@ class Console extends Test\Unit\Suite
                     ->isEqualTo($expect);
     }
 
-    public function case_set_input()
+    public function case_set_input(): void
     {
         $this
             ->given($input = new LUT\Input())
@@ -117,7 +118,7 @@ class Console extends Test\Unit\Suite
                     ->isIdenticalTo($input);
     }
 
-    public function case_get_input()
+    public function case_get_input(): void
     {
         $this
             ->when($result = SUT::getInput())
@@ -127,7 +128,7 @@ class Console extends Test\Unit\Suite
                     ->isIdenticalTo(SUT::getInput());
     }
 
-    public function case_set_output()
+    public function case_set_output(): void
     {
         $this
             ->given($output = new LUT\Output())
@@ -139,7 +140,7 @@ class Console extends Test\Unit\Suite
                     ->isIdenticalTo($output);
     }
 
-    public function case_get_output()
+    public function case_get_output(): void
     {
         $this
             ->when($result = SUT::getOutput())
@@ -149,7 +150,7 @@ class Console extends Test\Unit\Suite
                     ->isIdenticalTo(SUT::getOutput());
     }
 
-    public function case_set_tput()
+    public function case_set_tput(): void
     {
         $this
             ->given($tput = new LUT\Tput('hoa://Library/Console/Source/Terminfo/78/xterm'))
@@ -161,7 +162,7 @@ class Console extends Test\Unit\Suite
                     ->isIdenticalTo($tput);
     }
 
-    public function case_get_tput()
+    public function case_get_tput(): void
     {
         $this
             ->when($result = SUT::getTput())
@@ -171,7 +172,7 @@ class Console extends Test\Unit\Suite
                     ->isIdenticalTo(SUT::getTput());
     }
 
-    public function case_is_tmux_running()
+    public function case_is_tmux_running(): void
     {
         $this
             ->given($_SERVER['TMUX'] = 'foo')
@@ -181,7 +182,7 @@ class Console extends Test\Unit\Suite
                     ->isTrue();
     }
 
-    public function case_is_not_tmux_running()
+    public function case_is_not_tmux_running(): void
     {
         unset($_SERVER['TMUX']);
 

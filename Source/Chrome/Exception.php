@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,7 +45,6 @@ use Hoa\Console;
  *
  * Extending the \Hoa\Console\Exception class.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Exception extends Console\Exception

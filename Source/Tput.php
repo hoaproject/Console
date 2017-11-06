@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,16 +45,11 @@ namespace Hoa\Console;
  * Resources:
  *     • http://man.cx/terminfo(5),
  *     • http://pubs.opengroup.org/onlinepubs/7908799/xcurses/terminfo.html,
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Tput
 {
     /**
      * Booleans.
-     *
-     * @var array
      */
     protected static $_booleans = [
         'auto_left_margin',
@@ -104,8 +101,6 @@ class Tput
 
     /**
      * Numbers.
-     *
-     * @var array
      */
     protected static $_numbers = [
         'columns',
@@ -152,8 +147,6 @@ class Tput
 
     /**
      * Strings.
-     *
-     * @var array
      */
     protected static $_strings = [
         'back_tab',
@@ -575,8 +568,6 @@ class Tput
 
     /**
      * Computed informations.
-     *
-     * @var array
      */
     protected $_informations = [];
 
@@ -584,10 +575,8 @@ class Tput
 
     /**
      * Set stream and parse.
-     *
-     * @param   string  $terminfo    Terminfo file.
      */
-    public function __construct($terminfo = null)
+    public function __construct(?string $terminfo = null)
     {
         if (null === $terminfo) {
             $terminfo = static::getTerminfo();
@@ -600,12 +589,8 @@ class Tput
 
     /**
      * Parse.
-     *
-     * @param   string  $terminfo    Terminfo file.
-     * @return  array
-     * @throws  \Hoa\Console\Exception
      */
-    protected function parse($terminfo)
+    protected function parse(string $terminfo): array
     {
         if (!file_exists($terminfo)) {
             throw new Exception(
@@ -639,7 +624,7 @@ class Tput
         $out['description'] = $nameAndDescription[1];
 
         // Booleans.
-        $i            += $headers['names_size'];
+        $i += $headers['names_size'];
         $booleans      = [];
         $booleanNames  = &static::$_booleans;
 
@@ -722,21 +707,16 @@ class Tput
 
     /**
      * Get all informations.
-     *
-     * @return  array
      */
-    public function getInformations()
+    public function getInformations(): array
     {
         return $this->_informations;
     }
 
     /**
      * Get a boolean value.
-     *
-     * @param   bool  $boolean    Boolean.
-     * @return  bool
      */
-    public function has($boolean)
+    public function has(bool $boolean): bool
     {
         if (!isset($this->_informations['booleans'][$boolean])) {
             return false;
@@ -747,11 +727,8 @@ class Tput
 
     /**
      * Get a number value.
-     *
-     * @param   int  $number    Number.
-     * @return  int
      */
-    public function count($number)
+    public function count(int $number): int
     {
         if (!isset($this->_informations['numbers'][$number])) {
             return 0;
@@ -762,11 +739,8 @@ class Tput
 
     /**
      * Get a string value.
-     *
-     * @param   string  $string    String.
-     * @return  int
      */
-    public function get($string)
+    public function get(string $string): int
     {
         if (!isset($this->_informations['strings'][$string])) {
             return null;
@@ -777,10 +751,8 @@ class Tput
 
     /**
      * Get current term profile.
-     *
-     * @return  string
      */
-    public static function getTerm()
+    public static function getTerm(): string
     {
         return
             isset($_SERVER['TERM']) && !empty($_SERVER['TERM'])
@@ -790,11 +762,8 @@ class Tput
 
     /**
      * Get pathname to the current terminfo.
-     *
-     * @param   string  $term    Term.
-     * @return  string
      */
-    public static function getTerminfo($term = null)
+    public static function getTerminfo(?string $term = null): string
     {
         $paths = [];
 
