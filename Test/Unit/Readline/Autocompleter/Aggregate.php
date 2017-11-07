@@ -87,14 +87,10 @@ class Aggregate extends Test\Unit\Suite
         $this
             ->given(
                 $autocompleterA = new \Mock\Hoa\Console\Readline\Autocompleter\Autocompleter(),
-                $autocompleterA->getWordDefinition = function () {
-                    return 'aaa';
-                },
+                $this->calling($autocompleterA)->getWordDefinition = 'aaa',
 
                 $autocompleterB = new \Mock\Hoa\Console\Readline\Autocompleter\Autocompleter(),
-                $autocompleterB->getWordDefinition = function () {
-                    return 'bbb';
-                },
+                $this->calling($autocompleterB)->getWordDefinition = 'bbb',
 
                 $autocompleter = new SUT([$autocompleterA, $autocompleterB]),
                 $prefix        = 'ccc'

@@ -39,6 +39,7 @@ declare(strict_types=1);
 namespace Hoa\Console\Test\Unit\Readline\Autocompleter;
 
 use Hoa\Console\Readline\Autocompleter\Path as SUT;
+use Hoa\Protocol;
 use Hoa\Test;
 
 /**
@@ -83,9 +84,9 @@ class Path extends Test\Unit\Suite
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Foo?type=file'),
-                resolve('hoa://Test/Vfs/Root/Bar?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Foo?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bar?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'Q'
@@ -102,9 +103,9 @@ class Path extends Test\Unit\Suite
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Foo?type=file'),
-                resolve('hoa://Test/Vfs/Root/Bar?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Foo?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bar?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'F'
@@ -121,11 +122,11 @@ class Path extends Test\Unit\Suite
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Foo?type=file'),
-                resolve('hoa://Test/Vfs/Root/Bar?type=file'),
-                resolve('hoa://Test/Vfs/Root/Baz?type=file'),
-                resolve('hoa://Test/Vfs/Root/Qux?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Foo?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bar?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Baz?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Qux?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'B'
@@ -142,10 +143,10 @@ class Path extends Test\Unit\Suite
     {
         $this
             ->given(
-                resolve('hoa://Test/Vfs/Root?type=directory'),
-                resolve('hoa://Test/Vfs/Root/Bara?type=file'),
-                resolve('hoa://Test/Vfs/Root/Barb?type=file'),
-                resolve('hoa://Test/Vfs/Root/Baza?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root?type=directory'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Bara?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Barb?type=file'),
+                Protocol\Protocol::getInstance()->resolve('hoa://Test/Vfs/Root/Baza?type=file'),
 
                 $autocompleter = new SUT('hoa://Test/Vfs/Root'),
                 $prefix        = 'Bar'

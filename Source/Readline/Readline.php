@@ -482,11 +482,9 @@ class Readline
     /**
      * Set buffer. Not for user.
      */
-    public function setBuffer(string $buffer): ?string
+    public function setBuffer(string $buffer): void
     {
         $this->_buffer = $buffer;
-
-        return;
     }
 
     /**

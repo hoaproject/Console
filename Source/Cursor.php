@@ -640,7 +640,7 @@ class Cursor
      *     • u, underline, _: underline;
      *     • v, vertical,  |: vertical.
      */
-    public static function setStyle(int $style, bool $blink = true)
+    public static function setStyle(string $style, bool $blink = true)
     {
         if (OS_WIN) {
             return;

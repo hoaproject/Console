@@ -740,7 +740,7 @@ class Tput
     /**
      * Get a string value.
      */
-    public function get(string $string): int
+    public function get(string $string): ?string
     {
         if (!isset($this->_informations['strings'][$string])) {
             return null;

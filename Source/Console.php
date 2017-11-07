@@ -44,106 +44,76 @@ use Hoa\Consistency;
  * Class \Hoa\Console.
  *
  * A set of utils and helpers about the console.
- *
- * @license    New BSD License
  */
 class Console
 {
     /**
      * Pipe mode: FIFO.
-     *
-     * @var int
      */
     public const IS_FIFO      = 0;
 
     /**
      * Pipe mode: character.
-     *
-     * @var int
      */
     public const IS_CHARACTER = 1;
 
     /**
      * Pipe mode: directory.
-     *
-     * @var int
      */
     public const IS_DIRECTORY = 2;
 
     /**
      * Pipe mode: block.
-     *
-     * @var int
      */
     public const IS_BLOCK     = 3;
 
     /**
      * Pipe mode: regular.
-     *
-     * @var int
      */
     public const IS_REGULAR   = 4;
 
     /**
      * Pipe mode: link.
-     *
-     * @var int
      */
     public const IS_LINK      = 5;
 
     /**
      * Pipe mode: socket.
-     *
-     * @var int
      */
     public const IS_SOCKET    = 6;
 
     /**
      * Pipe mode: whiteout.
-     *
-     * @var int
      */
     public const IS_WHITEOUT  = 7;
 
     /**
      * Advanced interaction is on.
-     *
-     * @var bool
      */
     private static $_advanced = null;
 
     /**
      * Previous STTY configuration.
-     *
-     * @var string
      */
     private static $_old      = null;
 
     /**
      * Mode.
-     *
-     * @var array
      */
     protected static $_mode   = [];
 
     /**
      * Input.
-     *
-     * @var \Hoa\Console\Input
      */
     protected static $_input  = null;
 
     /**
      * Output.
-     *
-     * @var \Hoa\Console\Output
      */
     protected static $_output = null;
 
     /**
      * Tput.
-     *
-     * @var \Hoa\Console\Tput
      */
     protected static $_tput   = null;
 
@@ -151,9 +121,6 @@ class Console
 
     /**
      * Prepare the environment for advanced interactions.
-     *
-     * @param   bool  $force    Force it if STDIN is not direct.
-     * @return  bool
      */
     public static function advancedInteraction(bool $force = false): bool
     {
@@ -179,10 +146,8 @@ class Console
 
     /**
      * Restore previous interaction options.
-     *
-     * @return  void
      */
-    public static function restoreInteraction(): void
+    public static function restoreInteraction()
     {
         if (null === self::$_old) {
             return;
@@ -306,11 +271,8 @@ class Console
 
     /**
      * Set input layer.
-     *
-     * @param   \Hoa\Console\Input  $input    Input.
-     * @return  \Hoa\Console\Input
      */
-    public static function setInput(Input $input): Input
+    public static function setInput(Input $input): ?Input
     {
         $old            = static::$_input;
         static::$_input = $input;
@@ -320,8 +282,6 @@ class Console
 
     /**
      * Get input layer.
-     *
-     * @return  \Hoa\Console\Input
      */
     public static function getInput(): Input
     {
@@ -334,11 +294,8 @@ class Console
 
     /**
      * Set output layer.
-     *
-     * @param   \Hoa\Console\Output  $output    Output.
-     * @return  \Hoa\Console\Output
      */
-    public static function setOutput(Output $output): Output
+    public static function setOutput(Output $output): ?Output
     {
         $old             = static::$_output;
         static::$_output = $output;
@@ -348,8 +305,6 @@ class Console
 
     /**
      * Get output layer.
-     *
-     * @return  \Hoa\Console\Output
      */
     public static function getOutput(): Output
     {

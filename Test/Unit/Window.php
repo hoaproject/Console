@@ -137,10 +137,13 @@ class Window extends Test\Unit\Suite
             ->given($this->constant->OS_WIN = true)
             ->when($result = SUT::getPosition())
             ->then
-                ->variable($result)
-                    ->isNull()
                 ->output
-                    ->isEmpty();
+                    ->isEmpty()
+                ->array($result)
+                    ->isEqualTo([
+                        'x' => 0,
+                        'y' => 0
+                    ]);
     }
 
     public function case_scroll_u(): void

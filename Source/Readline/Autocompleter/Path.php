@@ -73,7 +73,9 @@ class Path implements Autocompleter
             $root = static::PWD;
         }
 
-        $this->setRoot($root);
+        if (null !== $root) {
+            $this->setRoot($root);
+        }
 
         if (null !== $iteratorFactory) {
             $this->setIteratorFactory($iteratorFactory);
@@ -168,7 +170,7 @@ class Path implements Autocompleter
     /**
      * Set iterator factory (a finder).
      */
-    public function setIteratorFactory(callable $iteratorFactory): ?string
+    public function setIteratorFactory(callable $iteratorFactory): ?callable
     {
         $old                    = $this->_iteratorFactory;
         $this->_iteratorFactory = $iteratorFactory;
@@ -179,7 +181,7 @@ class Path implements Autocompleter
     /**
      * Get iterator factory.
      */
-    public function getIteratorFactory(): callable
+    public function getIteratorFactory(): ?callable
     {
         return $this->_iteratorFactory;
     }

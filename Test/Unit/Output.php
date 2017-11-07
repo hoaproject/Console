@@ -73,7 +73,7 @@ class Output extends Test\Unit\Suite
     {
         $this
             ->given($output = new SUT())
-            ->when($output->writeString(123))
+            ->when($output->writeString('123'))
             ->then
                 ->output
                     ->isIdenticalTo('123');

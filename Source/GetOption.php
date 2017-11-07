@@ -208,7 +208,7 @@ class GetOption
     /**
      * Get option from the pipette.
      */
-    public function getOption(?string &$optionValue, string $short = null)
+    public function getOption(&$optionValue, string $short = null)
     {
         static $first = true;
 
