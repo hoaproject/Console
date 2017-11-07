@@ -44,8 +44,6 @@ use Hoa\Console;
  * Class \Hoa\Console\Chrome\Exception.
  *
  * Extending the \Hoa\Console\Exception class.
- *
- * @license    New BSD License
  */
 class Exception extends Console\Exception
 {

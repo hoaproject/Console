@@ -45,8 +45,6 @@ use Hoa\Event;
  * Class \Hoa\Console\Mouse.
  *
  * Allow to listen the mouse.
- *
- * @license    New BSD License
  */
 class Mouse implements Event\Listenable
 {
@@ -54,57 +52,41 @@ class Mouse implements Event\Listenable
 
     /**
      * Pointer code for left button.
-     *
-     * @const int
      */
     public const BUTTON_LEFT    = 0;
 
     /**
      * Pointer code for the middle button.
-     *
-     * @const int
      */
     public const BUTTON_MIDDLE  = 1;
 
     /**
      * Pointer code for the right button.
-     *
-     * @const int
      */
     public const BUTTON_RIGHT   = 2;
 
     /**
      * Pointer code for the release of the button.
-     *
-     * @const int
      */
     public const BUTTON_RELEASE = 3;
 
     /**
      * Pointer code for the wheel up.
-     *
-     * @const int
      */
     public const WHEEL_UP       = 64;
 
     /**
      * Pointer code for the wheel down.
-     *
-     * @const int
      */
     public const WHEEL_DOWN     = 65;
 
     /**
      * Singleton.
-     *
-     * @var \Hoa\Console\Mouse
      */
     protected static $_instance = null;
 
     /**
      * Whether the mouse is tracked or not.
-     *
-     * @var bool
      */
     protected static $_enabled  = false;
 
@@ -112,7 +94,6 @@ class Mouse implements Event\Listenable
 
     /**
      * Constructor.
-     *
      */
     private function __construct()
     {
@@ -133,10 +114,8 @@ class Mouse implements Event\Listenable
 
     /**
      * Singleton.
-     *
-     * @return  \Hoa\Console\Mouse
      */
-    public static function getInstance(): Mouse
+    public static function getInstance(): self
     {
         if (null === static::$_instance) {
             static::$_instance = new static();
@@ -147,10 +126,8 @@ class Mouse implements Event\Listenable
 
     /**
      * Track the mouse.
-     *
-     * @return  bool
      */
-    public static function track(): bool
+    public static function track()
     {
         if (true === static::$_enabled) {
             return;
@@ -265,10 +242,8 @@ class Mouse implements Event\Listenable
 
     /**
      * Untrack the mouse.
-     *
-     * @return  void
      */
-    public static function untrack(): void
+    public static function untrack()
     {
         if (false === static::$_enabled) {
             return;

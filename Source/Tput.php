@@ -716,7 +716,7 @@ class Tput
     /**
      * Get a boolean value.
      */
-    public function has(bool $boolean): bool
+    public function has(string $boolean): bool
     {
         if (!isset($this->_informations['booleans'][$boolean])) {
             return false;
@@ -728,7 +728,7 @@ class Tput
     /**
      * Get a number value.
      */
-    public function count(int $number): int
+    public function count(string $number): int
     {
         if (!isset($this->_informations['numbers'][$number])) {
             return 0;

@@ -42,15 +42,11 @@ namespace Hoa\Console\Readline;
  * Class \Hoa\Console\Readline\Password.
  *
  * Read, edit, bind… a password from the input.
- *
- * @license    New BSD License
  */
 class Password extends Readline
 {
     /**
      * State: continue to read and no output.
-     *
-     * @const int
      */
-    public const STATE_CONTINUE = 5; // parent::STATE_CONTINUE | parent::STATE_NO_ECHO
+    public const STATE_CONTINUE = parent::STATE_CONTINUE | parent::STATE_NO_ECHO;
 }

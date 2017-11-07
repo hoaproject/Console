@@ -297,7 +297,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Open the stream and return the associated resource.
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null)
     {
         $out = @proc_open(
             $streamName,
@@ -327,7 +327,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
             @fclose($pipe);
         }
 
-        return @proc_close($this->getStream());
+        return (bool) @proc_close($this->getStream());
     }
 
     /**
@@ -559,7 +559,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Read a line.
      */
-    public function readLine(int $pipe = 1): string
+    public function readLine(int $pipe = 1)
     {
         return stream_get_line($this->getPipe($pipe), 1 << 15, "\n");
     }
@@ -748,7 +748,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Set command name.
      */
-    protected function setCommand(string $command): string
+    protected function setCommand(string $command): ?string
     {
         $old            = $this->_command;
         $this->_command = escapeshellcmd($command);
@@ -759,7 +759,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Get command name.
      */
-    public function getCommand(): string
+    public function getCommand(): ?string
     {
         return $this->_command;
     }
@@ -808,7 +808,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Set current working directory of the process.
      */
-    protected function setCwd(string $cwd): string
+    protected function setCwd(string $cwd): ?string
     {
         $old        = $this->_cwd;
         $this->_cwd = $cwd;
@@ -827,7 +827,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Set environment of the process.
      */
-    protected function setEnvironment(array $environment): array
+    protected function setEnvironment(array $environment): ?array
     {
         $old                = $this->_environment;
         $this->_environment = $environment;
@@ -838,7 +838,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Get environment of the process.
      */
-    public function getEnvironment(): array
+    public function getEnvironment(): ?array
     {
         return $this->_environment;
     }
@@ -846,7 +846,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Set timeout of the process.
      */
-    public function setTimeout(int $timeout): int
+    public function setTimeout(int $timeout): ?int
     {
         $old            = $this->_timeout;
         $this->_timeout = $timeout;
@@ -868,14 +868,12 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     public static function setTitle(string $title): void
     {
         cli_set_process_title($title);
-
-        return;
     }
 
     /**
      * Get process title.
      */
-    public static function getTitle(): string
+    public static function getTitle(): ?string
     {
         return cli_get_process_title();
     }
@@ -883,7 +881,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Found the place of a binary.
      */
-    public static function locate(string $binary): string
+    public static function locate(string $binary): ?string
     {
         if (isset($_ENV['PATH'])) {
             $separator = ':';
@@ -917,6 +915,6 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
             $commandLine = escapeshellcmd($commandLine);
         }
 
-        return rtrim(shell_exec($commandLine));
+        return rtrim(shell_exec($commandLine) ?? '');
     }
 }

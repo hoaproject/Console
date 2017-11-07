@@ -204,7 +204,7 @@ class Window implements Event\Source
     public static function getPosition(): array
     {
         if (OS_WIN) {
-            return;
+            return ['x' => 0, 'y' => 0];
         }
 
         // DECSLPP.
@@ -387,7 +387,7 @@ class Window implements Event\Source
     public static function getTitle(): ?string
     {
         if (OS_WIN) {
-            return;
+            return null;
         }
 
         // DECSLPP.
@@ -431,7 +431,7 @@ class Window implements Event\Source
     public static function getLabel(): ?string
     {
         if (OS_WIN) {
-            return;
+            return null;
         }
 
         // DECSLPP.

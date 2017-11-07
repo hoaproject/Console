@@ -47,22 +47,16 @@ use Hoa\Console;
  *
  *     ob_start('Hoa\Console\Chrome\Pager::less');
  *     echo file_get_contents(__FILE__);
- *
- * @license    New BSD License
  */
 class Pager
 {
     /**
      * Represent LESS(1).
-     *
-     * @const string
      */
     public const LESS = 'less';
 
     /**
      * Represent MORE(1).
-     *
-     * @const string
      */
     public const MORE = 'more';
 
@@ -70,10 +64,6 @@ class Pager
 
     /**
      * Use less.
-     *
-     * @param   string  $output    Output (from the output buffer).
-     * @param   int     $mode      Mode (from the output buffer).
-     * @return  string
      */
     public static function less(string $output, int $mode): string
     {
@@ -82,10 +72,6 @@ class Pager
 
     /**
      * Use more.
-     *
-     * @param   string  $output    Output (from the output buffer).
-     * @param   int     $mode      Mode (from the output buffer).
-     * @return  string
      */
     public static function more(string $output, int $mode): string
     {
@@ -94,13 +80,8 @@ class Pager
 
     /**
      * Use pager set in the environment (i.e. $_ENV['PAGER']).
-     *
-     * @param   string  $output    Output (from the output buffer).
-     * @param   int     $mode      Mode (from the output buffer).
-     * @param   string  $type      Type. Please, see self::LESS or self::MORE.
-     * @return  string
      */
-    public static function pager(string $output, int $mode, string $type = null): string
+    public static function pager(string $output, int $mode, string $type = null): ?string
     {
         static $process = null;
 

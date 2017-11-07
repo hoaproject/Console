@@ -48,15 +48,11 @@ class Parser
     /**
      * If long value is not enabled, -abc is equivalent to -a -b -c, else -abc
      * is equivalent to --abc.
-     *
-     * @var \Hoa\Console\Parser
      */
     protected $_longonly = false;
 
     /**
      * The parsed result in three categories : command, input, and switch.
-     *
-     * @var array
      */
     protected $_parsed   = null;
 
@@ -149,9 +145,6 @@ class Parser
      * remove some character, or some particular case. But if we give the
      * command manually — i.e. without any reconstitution —, all these cases
      * will work :).
-     *
-     * @param   string  $command    Command to parse.
-     * @return  void
      */
     public function parse(string $command): void
     {
@@ -234,15 +227,10 @@ class Parser
                 $this->addValuedSwitch($match);
             }
         }
-
-        return;
     }
 
     /**
      * Add an input.
-     *
-     * @param   array  $input    Intput.
-     * @return  void
      */
     protected function addInput(array $input): void
     {
@@ -255,45 +243,28 @@ class Parser
         }
 
         $this->_parsed['input'][] = $handle;
-
-        return;
     }
 
     /**
      * Add a boolean switch.
-     *
-     * @param   array  $switch    Switch.
-     * @return  void
      */
     protected function addBoolSwitch(array $switch): void
     {
         $this->addSwitch($switch['b'], true);
-
-        return;
     }
 
     /**
      * Add a valued switch.
-     *
-     * @param   array  $switch    Switch.
-     * @return  void
      */
     protected function addValuedSwitch(array $switch): void
     {
         $this->addSwitch($switch['b'], $switch['s'], $switch[4]);
-
-        return;
     }
 
     /**
      * Add a switch.
-     *
-     * @param   string  $name      Switch name.
-     * @param   string  $value     Switch value.
-     * @param   string  $escape    Character to escape.
-     * @return  void
      */
-    protected function addSwitch(string $name, string $value, string $escape = null)
+    protected function addSwitch(string $name, $value, string $escape = null)
     {
         if (substr($name, 0, 2) == '--') {
             return $this->addSwitch(substr($name, 2), $value, $escape);
@@ -340,12 +311,8 @@ class Parser
 
     /**
      * Transfer a switch value in the input stack.
-     *
-     * @param   string  $name     The switch name.
-     * @param   string  $value    The switch value.
-     * @return  void
      */
-    public function transferSwitchToInput(string $name, string &$value): void
+    public function transferSwitchToInput(string $name, string &$value)
     {
         if (!isset($this->_parsed['switch'][$name])) {
             return;
@@ -360,8 +327,6 @@ class Parser
 
     /**
      * Get all inputs.
-     *
-     * @return  array
      */
     public function getInputs(): array
     {
@@ -371,13 +336,6 @@ class Parser
     /**
      * Distribute inputs in variable (like the list() function, but without
      * error).
-     *
-     * @param   string  $a     First input.
-     * @param   string  $b     Second input.
-     * @param   string  $c     Third input.
-     * @param   ...     ...    ...
-     * @param   string  $z     26th input.
-     * @return  void
      */
     public function listInputs(
         &$a,
@@ -418,8 +376,6 @@ class Parser
 
     /**
      * Get all switches.
-     *
-     * @return  array
      */
     public function getSwitches(): array
     {
@@ -428,13 +384,6 @@ class Parser
 
     /**
      * Parse a special value, i.e. with comma and intervals.
-     *
-     * @param   string  $value       The value to parse.
-     * @param   array   $keywords    Value of keywords.
-     * @return  array
-     * @throws  \Hoa\Console\Exception
-     * @todo    Could be ameliorate with a ":" explode, and some eval.
-     *          Check if operands are integer.
      */
     public function parseSpecialValue(string $value, array $keywords = []): array
     {
@@ -483,9 +432,6 @@ class Parser
 
     /**
      * Set the long-only parameter.
-     *
-     * @param   bool  $longonly    The long-only value.
-     * @return  bool
      */
     public function setLongOnly(bool $longonly = false): bool
     {
@@ -497,8 +443,6 @@ class Parser
 
     /**
      * Get the long-only value.
-     *
-     * @return  bool
      */
     public function getLongOnly(): bool
     {

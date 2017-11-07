@@ -196,11 +196,8 @@ class Console
     /**
      * Get mode of a certain pipe.
      * Inspired by sys/stat.h.
-     *
-     * @param   resource  $pipe    Pipe.
-     * @return  int
      */
-    public static function getMode(resource $pipe = STDIN): int
+    public static function getMode($pipe = STDIN): int
     {
         $_pipe = (int) $pipe;
 
@@ -272,11 +269,8 @@ class Console
      * For example:
      *     $ php Mode.php
      * In this case, self::isDirect(STDOUT) will return true.
-     *
-     * @param   resource  $pipe    Pipe.
-     * @return  bool
      */
-    public static function isDirect(resource $pipe): bool
+    public static function isDirect($pipe): bool
     {
         return self::IS_CHARACTER === self::getMode($pipe);
     }
@@ -286,11 +280,8 @@ class Console
      * For example:
      *     $ php Mode.php | foobar
      * In this case, self::isPipe(STDOUT) will return true.
-     *
-     * @param   resource  $pipe    Pipe.
-     * @return  bool
      */
-    public static function isPipe(resource $pipe): bool
+    public static function isPipe($pipe): bool
     {
         return self::IS_FIFO === self::getMode($pipe);
     }
@@ -300,11 +291,8 @@ class Console
      * For example:
      *     $ php Mode.php < foobar
      * In this case, self::isRedirection(STDIN) will return true.
-     *
-     * @param   resource  $pipe    Pipe.
-     * @return  bool
      */
-    public static function isRedirection(resource $pipe): bool
+    public static function isRedirection($pipe): bool
     {
         $mode = self::getMode($pipe);
 
@@ -374,11 +362,8 @@ class Console
 
     /**
      * Set tput.
-     *
-     * @param   \Hoa\Console\Tput  $tput    Tput.
-     * @return  \Hoa\Console\Tput
      */
-    public static function setTput(Tput $tput): Tput
+    public static function setTput(Tput $tput): ?Tput
     {
         $old           = static::$_tput;
         static::$_tput = $tput;
@@ -388,8 +373,6 @@ class Console
 
     /**
      * Get the current tput instance of the current process.
-     *
-     * @return  \Hoa\Console\Tput
      */
     public static function getTput(): Tput
     {
@@ -402,8 +385,6 @@ class Console
 
     /**
      * Check whether we are running behind TMUX(1).
-     *
-     * @return  bool
      */
     public static function isTmuxRunning(): bool
     {
@@ -419,4 +400,4 @@ Consistency::registerShutdownFunction(xcallable('Hoa\Console\Console::restoreInt
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\Console\Console');
+Consistency::flexEntity(Console::class);

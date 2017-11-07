@@ -47,15 +47,11 @@ use Hoa\Stream;
  * This interface represents the input of a program. Most of the time, this is
  * going to be `php://stdin` but it can be `/dev/tty` if the former has been
  * closed.
- *
- * @license    New BSD License
  */
 class Input implements Stream\IStream\In
 {
     /**
      * Real input stream.
-     *
-     * @var \Hoa\Stream\IStream\In
      */
     protected $_input = null;
 
@@ -63,8 +59,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Wraps an `Hoa\Stream\IStream\In` stream.
-     *
-     * @param   \Hoa\Stream\IStream\In  $input    Input.
      */
     public function __construct(Stream\IStream\In $input = null)
     {
@@ -84,8 +78,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Get underlying stream.
-     *
-     * @return \Hoa\Stream\IStream\In
      */
     public function getStream(): Stream\IStream\In
     {
@@ -94,8 +86,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Test for end-of-file.
-     *
-     * @return  bool
      */
     public function eof(): bool
     {
@@ -104,9 +94,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Read n characters.
-     *
-     * @param   int     $length    Length.
-     * @return  string
      */
     public function read(int $length): string
     {
@@ -115,9 +102,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Alias of $this->read().
-     *
-     * @param   int     $length    Length.
-     * @return  string
      */
     public function readString(int $length): string
     {
@@ -126,8 +110,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Read a character.
-     *
-     * @return  string
      */
     public function readCharacter(): string
     {
@@ -136,8 +118,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Read a boolean.
-     *
-     * @return  bool
      */
     public function readBoolean(): bool
     {
@@ -146,9 +126,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Read an integer.
-     *
-     * @param   int    $length    Length.
-     * @return  int
      */
     public function readInteger(int $length = 1): int
     {
@@ -157,9 +134,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Read a float.
-     *
-     * @param   int     $length    Length.
-     * @return  float
      */
     public function readFloat(int $length = 1): float
     {
@@ -169,10 +143,6 @@ class Input implements Stream\IStream\In
     /**
      * Read an array.
      * Alias of the $this->scanf() method.
-     *
-     * @param   mixed   $argument    Argument (because the behavior is very
-     *                               different according to the implementation).
-     * @return  array
      */
     public function readArray($argument = null): array
     {
@@ -181,8 +151,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Read a line.
-     *
-     * @return  string
      */
     public function readLine(): string
     {
@@ -191,9 +159,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Read all, i.e. read as much as possible.
-     *
-     * @param   int  $offset    Offset.
-     * @return  string
      */
     public function readAll(int $offset = 0): string
     {
@@ -202,9 +167,6 @@ class Input implements Stream\IStream\In
 
     /**
      * Parse input from a stream according to a format.
-     *
-     * @param   string  $format    Format (see printf's formats).
-     * @return  array
      */
     public function scanf(string $format): array
     {

@@ -44,25 +44,18 @@ use Hoa\Consistency;
  * Interface \Hoa\Console\Readline\Autocompleter.
  *
  * Interface for all auto-completers.
- *
- * @license    New BSD License
  */
 interface Autocompleter
 {
     /**
      * Complete a word.
      * Returns null for no word, a full-word or an array of full-words.
-     *
-     * @param   string  &$prefix    Prefix to autocomplete.
-     * @return  mixed
      */
-    public function complete(&$prefix);
+    public function complete(?string &$prefix);
 
     /**
      * Get definition of a word.
      * Example: \b\w+\b. PCRE delimiters and options must not be provided.
-     *
-     * @return  string
      */
     public function getWordDefinition(): string;
 }
@@ -70,4 +63,4 @@ interface Autocompleter
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\Console\Readline\Autocompleter\Autocompleter');
+Consistency::flexEntity(Autocompleter::class);

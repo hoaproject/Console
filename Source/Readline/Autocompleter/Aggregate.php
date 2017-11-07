@@ -42,15 +42,11 @@ namespace Hoa\Console\Readline\Autocompleter;
  * Class \Hoa\Console\Readline\Autocompleter\Aggregate.
  *
  * Aggregate several autocompleters.
- *
- * @license    New BSD License
  */
 class Aggregate implements Autocompleter
 {
     /**
      * List of autocompleters.
-     *
-     * @var array
      */
     protected $_autocompleters = null;
 
@@ -58,8 +54,6 @@ class Aggregate implements Autocompleter
 
     /**
      * Constructor.
-     *
-     * @param   array  $autocompleters    Auto-completers.
      */
     public function __construct(array $autocompleters)
     {
@@ -71,11 +65,8 @@ class Aggregate implements Autocompleter
     /**
      * Complete a word.
      * Returns null for no word, a full-word or an array of full-words.
-     *
-     * @param   string  &$prefix    Prefix to autocomplete.
-     * @return  mixed
      */
-    public function complete(&$prefix)
+    public function complete(?string &$prefix)
     {
         foreach ($this->getAutocompleters() as $autocompleter) {
             $preg = preg_match(
@@ -104,11 +95,8 @@ class Aggregate implements Autocompleter
 
     /**
      * Set/initialize list of autocompleters.
-     *
-     * @param   array  $autocompleters    Auto-completers.
-     * @return  \ArrayObject
      */
-    protected function setAutocompleters(array $autocompleters): \ArrayObject
+    protected function setAutocompleters(array $autocompleters): ?\ArrayObject
     {
         $old                   = $this->_autocompleters;
         $this->_autocompleters = new \ArrayObject($autocompleters);
@@ -118,18 +106,14 @@ class Aggregate implements Autocompleter
 
     /**
      * Get list of autocompleters.
-     *
-     * @return  \ArrayObject
      */
-    public function getAutocompleters(): \ArrayObject
+    public function getAutocompleters(): ?\ArrayObject
     {
         return $this->_autocompleters;
     }
 
     /**
      * Get definition of a word.
-     *
-     * @return  string
      */
     public function getWordDefinition(): string
     {

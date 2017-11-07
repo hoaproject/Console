@@ -45,22 +45,16 @@ use Hoa\Stream;
  *
  * This class represents the output of a program. Most of the time, this is
  * going to be STDOUT.
- *
- * @license    New BSD License
  */
 class Output implements Stream\IStream\Out
 {
     /**
      * Whether the multiplexer must be considered while writing on the output.
-     *
-     * @var bool
      */
     protected $_considerMultiplexer = false;
 
     /**
      * Real output stream.
-     *
-     * @var \Hoa\Stream\IStream\Out
      */
     protected $_output              = null;
 
@@ -68,8 +62,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Wraps an `Hoa\Stream\IStream\Out` stream.
-     *
-     * @param  \Hoa\Stream\IStream\Out  $output    Output.
      */
     public function __construct(Stream\IStream\Out $output = null)
     {
@@ -80,8 +72,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Get the real output stream.
-     *
-     * @return  \Hoa\Stream\IStream\Out
      */
     public function getStream(): Stream\IStream\Out
     {
@@ -90,13 +80,8 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write n characters.
-     *
-     * @param   string  $string    String.
-     * @param   int     $length    Length.
-     * @return  void
-     * @throws  \Hoa\Console\Exception
      */
-    public function write(string $string, int $length): void
+    public function write(string $string, int $length)
     {
         if (0 > $length) {
             throw new Exception(
@@ -128,9 +113,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write a string.
-     *
-     * @param   string  $string    String.
-     * @return  void
      */
     public function writeString(string $string)
     {
@@ -141,9 +123,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write a character.
-     *
-     * @param   string  $character    Character.
-     * @return  void
      */
     public function writeCharacter(string $character)
     {
@@ -152,9 +131,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write a boolean.
-     *
-     * @param   bool  $boolean    Boolean.
-     * @return  void
      */
     public function writeBoolean(bool $boolean)
     {
@@ -163,9 +139,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write an integer.
-     *
-     * @param   int  $integer    Integer.
-     * @return  void
      */
     public function writeInteger(int $integer)
     {
@@ -176,9 +149,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write a float.
-     *
-     * @param   float  $float    Float.
-     * @return  void
      */
     public function writeFloat(float $float)
     {
@@ -189,9 +159,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write an array.
-     *
-     * @param   array  $array    Array.
-     * @return  void
      */
     public function writeArray(array $array)
     {
@@ -202,9 +169,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write a line.
-     *
-     * @param   string  $line    Line.
-     * @return  void
      */
     public function writeLine(string $line)
     {
@@ -219,9 +183,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Write all, i.e. as much as possible.
-     *
-     * @param   string  $string    String.
-     * @return  void
      */
     public function writeAll(string $string)
     {
@@ -230,9 +191,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Truncate a stream to a given length.
-     *
-     * @param   int  $size    Size.
-     * @return  bool
      */
     public function truncate(int $size): bool
     {
@@ -241,9 +199,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Consider the multiplexer (if running) while writing on the output.
-     *
-     * @param   bool  $consider    Consider the multiplexer or not.
-     * @return  bool
      */
     public function considerMultiplexer(bool $consider): bool
     {
@@ -255,8 +210,6 @@ class Output implements Stream\IStream\Out
 
     /**
      * Check whether the multiplexer must be considered or not.
-     *
-     * @return  bool
      */
     public function isMultiplexerConsidered(): bool
     {

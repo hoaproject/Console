@@ -44,20 +44,13 @@ use Hoa\Console;
  * Class \Hoa\Console\Chrome\Editor.
  *
  * Start an editor.
- *
- * @license    New BSD License
  */
 class Editor
 {
     /**
      * Open an editor.
-     *
-     * @param   string  $file      File to open.
-     * @param   string  $editor    Editor to use ($_SERVER['EDITOR'] by
-     *                             default).
-     * @return  string
      */
-    public static function open(string $file = '', string $editor = null): string
+    public static function open(string $file = '', string $editor = null): ?string
     {
         if (null === $editor) {
             if (isset($_SERVER['EDITOR'])) {

@@ -44,29 +44,21 @@ use Hoa\Console;
  * Class \Hoa\Console\Chrome\Text.
  *
  * This class builts the text layout.
- *
- * @license    New BSD License
  */
 class Text
 {
     /**
      * Align the text to left.
-     *
-     * @const int
      */
     public const ALIGN_LEFT   = 0;
 
     /**
      * Align the text to right.
-     *
-     * @const int
      */
     public const ALIGN_RIGHT  = 1;
 
     /**
      * Align the text to center.
-     *
-     * @const int
      */
     public const ALIGN_CENTER = 2;
 
@@ -75,11 +67,6 @@ class Text
     /**
      * Colorize a portion of a text.
      * It is kind of a shortcut of \Hoa\Console\Color.
-     *
-     * @param   string  $text                Text.
-     * @param   string  $attributesBefore    Style to apply.
-     * @param   string  $attributesAfter     Reset style.
-     * @return  string
      */
     public static function colorize(
         string $text,
@@ -113,23 +100,13 @@ class Text
      * For example : '|: ', will set a ': ' between the first and second column,
      * and nothing for the other.
      *
-     * @param   Array   $line                 The table represented by an array
-     *                                        (see the documentation).
-     * @param   int     $alignement           The global alignement of the text
-     *                                        in cell.
-     * @param   int     $horizontalPadding    The horizontal padding (right
-     *                                        padding).
-     * @param   int     $verticalPadding      The vertical padding.
-     * @param   string  $separator            String where each character is a
-     *                                        column separator.
-     * @return  string
      */
     public static function columnize(
         array $line,
-        int $alignement        = self::ALIGN_LEFT,
-        int $horizontalPadding = 2,
-        int $verticalPadding   = 0,
-        string $separator         = null
+        int $alignement          = self::ALIGN_LEFT,
+        float $horizontalPadding = 2,
+        float $verticalPadding   = 0,
+        string $separator        = null
     ): string {
         if (empty($line)) {
             return '';
@@ -269,7 +246,7 @@ class Text
                 }
             }
 
-            $format .= str_repeat("\n", $verticalPadding + 1);
+            $format .= str_repeat("\n", (int) round($verticalPadding + 1));
 
             array_unshift($handle, $format);
             $out .= call_user_func_array('sprintf', $handle);
@@ -280,11 +257,6 @@ class Text
 
     /**
      * Align a text according a “layer”. The layer width is given in arguments.
-     *
-     * @param   string  $text          The text.
-     * @param   int     $alignement    The text alignement.
-     * @param   int     $width         The layer width.
-     * @return  string
      */
     public static function align(
         string $text,
@@ -326,9 +298,6 @@ class Text
 
     /**
      * Get the maximum line width.
-     *
-     * @param   mixed      $lines    The line (or group of lines).
-     * @return  int
      */
     protected static function getMaxLineWidth($lines): int
     {
@@ -350,9 +319,6 @@ class Text
 
     /**
      * Get the maximum line number (count the new-line character).
-     *
-     * @param   mixed      $lines    The line (or group of lines).
-     * @return  int
      */
     protected static function getMaxLineNumber($lines): int
     {
@@ -372,11 +338,6 @@ class Text
 
     /**
      * My own wordwrap (just force the wordwrap() $cut parameter)..
-     *
-     * @param   string  $text     Text to wrap.
-     * @param   int     $width    Line width.
-     * @param   string  $break    String to make the break.
-     * @return  string
      */
     public static function wordwrap(string $text, int $width = null, string $break = "\n"): string
     {
@@ -390,10 +351,6 @@ class Text
 
     /**
      * Underline with a special string.
-     *
-     * @param   string  $text       The text to underline.
-     * @param   string  $pattern    The string used to underline.
-     * @return  string
      */
     public static function underline(string $text, string $pattern = '*'): string
     {
