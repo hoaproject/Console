@@ -494,7 +494,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Read n characters.
      */
-    public function read(int $length, int $pipe = 1): string
+    public function read(int $length, int $pipe = 1)
     {
         if (0 > $length) {
             throw new Exception(
@@ -510,7 +510,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Alias of $this->read().
      */
-    public function readString(int $length, int $pipe = 1): string
+    public function readString(int $length, int $pipe = 1)
     {
         return $this->read($length, $pipe);
     }
@@ -518,7 +518,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Read a character.
      */
-    public function readCharacter(int $pipe = 1): string
+    public function readCharacter(int $pipe = 1)
     {
         return fgetc($this->getPipe($pipe));
     }
@@ -526,7 +526,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Read a boolean.
      */
-    public function readBoolean(int $pipe = 1): bool
+    public function readBoolean(int $pipe = 1)
     {
         return (bool) $this->read(1, $pipe);
     }
@@ -534,7 +534,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Read an integer.
      */
-    public function readInteger(int $length = 1, int $pipe = 1): int
+    public function readInteger(int $length = 1, int $pipe = 1)
     {
         return (int) $this->read($length, $pipe);
     }
@@ -542,7 +542,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Read a float.
      */
-    public function readFloat(int $length = 1, int $pipe = 1): float
+    public function readFloat(int $length = 1, int $pipe = 1)
     {
         return (float) $this->read($length, $pipe);
     }
@@ -551,7 +551,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
      * Read an array.
      * Alias of the $this->scanf() method.
      */
-    public function readArray(string $format = null, int $pipe = 1): array
+    public function readArray(string $format = null, int $pipe = 1)
     {
         return $this->scanf($format, $pipe);
     }
@@ -567,7 +567,7 @@ class Processus extends Stream implements Stream\IStream\In, Stream\IStream\Out,
     /**
      * Read all, i.e. read as much as possible.
      */
-    public function readAll(int $offset = -1, int $pipe = 1): string
+    public function readAll(int $offset = -1, int $pipe = 1)
     {
         $_pipe = $this->getPipe($pipe);
 

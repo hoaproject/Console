@@ -95,7 +95,7 @@ class Input implements Stream\IStream\In
     /**
      * Read n characters.
      */
-    public function read(int $length): string
+    public function read(int $length)
     {
         return $this->_input->read($length);
     }
@@ -103,7 +103,7 @@ class Input implements Stream\IStream\In
     /**
      * Alias of $this->read().
      */
-    public function readString(int $length): string
+    public function readString(int $length)
     {
         return $this->_input->readString($length);
     }
@@ -111,7 +111,7 @@ class Input implements Stream\IStream\In
     /**
      * Read a character.
      */
-    public function readCharacter(): string
+    public function readCharacter()
     {
         return $this->_input->readCharacter();
     }
@@ -119,7 +119,7 @@ class Input implements Stream\IStream\In
     /**
      * Read a boolean.
      */
-    public function readBoolean(): bool
+    public function readBoolean()
     {
         return $this->_input->readBoolean();
     }
@@ -127,7 +127,7 @@ class Input implements Stream\IStream\In
     /**
      * Read an integer.
      */
-    public function readInteger(int $length = 1): int
+    public function readInteger(int $length = 1)
     {
         return $this->_input->readInteger($length);
     }
@@ -135,7 +135,7 @@ class Input implements Stream\IStream\In
     /**
      * Read a float.
      */
-    public function readFloat(int $length = 1): float
+    public function readFloat(int $length = 1)
     {
         return $this->_input->readFloat($length);
     }
@@ -144,7 +144,7 @@ class Input implements Stream\IStream\In
      * Read an array.
      * Alias of the $this->scanf() method.
      */
-    public function readArray($argument = null): array
+    public function readArray($argument = null)
     {
         return $this->_input->readArray($argument);
     }
@@ -152,7 +152,7 @@ class Input implements Stream\IStream\In
     /**
      * Read a line.
      */
-    public function readLine(): string
+    public function readLine()
     {
         return $this->_input->readLine();
     }
@@ -160,7 +160,7 @@ class Input implements Stream\IStream\In
     /**
      * Read all, i.e. read as much as possible.
      */
-    public function readAll(int $offset = 0): string
+    public function readAll(int $offset = 0)
     {
         return $this->_input->readAll($offset);
     }

@@ -26,16 +26,16 @@
     },
     "require": {
         "php"            : ">=7.1",
-        "hoa/consistency": "~1.0",
-        "hoa/event"      : "~1.0",
-        "hoa/exception"  : "~1.0",
-        "hoa/file"       : "~1.0",
-        "hoa/protocol"   : "~1.0",
-        "hoa/stream"     : "~1.0",
-        "hoa/ustring"    : "~4.0"
+        "hoa/consistency": "dev-master",
+        "hoa/event"      : "dev-master",
+        "hoa/exception"  : "dev-master",
+        "hoa/file"       : "dev-master",
+        "hoa/protocol"   : "dev-master",
+        "hoa/stream"     : "dev-master",
+        "hoa/ustring"    : "dev-master"
     },
     "require-dev": {
-        "hoa/test": "~2.0"
+        "hoa/test": "dev-master"
     },
     "autoload": {
         "psr-4": {
