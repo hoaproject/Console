@@ -206,8 +206,10 @@ class Readline
         $output->writeAll($prefix);
 
         while (true) {
-            @stream_select($read, $write, $except, $this->selectTimeout, 0);
-
+            $select = @stream_select($read, $write, $except, $this->selectTimeout, 0);
+            if ($select === false) { // if select() is interrupted by signal
+                $read = [];
+            }
             if (empty($read)) {
                 $read = [$input->getStream()->getStream()];
 
@@ -225,7 +227,7 @@ class Readline
             $return        = $this->_readLine($char);
 
             if ($this->frameCallback !== null) {
-                if (call_user_func($this->frameCallback, $this)) {
+                if ($ret = call_user_func($this->frameCallback, $this)) {
                     return null;
                 }
             }
