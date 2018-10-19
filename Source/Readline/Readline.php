@@ -575,7 +575,7 @@ class Readline
             $self->setLineCurrent($self->getLineCurrent() + 1);
         }
 
-        $self->setBuffer(null);
+        $self->setBuffer('');
 
         return static::STATE_CONTINUE;
     }
@@ -594,7 +594,7 @@ class Readline
             $self->setLineCurrent($self->getLineCurrent() - 1);
         }
 
-        $self->setBuffer(null);
+        $self->setBuffer('');
 
         return static::STATE_CONTINUE;
     }
