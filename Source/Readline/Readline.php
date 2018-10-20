@@ -115,7 +115,7 @@ class Readline
     protected $_autocompleter  = null;
 
     /**
-     * @var int
+     * @var float
      */
     protected $selectTimeout = 30;
 
@@ -152,9 +152,9 @@ class Readline
 
 
     /**
-     * @param int $timeout
+     * @param float $timeout
      */
-    public function setSelectTimeout(int $timeout): void
+    public function setSelectTimeout(float $timeout): void
     {
         $this->selectTimeout = $timeout;
     }
@@ -206,7 +206,10 @@ class Readline
         $output->writeAll($prefix);
 
         while (true) {
-            $select = @stream_select($read, $write, $except, $this->selectTimeout, 0);
+            $select = @stream_select($read, $write, $except,
+                (int) $this->selectTimeout,
+                (int) (($this->selectTimeout - (int) $this->selectTimeout) * 1e6)
+            );
             if ($select === false) { // if select() is interrupted by signal
                 $read = [];
             }
@@ -933,7 +936,10 @@ class Readline
             };
 
             while (true) {
-                @stream_select($read, $write, $except, $this->selectTimeout, 0);
+                $select = @stream_select($read, $write, $except,
+                    (int) $this->selectTimeout,
+                    (int) (($this->selectTimeout - (int) $this->selectTimeout) * 1e6)
+                );
 
                 if (empty($read)) {
                     $read = [$input->getStream()->getStream()];
