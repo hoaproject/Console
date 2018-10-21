@@ -472,7 +472,7 @@ class Readline
     /**
      * Set an autocompleter.
      */
-    public function setAutocompleter(Autocompleter $autocompleter): ?Autocompleter
+    public function setAutocompleter(Autocompleter\Autocompleter $autocompleter): ?Autocompleter\Autocompleter
     {
         $old                  = $this->_autocompleter;
         $this->_autocompleter = $autocompleter;
@@ -800,16 +800,18 @@ class Readline
         );
 
         if (0 === $matches) {
-            return $state;
+            $word = '';
+        }
+        else {
+            $word = $words[0][0];
         }
 
-        $word = $words[0][0];
-
-        if ('' === trim($word)) {
+        /*if ('' === trim($word)) {
             return $state;
-        }
+        }*/
 
         $solution = $autocompleter->complete($word);
+
         $length   = mb_strlen($word);
 
         if (null === $solution) {
@@ -936,7 +938,7 @@ class Readline
             };
 
             while (true) {
-                $select = @stream_select($read, $write, $except,
+                @stream_select($read, $write, $except,
                     (int) $this->selectTimeout,
                     (int) (($this->selectTimeout - (int) $this->selectTimeout) * 1e6)
                 );
