@@ -322,7 +322,7 @@ class Readline
      */
     public function addHistory(string $line = null)
     {
-        if (empty($line)) {
+        if ($line === null || $line === '') {
             return;
         }
 
