@@ -269,7 +269,7 @@ class Cursor
                 case 'a':
                 case 'all':
                 case '↕':
-                    $output->writeAll($tput->get('clear_screen'));
+                    $output->writeAll($tput->get('clear_screen') ?? '');
                     static::moveTo(1, 1);
 
                     break;
@@ -284,21 +284,21 @@ class Cursor
                 case 'r':
                 case 'right':
                 case '→':
-                    $output->writeAll($tput->get('clr_eol'));
+                    $output->writeAll($tput->get('clr_eol') ? '');
 
                     break;
 
                 case 'd':
                 case 'down':
                 case '↓':
-                    $output->writeAll($tput->get('clr_eos'));
+                    $output->writeAll($tput->get('clr_eos') ?? '');
 
                     break;
 
                 case 'l':
                 case 'left':
                 case '←':
-                    $output->writeAll($tput->get('clr_bol'));
+                    $output->writeAll($tput->get('clr_bol') ?? '');
 
                     break;
 
@@ -317,7 +317,7 @@ class Cursor
     public static function hide(): void
     {
         Console::getOutput()->writeAll(
-            Console::getTput()->get('cursor_invisible')
+            Console::getTput()->get('cursor_invisible') ?? ''
         );
     }
 
@@ -327,7 +327,7 @@ class Cursor
     public static function show(): void
     {
         Console::getOutput()->writeAll(
-            Console::getTput()->get('cursor_visible')
+            Console::getTput()->get('cursor_visible') ?? ''
         );
     }
 
@@ -685,7 +685,7 @@ class Cursor
     public static function bip(): void
     {
         Console::getOutput()->writeAll(
-            Console::getTput()->get('bell')
+            Console::getTput()->get('bell') ?? ''
         );
     }
 }
