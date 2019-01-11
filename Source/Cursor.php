@@ -284,7 +284,7 @@ class Cursor
                 case 'r':
                 case 'right':
                 case '→':
-                    $output->writeAll($tput->get('clr_eol') ? '');
+                    $output->writeAll($tput->get('clr_eol') ?? '');
 
                     break;
 
