@@ -114,7 +114,15 @@ class Readline
      */
     protected $_autocompleter  = null;
 
+    /**
+     * @var float
+     */
+    protected $selectTimeout = 30;
 
+    /**
+     * @var callable
+     */
+    protected $frameCallback;
 
     /**
      * Initialize the readline editor.
@@ -142,10 +150,28 @@ class Readline
         return;
     }
 
+
+    /**
+     * @param float $timeout
+     */
+    public function setSelectTimeout(float $timeout): void
+    {
+        $this->selectTimeout = $timeout;
+    }
+
+    /**
+     * @param callable $callback
+     */
+    public function setFrameCallback(callable $callback): void
+    {
+        $this->frameCallback = $callback;
+
+    }
+
     /**
      * Read a line from the input.
      */
-    public function readLine(string $prefix = null): ?string
+    public function readLine(string $prefix = ''): ?string
     {
         $input = Console::getInput();
 
@@ -180,10 +206,21 @@ class Readline
         $output->writeAll($prefix);
 
         while (true) {
-            @stream_select($read, $write, $except, 30, 0);
-
+            $select = @stream_select($read, $write, $except,
+                (int) $this->selectTimeout,
+                (int) (($this->selectTimeout - (int) $this->selectTimeout) * 1e6)
+            );
+            if ($select === false) { // if select() is interrupted by signal
+                $read = [];
+            }
             if (empty($read)) {
                 $read = [$input->getStream()->getStream()];
+
+                if ($this->frameCallback !== null) {
+                    if (call_user_func($this->frameCallback, $this)) {
+                        return null;
+                    }
+                }
 
                 continue;
             }
@@ -191,6 +228,12 @@ class Readline
             $char          = $this->_read();
             $this->_buffer = $char;
             $return        = $this->_readLine($char);
+
+            if ($this->frameCallback !== null) {
+                if ($ret = call_user_func($this->frameCallback, $this)) {
+                    return null;
+                }
+            }
 
             if (0 === ($return & self::STATE_NO_ECHO)) {
                 $output->writeAll($this->_buffer);
@@ -207,7 +250,7 @@ class Readline
     /**
      * Readline core.
      */
-    public function _readLine(string $char): ?string
+    public function _readLine(string $char)
     {
         if (isset($this->_mapping[$char]) &&
             is_callable($this->_mapping[$char])) {
@@ -236,9 +279,9 @@ class Readline
             $this->getLineCurrent() - 1
         );
         $this->_buffer = "\033[K" . $tail . str_repeat(
-            "\033[D",
-            mb_strlen($tail) - 1
-        );
+                "\033[D",
+                mb_strlen($tail) - 1
+            );
 
         return static::STATE_CONTINUE;
     }
@@ -279,7 +322,7 @@ class Readline
      */
     public function addHistory(string $line = null)
     {
-        if (empty($line)) {
+        if ($line === null || $line === '') {
             return;
         }
 
@@ -366,8 +409,8 @@ class Readline
         }
 
         $this->_line         = mb_substr($this->_line, 0, $this->_lineCurrent) .
-                               $insert .
-                               mb_substr($this->_line, $this->_lineCurrent);
+            $insert .
+            mb_substr($this->_line, $this->_lineCurrent);
         $this->_lineLength   = mb_strlen($this->_line);
         $this->_lineCurrent += mb_strlen($insert);
 
@@ -429,7 +472,7 @@ class Readline
     /**
      * Set an autocompleter.
      */
-    public function setAutocompleter(Autocompleter $autocompleter): ?Autocompleter
+    public function setAutocompleter(Autocompleter\Autocompleter $autocompleter): ?Autocompleter\Autocompleter
     {
         $old                  = $this->_autocompleter;
         $this->_autocompleter = $autocompleter;
@@ -440,7 +483,7 @@ class Readline
     /**
      * Get the autocompleter.
      */
-    public function getAutocompleter(): Autocompleter
+    public function getAutocompleter(): ?Autocompleter
     {
         return $this->_autocompleter;
     }
@@ -497,7 +540,7 @@ class Readline
             Console\Cursor::clear('↔');
             Console::getOutput()->writeAll($self->getPrefix());
         }
-        $self->setBuffer($buffer = $self->previousHistory());
+        $self->setBuffer($buffer = (string) $self->previousHistory());
         $self->setLine($buffer);
 
         return static::STATE_CONTINUE;
@@ -515,7 +558,7 @@ class Readline
             Console::getOutput()->writeAll($self->getPrefix());
         }
 
-        $self->setBuffer($buffer = $self->nextHistory());
+        $self->setBuffer($buffer = (string) $self->nextHistory());
         $self->setLine($buffer);
 
         return static::STATE_CONTINUE;
@@ -535,7 +578,7 @@ class Readline
             $self->setLineCurrent($self->getLineCurrent() + 1);
         }
 
-        $self->setBuffer(null);
+        $self->setBuffer('');
 
         return static::STATE_CONTINUE;
     }
@@ -554,7 +597,7 @@ class Readline
             $self->setLineCurrent($self->getLineCurrent() - 1);
         }
 
-        $self->setBuffer(null);
+        $self->setBuffer('');
 
         return static::STATE_CONTINUE;
     }
@@ -565,7 +608,7 @@ class Readline
      */
     public function _bindBackspace(self $self): int
     {
-        $buffer = null;
+        $buffer = '';
 
         if (0 < $self->getLineCurrent()) {
             if (0 === (static::STATE_CONTINUE & static::STATE_NO_ECHO)) {
@@ -757,16 +800,18 @@ class Readline
         );
 
         if (0 === $matches) {
-            return $state;
+            $word = '';
+        }
+        else {
+            $word = $words[0][0];
         }
 
-        $word = $words[0][0];
-
-        if ('' === trim($word)) {
+        /*if ('' === trim($word)) {
             return $state;
-        }
+        }*/
 
         $solution = $autocompleter->complete($word);
+
         $length   = mb_strlen($word);
 
         if (null === $solution) {
@@ -893,7 +938,10 @@ class Readline
             };
 
             while (true) {
-                @stream_select($read, $write, $except, 30, 0);
+                @stream_select($read, $write, $except,
+                    (int) $this->selectTimeout,
+                    (int) (($this->selectTimeout - (int) $this->selectTimeout) * 1e6)
+                );
 
                 if (empty($read)) {
                     $read = [$input->getStream()->getStream()];
@@ -983,7 +1031,7 @@ class Readline
                             Console\Cursor::move('←', mb_strlen($tail));
                         }
 
-                        // no break
+                    // no break
                     default:
                         $mColumn = -1;
                         $mLine   = -1;
