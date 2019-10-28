@@ -51,7 +51,7 @@ class Tput
     /**
      * Booleans.
      */
-    protected static $_booleans = [
+    protected const BOOLEANS = [
         'auto_left_margin',
         'auto_right_margin',
         'no_esc_ctlc',
@@ -102,7 +102,7 @@ class Tput
     /**
      * Numbers.
      */
-    protected static $_numbers = [
+    protected const NUMBERS = [
         'columns',
         'init_tabs',
         'lines',
@@ -148,7 +148,7 @@ class Tput
     /**
      * Strings.
      */
-    protected static $_strings = [
+    protected const STRINGS = [
         'back_tab',
         'bell',
         'carriage_return',
@@ -626,7 +626,7 @@ class Tput
         // Booleans.
         $i += $headers['names_size'];
         $booleans      = [];
-        $booleanNames  = &static::$_booleans;
+        $booleanNames  = &self::BOOLEANS;
 
         for (
             $e = 0, $max = $i + $headers['bool_count'];
@@ -644,7 +644,7 @@ class Tput
         }
 
         $numbers     = [];
-        $numberNames = &static::$_numbers;
+        $numberNames = &self::NUMBERS;
 
         for (
             $e = 0, $max = $i + $headers['number_count'] * 2;
@@ -666,7 +666,7 @@ class Tput
 
         // Strings.
         $strings     = [];
-        $stringNames = &static::$_strings;
+        $stringNames = &self::STRINGS;
         $ii          = $i + $headers['string_count'] * 2;
 
         for (
