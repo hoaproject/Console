@@ -646,19 +646,39 @@ class Tput
         $numbers     = [];
         $numberNames = &static::$_numbers;
 
-        for (
-            $e = 0, $max = $i + $headers['number_count'] * 2;
-            $i < $max;
-            ++$e, $i += 2
-        ) {
-            $name    = $numberNames[$e];
-            $data_i0 = ord($data[$i    ]);
-            $data_i1 = ord($data[$i + 1]);
+        if (542 === $headers['magic_number']) {
+            for (
+                $e = 0, $max = $i + $headers['number_count'] * 4;
+                $i < $max;
+                ++$e, $i += 4
+            ) {
+                $name    = $numberNames[$e];
+                $data_i0 = ord($data[$i    ]);
+                $data_i1 = ord($data[$i + 1]);
+                $data_i2 = ord($data[$i + 2]);
+                $data_i3 = ord($data[$i + 3]);
 
-            if ($data_i1 === 255 && $data_i0 === 255) {
-                $numbers[$name] = -1;
-            } else {
-                $numbers[$name] = ($data_i1 << 8) | $data_i0;
+                if ($data_i3 === 255 && $data_i2 === 255 && $data_i1 === 255 && $data_i0 === 255) {
+                    $numbers[$name] = -1;
+                } else {
+                    $numbers[$name] = ($data_i3 << 24) |($data_i2 << 16) | ($data_i1 << 8) | $data_i0;
+                }
+            }
+        } else {
+            for (
+                $e = 0, $max = $i + $headers['number_count'] * 2;
+                $i < $max;
+                ++$e, $i += 2
+            ) {
+                $name    = $numberNames[$e];
+                $data_i0 = ord($data[$i    ]);
+                $data_i1 = ord($data[$i + 1]);
+
+                if ($data_i1 === 255 && $data_i0 === 255) {
+                    $numbers[$name] = -1;
+                } else {
+                    $numbers[$name] = ($data_i1 << 8) | $data_i0;
+                }
             }
         }
 
