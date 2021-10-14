@@ -98,7 +98,7 @@ class Cursor
                     $output->writeAll(
                         str_replace(
                             '%p1%d',
-                            $repeat,
+                            (string) $repeat,
                             $tput->get('parm_right_cursor')
                         )
                     );
@@ -117,7 +117,7 @@ class Cursor
                     $output->writeAll(
                         str_replace(
                             '%p1%d',
-                            $repeat,
+                            (string) $repeat,
                             $tput->get('parm_down_cursor')
                         )
                     );
@@ -136,7 +136,7 @@ class Cursor
                     $output->writeAll(
                         str_replace(
                             '%p1%d',
-                            $repeat,
+                            (string) $repeat,
                             $tput->get('parm_left_cursor')
                         )
                     );
