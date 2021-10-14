@@ -360,7 +360,7 @@ class Text
         foreach ($text as $key => &$value) {
             $i   = -1;
             $max = strlen($value);
-            while ($value{++$i} == ' ' && $i < $max);
+            while ($value[++$i] == ' ' && $i < $max);
 
             $underline =
                 str_repeat(' ', $i) .
