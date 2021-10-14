@@ -79,7 +79,7 @@ class Cursor
                     $output->writeAll(
                         str_replace(
                             '%p1%d',
-                            $repeat,
+                            (string) $repeat,
                             $tput->get('parm_up_cursor')
                         )
                     );
